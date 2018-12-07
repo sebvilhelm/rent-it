@@ -11,8 +11,6 @@ type Query {
     last: Int
   ): [Item!]!
   item(where: ItemWhereUniqueInput!): Item
-  users: [User!]!
-  user(where: UserWhereUniqueInput!): User
   me: User
 }
 
@@ -40,8 +38,8 @@ type Mutation {
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
 
-  createRent(itemId: ID!, startDate: DateTime!, endDate: DateTime!): Rent!
-  cancelRent(id: ID!): Rent!
+  book(itemId: ID!, startDate: DateTime!, endDate: DateTime!): Rent!
+  cancel(id: ID!): Rent!
 
   createRentReview(id: ID!, rating: Int!): RentReview!
 }

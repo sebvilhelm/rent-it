@@ -103,7 +103,7 @@ const Mutation = {
     return { message: 'Goodbye!' }
   },
 
-  async createRent(_, args, ctx, info) {
+  async book(_, args, ctx, info) {
     const currentUserId = getUserId(ctx)
 
     const { itemId, startDate, endDate, ...rent } = args
@@ -144,7 +144,7 @@ const Mutation = {
     )
   },
 
-  async cancelRent(_, args, ctx, info) {
+  async cancel(_, args, ctx, info) {
     const currentUserId = getUserId(ctx)
 
     const { id } = args

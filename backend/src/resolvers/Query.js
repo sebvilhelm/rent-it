@@ -14,8 +14,6 @@ const Query = {
       info
     )
   },
-  user: forwardTo('db'),
-  users: forwardTo('db'),
 }
 
 module.exports = Query
