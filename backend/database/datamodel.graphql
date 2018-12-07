@@ -1,0 +1,49 @@
+type User {
+  id: ID! @unique
+  name: String!
+  email: String! @unique
+  password: String!
+  items: [Item!]!
+  rents: [Rent!]!
+  reviewsBy: [UserReview!]! @relation(name: "ReviewsByUser")
+  reviews: [UserReview!]! @relation(name: "ReviewsOfUser")
+}
+
+type Item {
+  id: ID! @unique
+  title: String!
+  description: String!
+  owner: User!
+  rents: [Rent!]!
+  price: Int!
+  maxDuration: Int
+}
+
+type Rent {
+  id: ID! @unique
+  item: Item
+  renter: User
+  startDate: DateTime!
+  endDate: DateTime!
+  review: RentReview
+  cancelled: Boolean! @default(value: "true")
+}
+
+type UserReview {
+  id: ID! @unique
+  rating: Int!
+  user: User! @relation(name: "ReviewsOfUser")
+  reviewer: User! @relation(name: "ReviewsByUser")
+}
+
+type RentReview {
+  id: ID! @unique
+  rating: Int!
+  rent: Rent!
+  reviewer: User
+}
+
+enum Permission {
+  ADMIN
+  USER
+}

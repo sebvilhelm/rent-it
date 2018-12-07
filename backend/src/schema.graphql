@@ -1,0 +1,98 @@
+# import * from './generated/prisma.graphql'
+
+scalar DateTime
+
+type Query {
+  items(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    first: Int
+    last: Int
+  ): [Item!]!
+  item(where: ItemWhereUniqueInput!): Item
+  users: [User!]!
+  user(where: UserWhereUniqueInput!): User
+  me: User
+}
+
+type Mutation {
+  createItem(
+    title: String!
+    description: String!
+    price: Int!
+    maxDuration: Int
+  ): Item!
+  updateItem(
+    id: ID!
+    title: String
+    description: String
+    price: Int
+    maxDuration: Int
+  ): Item!
+
+  signUp(
+    name: String!
+    email: String!
+    password: String!
+    confirmPassword: String!
+  ): User!
+  signIn(email: String!, password: String!): User!
+  signOut: SuccessMessage
+
+  createRent(itemId: ID!, startDate: DateTime!, endDate: DateTime!): Rent!
+  cancelRent(id: ID!): Rent!
+
+  createRentReview(id: ID!, rating: Int!): RentReview!
+}
+
+type SuccessMessage {
+  message: String
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+type User {
+  id: ID!
+  name: String!
+  #email: String!
+  items(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Item!]
+  rents(
+    where: RentWhereInput
+    orderBy: RentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Rent!]
+  reviewsBy(
+    where: UserReviewWhereInput
+    orderBy: UserReviewOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [UserReview!]
+  reviews(
+    where: UserReviewWhereInput
+    orderBy: UserReviewOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [UserReview!]
+}
