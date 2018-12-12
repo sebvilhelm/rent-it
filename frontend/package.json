@@ -26,6 +26,7 @@
   ],
   "dependencies": {
     "@emotion/core": "^10.0.4",
+    "@reach/router": "^1.2.1",
     "apollo-boost": "^0.1.22",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
@@ -33,7 +34,8 @@
     "react-apollo": "^2.3.2",
     "react-apollo-hooks": "^0.2.1",
     "react-dom": "^16.7.0-alpha.2",
-    "react-scripts": "2.1.1"
+    "react-scripts": "2.1.1",
+    "the-platform": "^0.9.3"
   },
   "devDependencies": {
     "eslint-config-prettier": "^3.3.0",

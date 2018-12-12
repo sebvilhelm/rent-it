@@ -1,28 +1,32 @@
 /** @jsx jsx */
-import React from 'react'
 import { jsx, css } from '@emotion/core'
-import { Suspense } from 'react'
+import { Fragment, Suspense } from 'react'
+import { Router, Link } from '@reach/router'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import SpacerGif from './components/SpacerGif'
 import Spinner from './components/Spinner'
+import Item from './components/Item'
 
 const query = gql`
   query testQuery {
     items {
+      id
       title
     }
   }
 `
 
-function C() {
+function Test() {
   const {
     data: { items },
   } = useQuery(query)
   return (
     <ul>
       {items.map(item => (
-        <li key={item.title}>{item.title}</li>
+        <li key={item.id}>
+          <Link to={`/item/${item.id}`}>{item.title}</Link>
+        </li>
       ))}
     </ul>
   )
@@ -38,7 +42,13 @@ function Header(props) {
           <input type="search" />
         </div>
 
-        <nav>link link link link</nav>
+        <nav>
+          <a href="#">Link</a>
+          <a href="#">Link</a>
+          <a href="#">Link</a>
+          <a href="#">Link</a>
+          <a href="#">Link</a>
+        </nav>
       </div>
     </header>
   )
@@ -46,7 +56,7 @@ function Header(props) {
 
 function App() {
   return (
-    <>
+    <Fragment>
       <Suspense fallback={<Spinner />}>
         <Header />
         <h1
@@ -56,9 +66,14 @@ function App() {
         >
           Hello
         </h1>
-        <C />
+        <Suspense fallback={<Spinner />}>
+          <Router>
+            <Test path="/" />
+            <Item path="item/:id" />
+          </Router>
+        </Suspense>
       </Suspense>
-    </>
+    </Fragment>
   )
 }
 
