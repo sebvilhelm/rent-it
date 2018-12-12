@@ -6,6 +6,13 @@ const server = createServer()
 
 server.express.use(cookieParser())
 
-server.start(options =>
-  console.log(`Server is running on http://localhost:${options.port}`)
+server.start(
+  {
+    cors: {
+      credentials: true,
+      origin: process.env.FRONTEND_URL,
+    },
+  },
+  options =>
+    console.log(`Server is running on http://localhost:${options.port}`)
 )
