@@ -14,11 +14,7 @@ const Query = {
       info
     )
 
-    return {
-      user,
-      email: user.email,
-      bookings: user.bookings,
-    }
+    return user
   },
 }
 
