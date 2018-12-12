@@ -11,7 +11,7 @@ type Query {
     last: Int
   ): [Item!]!
   item(where: ItemWhereUniqueInput!): Item
-  me: Viewer
+  me: User
 }
 
 type Mutation {
