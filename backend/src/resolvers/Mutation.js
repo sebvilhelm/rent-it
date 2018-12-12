@@ -117,7 +117,7 @@ const Mutation = {
 
     // Check if user is owner of item
     if (item.owner.id === currentUserId) {
-      throw new Error("You can't rent your own item, obviously")
+      throw new Error("You can't book your own item, obviously")
     }
 
     // TODO: Check if rent violates maxDuration
@@ -172,21 +172,27 @@ const Mutation = {
     )
   },
 
-  async createRentReview(_, args, ctx, info) {
+  async reviewBooking(_, args, ctx, info) {
     const currentUserId = getUserId(ctx)
 
     const { id, rating } = args
 
-    const rent = await ctx.query.rent(
+    const booking = await ctx.query.booking(
       { where: { id } },
-      '{ renter { id }, startDate }'
+      '{ booker { id }, startDate, cancelled }'
     )
 
-    return ctx.db.mutation.createRentReview(
+    // TODO: check if current user is booker
+
+    // TODO: Check is start date is lapsed
+
+    // ?: Do something with cancelled?
+
+    return ctx.db.mutation.createBookingReview(
       {
         data: {
           rating,
-          rent: {
+          booking: {
             connect: {
               id,
             },

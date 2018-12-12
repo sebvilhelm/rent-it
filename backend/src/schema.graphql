@@ -11,7 +11,7 @@ type Query {
     last: Int
   ): [Item!]!
   item(where: ItemWhereUniqueInput!): Item
-  me: User
+  me: Viewer
 }
 
 type Mutation {
@@ -38,10 +38,10 @@ type Mutation {
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
 
-  book(itemId: ID!, startDate: DateTime!, endDate: DateTime!): Rent!
-  cancel(id: ID!): Rent!
+  book(itemId: ID!, startDate: DateTime!, endDate: DateTime!): Booking!
+  cancel(id: ID!): Booking!
 
-  createRentReview(id: ID!, rating: Int!): RentReview!
+  reviewBooking(id: ID!, rating: Int!): BookingReview!
 }
 
 type SuccessMessage {
@@ -56,41 +56,9 @@ type AuthPayload {
 type User {
   id: ID!
   name: String!
-  #email: String!
-  items(
-    where: ItemWhereInput
-    orderBy: ItemOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Item!]
-  rents(
-    where: RentWhereInput
-    orderBy: RentOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Rent!]
-  reviewsBy(
-    where: UserReviewWhereInput
-    orderBy: UserReviewOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [UserReview!]
-  reviews(
-    where: UserReviewWhereInput
-    orderBy: UserReviewOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [UserReview!]
+  items: [Item!]
+  email: String!
+  bookings: [Booking!]
+  #reviewsBy: [UserReview!]
+  #reviews: [UserReview!]
 }

@@ -1,15 +1,23 @@
 # source: https://eu1.prisma.sh/sebastian-vilhelm-nielsen-e462bc/bachelor/dev
-# timestamp: Fri Dec 07 2018 13:16:16 GMT+0100 (Central European Standard Time)
+# timestamp: Wed Dec 12 2018 10:41:40 GMT+0100 (Central European Standard Time)
+
+type AggregateBooking {
+  count: Int!
+}
+
+type AggregateBookingReview {
+  count: Int!
+}
+
+type AggregateCategory {
+  count: Int!
+}
 
 type AggregateItem {
   count: Int!
 }
 
-type AggregateRent {
-  count: Int!
-}
-
-type AggregateRentReview {
+type AggregateLocation {
   count: Int!
 }
 
@@ -26,6 +34,953 @@ type BatchPayload {
   count: Long!
 }
 
+type Booking implements Node {
+  id: ID!
+  item: Item
+  booker: User
+  startDate: DateTime!
+  endDate: DateTime!
+  review: BookingReview
+  status: BookingStatus!
+}
+
+"""A connection to a list of items."""
+type BookingConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BookingEdge]!
+  aggregate: AggregateBooking!
+}
+
+input BookingCreateInput {
+  startDate: DateTime!
+  endDate: DateTime!
+  status: BookingStatus
+  item: ItemCreateOneWithoutBookingsInput
+  booker: UserCreateOneWithoutBookingsInput
+  review: BookingReviewCreateOneWithoutBookingInput
+}
+
+input BookingCreateManyWithoutBookerInput {
+  create: [BookingCreateWithoutBookerInput!]
+  connect: [BookingWhereUniqueInput!]
+}
+
+input BookingCreateManyWithoutItemInput {
+  create: [BookingCreateWithoutItemInput!]
+  connect: [BookingWhereUniqueInput!]
+}
+
+input BookingCreateOneWithoutReviewInput {
+  create: BookingCreateWithoutReviewInput
+  connect: BookingWhereUniqueInput
+}
+
+input BookingCreateWithoutBookerInput {
+  startDate: DateTime!
+  endDate: DateTime!
+  status: BookingStatus
+  item: ItemCreateOneWithoutBookingsInput
+  review: BookingReviewCreateOneWithoutBookingInput
+}
+
+input BookingCreateWithoutItemInput {
+  startDate: DateTime!
+  endDate: DateTime!
+  status: BookingStatus
+  booker: UserCreateOneWithoutBookingsInput
+  review: BookingReviewCreateOneWithoutBookingInput
+}
+
+input BookingCreateWithoutReviewInput {
+  startDate: DateTime!
+  endDate: DateTime!
+  status: BookingStatus
+  item: ItemCreateOneWithoutBookingsInput
+  booker: UserCreateOneWithoutBookingsInput
+}
+
+"""An edge in a connection."""
+type BookingEdge {
+  """The item at the end of the edge."""
+  node: Booking!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum BookingOrderByInput {
+  id_ASC
+  id_DESC
+  startDate_ASC
+  startDate_DESC
+  endDate_ASC
+  endDate_DESC
+  status_ASC
+  status_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type BookingPreviousValues {
+  id: ID!
+  startDate: DateTime!
+  endDate: DateTime!
+  status: BookingStatus!
+}
+
+type BookingReview implements Node {
+  id: ID!
+  rating: Int!
+  booking: Booking!
+  reviewer: User
+}
+
+"""A connection to a list of items."""
+type BookingReviewConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BookingReviewEdge]!
+  aggregate: AggregateBookingReview!
+}
+
+input BookingReviewCreateInput {
+  rating: Int!
+  booking: BookingCreateOneWithoutReviewInput!
+  reviewer: UserCreateOneInput
+}
+
+input BookingReviewCreateOneWithoutBookingInput {
+  create: BookingReviewCreateWithoutBookingInput
+  connect: BookingReviewWhereUniqueInput
+}
+
+input BookingReviewCreateWithoutBookingInput {
+  rating: Int!
+  reviewer: UserCreateOneInput
+}
+
+"""An edge in a connection."""
+type BookingReviewEdge {
+  """The item at the end of the edge."""
+  node: BookingReview!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum BookingReviewOrderByInput {
+  id_ASC
+  id_DESC
+  rating_ASC
+  rating_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type BookingReviewPreviousValues {
+  id: ID!
+  rating: Int!
+}
+
+type BookingReviewSubscriptionPayload {
+  mutation: MutationType!
+  node: BookingReview
+  updatedFields: [String!]
+  previousValues: BookingReviewPreviousValues
+}
+
+input BookingReviewSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BookingReviewSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BookingReviewSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BookingReviewSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: BookingReviewWhereInput
+}
+
+input BookingReviewUpdateInput {
+  rating: Int
+  booking: BookingUpdateOneRequiredWithoutReviewInput
+  reviewer: UserUpdateOneInput
+}
+
+input BookingReviewUpdateManyMutationInput {
+  rating: Int
+}
+
+input BookingReviewUpdateOneWithoutBookingInput {
+  create: BookingReviewCreateWithoutBookingInput
+  connect: BookingReviewWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: BookingReviewUpdateWithoutBookingDataInput
+  upsert: BookingReviewUpsertWithoutBookingInput
+}
+
+input BookingReviewUpdateWithoutBookingDataInput {
+  rating: Int
+  reviewer: UserUpdateOneInput
+}
+
+input BookingReviewUpsertWithoutBookingInput {
+  update: BookingReviewUpdateWithoutBookingDataInput!
+  create: BookingReviewCreateWithoutBookingInput!
+}
+
+input BookingReviewWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BookingReviewWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BookingReviewWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BookingReviewWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  rating: Int
+
+  """All values that are not equal to given value."""
+  rating_not: Int
+
+  """All values that are contained in given list."""
+  rating_in: [Int!]
+
+  """All values that are not contained in given list."""
+  rating_not_in: [Int!]
+
+  """All values less than the given value."""
+  rating_lt: Int
+
+  """All values less than or equal the given value."""
+  rating_lte: Int
+
+  """All values greater than the given value."""
+  rating_gt: Int
+
+  """All values greater than or equal the given value."""
+  rating_gte: Int
+  booking: BookingWhereInput
+  reviewer: UserWhereInput
+}
+
+input BookingReviewWhereUniqueInput {
+  id: ID
+}
+
+input BookingScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BookingScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BookingScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BookingScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  startDate: DateTime
+
+  """All values that are not equal to given value."""
+  startDate_not: DateTime
+
+  """All values that are contained in given list."""
+  startDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  startDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  startDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  startDate_lte: DateTime
+
+  """All values greater than the given value."""
+  startDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  startDate_gte: DateTime
+  endDate: DateTime
+
+  """All values that are not equal to given value."""
+  endDate_not: DateTime
+
+  """All values that are contained in given list."""
+  endDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  endDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  endDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  endDate_lte: DateTime
+
+  """All values greater than the given value."""
+  endDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  endDate_gte: DateTime
+  status: BookingStatus
+
+  """All values that are not equal to given value."""
+  status_not: BookingStatus
+
+  """All values that are contained in given list."""
+  status_in: [BookingStatus!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [BookingStatus!]
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  DENIED
+  CANCELLED
+}
+
+type BookingSubscriptionPayload {
+  mutation: MutationType!
+  node: Booking
+  updatedFields: [String!]
+  previousValues: BookingPreviousValues
+}
+
+input BookingSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BookingSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BookingSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BookingSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: BookingWhereInput
+}
+
+input BookingUpdateInput {
+  startDate: DateTime
+  endDate: DateTime
+  status: BookingStatus
+  item: ItemUpdateOneWithoutBookingsInput
+  booker: UserUpdateOneWithoutBookingsInput
+  review: BookingReviewUpdateOneWithoutBookingInput
+}
+
+input BookingUpdateManyDataInput {
+  startDate: DateTime
+  endDate: DateTime
+  status: BookingStatus
+}
+
+input BookingUpdateManyMutationInput {
+  startDate: DateTime
+  endDate: DateTime
+  status: BookingStatus
+}
+
+input BookingUpdateManyWithoutBookerInput {
+  create: [BookingCreateWithoutBookerInput!]
+  connect: [BookingWhereUniqueInput!]
+  disconnect: [BookingWhereUniqueInput!]
+  delete: [BookingWhereUniqueInput!]
+  update: [BookingUpdateWithWhereUniqueWithoutBookerInput!]
+  updateMany: [BookingUpdateManyWithWhereNestedInput!]
+  deleteMany: [BookingScalarWhereInput!]
+  upsert: [BookingUpsertWithWhereUniqueWithoutBookerInput!]
+}
+
+input BookingUpdateManyWithoutItemInput {
+  create: [BookingCreateWithoutItemInput!]
+  connect: [BookingWhereUniqueInput!]
+  disconnect: [BookingWhereUniqueInput!]
+  delete: [BookingWhereUniqueInput!]
+  update: [BookingUpdateWithWhereUniqueWithoutItemInput!]
+  updateMany: [BookingUpdateManyWithWhereNestedInput!]
+  deleteMany: [BookingScalarWhereInput!]
+  upsert: [BookingUpsertWithWhereUniqueWithoutItemInput!]
+}
+
+input BookingUpdateManyWithWhereNestedInput {
+  where: BookingScalarWhereInput!
+  data: BookingUpdateManyDataInput!
+}
+
+input BookingUpdateOneRequiredWithoutReviewInput {
+  create: BookingCreateWithoutReviewInput
+  connect: BookingWhereUniqueInput
+  update: BookingUpdateWithoutReviewDataInput
+  upsert: BookingUpsertWithoutReviewInput
+}
+
+input BookingUpdateWithoutBookerDataInput {
+  startDate: DateTime
+  endDate: DateTime
+  status: BookingStatus
+  item: ItemUpdateOneWithoutBookingsInput
+  review: BookingReviewUpdateOneWithoutBookingInput
+}
+
+input BookingUpdateWithoutItemDataInput {
+  startDate: DateTime
+  endDate: DateTime
+  status: BookingStatus
+  booker: UserUpdateOneWithoutBookingsInput
+  review: BookingReviewUpdateOneWithoutBookingInput
+}
+
+input BookingUpdateWithoutReviewDataInput {
+  startDate: DateTime
+  endDate: DateTime
+  status: BookingStatus
+  item: ItemUpdateOneWithoutBookingsInput
+  booker: UserUpdateOneWithoutBookingsInput
+}
+
+input BookingUpdateWithWhereUniqueWithoutBookerInput {
+  where: BookingWhereUniqueInput!
+  data: BookingUpdateWithoutBookerDataInput!
+}
+
+input BookingUpdateWithWhereUniqueWithoutItemInput {
+  where: BookingWhereUniqueInput!
+  data: BookingUpdateWithoutItemDataInput!
+}
+
+input BookingUpsertWithoutReviewInput {
+  update: BookingUpdateWithoutReviewDataInput!
+  create: BookingCreateWithoutReviewInput!
+}
+
+input BookingUpsertWithWhereUniqueWithoutBookerInput {
+  where: BookingWhereUniqueInput!
+  update: BookingUpdateWithoutBookerDataInput!
+  create: BookingCreateWithoutBookerInput!
+}
+
+input BookingUpsertWithWhereUniqueWithoutItemInput {
+  where: BookingWhereUniqueInput!
+  update: BookingUpdateWithoutItemDataInput!
+  create: BookingCreateWithoutItemInput!
+}
+
+input BookingWhereInput {
+  """Logical AND on all given filters."""
+  AND: [BookingWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [BookingWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [BookingWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  startDate: DateTime
+
+  """All values that are not equal to given value."""
+  startDate_not: DateTime
+
+  """All values that are contained in given list."""
+  startDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  startDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  startDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  startDate_lte: DateTime
+
+  """All values greater than the given value."""
+  startDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  startDate_gte: DateTime
+  endDate: DateTime
+
+  """All values that are not equal to given value."""
+  endDate_not: DateTime
+
+  """All values that are contained in given list."""
+  endDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  endDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  endDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  endDate_lte: DateTime
+
+  """All values greater than the given value."""
+  endDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  endDate_gte: DateTime
+  status: BookingStatus
+
+  """All values that are not equal to given value."""
+  status_not: BookingStatus
+
+  """All values that are contained in given list."""
+  status_in: [BookingStatus!]
+
+  """All values that are not contained in given list."""
+  status_not_in: [BookingStatus!]
+  item: ItemWhereInput
+  booker: UserWhereInput
+  review: BookingReviewWhereInput
+}
+
+input BookingWhereUniqueInput {
+  id: ID
+}
+
+type Category {
+  name: String!
+  slug: String!
+  description: String!
+  items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
+}
+
+"""A connection to a list of items."""
+type CategoryConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CategoryEdge]!
+  aggregate: AggregateCategory!
+}
+
+input CategoryCreateInput {
+  name: String!
+  slug: String!
+  description: String!
+  items: ItemCreateManyWithoutCategoryInput
+}
+
+input CategoryCreateOneWithoutItemsInput {
+  create: CategoryCreateWithoutItemsInput
+  connect: CategoryWhereUniqueInput
+}
+
+input CategoryCreateWithoutItemsInput {
+  name: String!
+  slug: String!
+  description: String!
+}
+
+"""An edge in a connection."""
+type CategoryEdge {
+  """The item at the end of the edge."""
+  node: Category!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum CategoryOrderByInput {
+  name_ASC
+  name_DESC
+  slug_ASC
+  slug_DESC
+  description_ASC
+  description_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type CategoryPreviousValues {
+  name: String!
+  slug: String!
+  description: String!
+}
+
+type CategorySubscriptionPayload {
+  mutation: MutationType!
+  node: Category
+  updatedFields: [String!]
+  previousValues: CategoryPreviousValues
+}
+
+input CategorySubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CategorySubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CategorySubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CategorySubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: CategoryWhereInput
+}
+
+input CategoryUpdateInput {
+  name: String
+  slug: String
+  description: String
+  items: ItemUpdateManyWithoutCategoryInput
+}
+
+input CategoryUpdateManyMutationInput {
+  name: String
+  slug: String
+  description: String
+}
+
+input CategoryUpdateOneRequiredWithoutItemsInput {
+  create: CategoryCreateWithoutItemsInput
+  connect: CategoryWhereUniqueInput
+  update: CategoryUpdateWithoutItemsDataInput
+  upsert: CategoryUpsertWithoutItemsInput
+}
+
+input CategoryUpdateWithoutItemsDataInput {
+  name: String
+  slug: String
+  description: String
+}
+
+input CategoryUpsertWithoutItemsInput {
+  update: CategoryUpdateWithoutItemsDataInput!
+  create: CategoryCreateWithoutItemsInput!
+}
+
+input CategoryWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CategoryWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CategoryWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CategoryWhereInput!]
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  slug: String
+
+  """All values that are not equal to given value."""
+  slug_not: String
+
+  """All values that are contained in given list."""
+  slug_in: [String!]
+
+  """All values that are not contained in given list."""
+  slug_not_in: [String!]
+
+  """All values less than the given value."""
+  slug_lt: String
+
+  """All values less than or equal the given value."""
+  slug_lte: String
+
+  """All values greater than the given value."""
+  slug_gt: String
+
+  """All values greater than or equal the given value."""
+  slug_gte: String
+
+  """All values containing the given string."""
+  slug_contains: String
+
+  """All values not containing the given string."""
+  slug_not_contains: String
+
+  """All values starting with the given string."""
+  slug_starts_with: String
+
+  """All values not starting with the given string."""
+  slug_not_starts_with: String
+
+  """All values ending with the given string."""
+  slug_ends_with: String
+
+  """All values not ending with the given string."""
+  slug_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  items_every: ItemWhereInput
+  items_some: ItemWhereInput
+  items_none: ItemWhereInput
+}
+
+input CategoryWhereUniqueInput {
+  name: String
+  slug: String
+}
+
 scalar DateTime
 
 type Item implements Node {
@@ -33,9 +988,10 @@ type Item implements Node {
   title: String!
   description: String!
   owner: User!
-  rents(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rent!]
+  bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
   price: Int!
   maxDuration: Int
+  category: Category!
 }
 
 """A connection to a list of items."""
@@ -54,7 +1010,13 @@ input ItemCreateInput {
   price: Int!
   maxDuration: Int
   owner: UserCreateOneWithoutItemsInput!
-  rents: RentCreateManyWithoutItemInput
+  bookings: BookingCreateManyWithoutItemInput
+  category: CategoryCreateOneWithoutItemsInput!
+}
+
+input ItemCreateManyWithoutCategoryInput {
+  create: [ItemCreateWithoutCategoryInput!]
+  connect: [ItemWhereUniqueInput!]
 }
 
 input ItemCreateManyWithoutOwnerInput {
@@ -62,9 +1024,27 @@ input ItemCreateManyWithoutOwnerInput {
   connect: [ItemWhereUniqueInput!]
 }
 
-input ItemCreateOneWithoutRentsInput {
-  create: ItemCreateWithoutRentsInput
+input ItemCreateOneWithoutBookingsInput {
+  create: ItemCreateWithoutBookingsInput
   connect: ItemWhereUniqueInput
+}
+
+input ItemCreateWithoutBookingsInput {
+  title: String!
+  description: String!
+  price: Int!
+  maxDuration: Int
+  owner: UserCreateOneWithoutItemsInput!
+  category: CategoryCreateOneWithoutItemsInput!
+}
+
+input ItemCreateWithoutCategoryInput {
+  title: String!
+  description: String!
+  price: Int!
+  maxDuration: Int
+  owner: UserCreateOneWithoutItemsInput!
+  bookings: BookingCreateManyWithoutItemInput
 }
 
 input ItemCreateWithoutOwnerInput {
@@ -72,15 +1052,8 @@ input ItemCreateWithoutOwnerInput {
   description: String!
   price: Int!
   maxDuration: Int
-  rents: RentCreateManyWithoutItemInput
-}
-
-input ItemCreateWithoutRentsInput {
-  title: String!
-  description: String!
-  price: Int!
-  maxDuration: Int
-  owner: UserCreateOneWithoutItemsInput!
+  bookings: BookingCreateManyWithoutItemInput
+  category: CategoryCreateOneWithoutItemsInput!
 }
 
 """An edge in a connection."""
@@ -337,7 +1310,8 @@ input ItemUpdateInput {
   price: Int
   maxDuration: Int
   owner: UserUpdateOneRequiredWithoutItemsInput
-  rents: RentUpdateManyWithoutItemInput
+  bookings: BookingUpdateManyWithoutItemInput
+  category: CategoryUpdateOneRequiredWithoutItemsInput
 }
 
 input ItemUpdateManyDataInput {
@@ -352,6 +1326,17 @@ input ItemUpdateManyMutationInput {
   description: String
   price: Int
   maxDuration: Int
+}
+
+input ItemUpdateManyWithoutCategoryInput {
+  create: [ItemCreateWithoutCategoryInput!]
+  connect: [ItemWhereUniqueInput!]
+  disconnect: [ItemWhereUniqueInput!]
+  delete: [ItemWhereUniqueInput!]
+  update: [ItemUpdateWithWhereUniqueWithoutCategoryInput!]
+  updateMany: [ItemUpdateManyWithWhereNestedInput!]
+  deleteMany: [ItemScalarWhereInput!]
+  upsert: [ItemUpsertWithWhereUniqueWithoutCategoryInput!]
 }
 
 input ItemUpdateManyWithoutOwnerInput {
@@ -370,13 +1355,31 @@ input ItemUpdateManyWithWhereNestedInput {
   data: ItemUpdateManyDataInput!
 }
 
-input ItemUpdateOneWithoutRentsInput {
-  create: ItemCreateWithoutRentsInput
+input ItemUpdateOneWithoutBookingsInput {
+  create: ItemCreateWithoutBookingsInput
   connect: ItemWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: ItemUpdateWithoutRentsDataInput
-  upsert: ItemUpsertWithoutRentsInput
+  update: ItemUpdateWithoutBookingsDataInput
+  upsert: ItemUpsertWithoutBookingsInput
+}
+
+input ItemUpdateWithoutBookingsDataInput {
+  title: String
+  description: String
+  price: Int
+  maxDuration: Int
+  owner: UserUpdateOneRequiredWithoutItemsInput
+  category: CategoryUpdateOneRequiredWithoutItemsInput
+}
+
+input ItemUpdateWithoutCategoryDataInput {
+  title: String
+  description: String
+  price: Int
+  maxDuration: Int
+  owner: UserUpdateOneRequiredWithoutItemsInput
+  bookings: BookingUpdateManyWithoutItemInput
 }
 
 input ItemUpdateWithoutOwnerDataInput {
@@ -384,15 +1387,13 @@ input ItemUpdateWithoutOwnerDataInput {
   description: String
   price: Int
   maxDuration: Int
-  rents: RentUpdateManyWithoutItemInput
+  bookings: BookingUpdateManyWithoutItemInput
+  category: CategoryUpdateOneRequiredWithoutItemsInput
 }
 
-input ItemUpdateWithoutRentsDataInput {
-  title: String
-  description: String
-  price: Int
-  maxDuration: Int
-  owner: UserUpdateOneRequiredWithoutItemsInput
+input ItemUpdateWithWhereUniqueWithoutCategoryInput {
+  where: ItemWhereUniqueInput!
+  data: ItemUpdateWithoutCategoryDataInput!
 }
 
 input ItemUpdateWithWhereUniqueWithoutOwnerInput {
@@ -400,9 +1401,15 @@ input ItemUpdateWithWhereUniqueWithoutOwnerInput {
   data: ItemUpdateWithoutOwnerDataInput!
 }
 
-input ItemUpsertWithoutRentsInput {
-  update: ItemUpdateWithoutRentsDataInput!
-  create: ItemCreateWithoutRentsInput!
+input ItemUpsertWithoutBookingsInput {
+  update: ItemUpdateWithoutBookingsDataInput!
+  create: ItemCreateWithoutBookingsInput!
+}
+
+input ItemUpsertWithWhereUniqueWithoutCategoryInput {
+  where: ItemWhereUniqueInput!
+  update: ItemUpdateWithoutCategoryDataInput!
+  create: ItemCreateWithoutCategoryInput!
 }
 
 input ItemUpsertWithWhereUniqueWithoutOwnerInput {
@@ -585,13 +1592,276 @@ input ItemWhereInput {
   """All values greater than or equal the given value."""
   maxDuration_gte: Int
   owner: UserWhereInput
-  rents_every: RentWhereInput
-  rents_some: RentWhereInput
-  rents_none: RentWhereInput
+  bookings_every: BookingWhereInput
+  bookings_some: BookingWhereInput
+  bookings_none: BookingWhereInput
+  category: CategoryWhereInput
 }
 
 input ItemWhereUniqueInput {
   id: ID
+}
+
+type Location {
+  city: String!
+  country: String!
+  lat: Float!
+  lng: Float!
+}
+
+"""A connection to a list of items."""
+type LocationConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [LocationEdge]!
+  aggregate: AggregateLocation!
+}
+
+input LocationCreateInput {
+  city: String!
+  country: String!
+  lat: Float!
+  lng: Float!
+}
+
+input LocationCreateOneInput {
+  create: LocationCreateInput
+}
+
+"""An edge in a connection."""
+type LocationEdge {
+  """The item at the end of the edge."""
+  node: Location!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum LocationOrderByInput {
+  city_ASC
+  city_DESC
+  country_ASC
+  country_DESC
+  lat_ASC
+  lat_DESC
+  lng_ASC
+  lng_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type LocationPreviousValues {
+  city: String!
+  country: String!
+  lat: Float!
+  lng: Float!
+}
+
+type LocationSubscriptionPayload {
+  mutation: MutationType!
+  node: Location
+  updatedFields: [String!]
+  previousValues: LocationPreviousValues
+}
+
+input LocationSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LocationSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LocationSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LocationSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: LocationWhereInput
+}
+
+input LocationUpdateDataInput {
+  city: String
+  country: String
+  lat: Float
+  lng: Float
+}
+
+input LocationUpdateManyMutationInput {
+  city: String
+  country: String
+  lat: Float
+  lng: Float
+}
+
+input LocationUpdateOneInput {
+  create: LocationCreateInput
+  disconnect: Boolean
+  delete: Boolean
+  update: LocationUpdateDataInput
+  upsert: LocationUpsertNestedInput
+}
+
+input LocationUpsertNestedInput {
+  update: LocationUpdateDataInput!
+  create: LocationCreateInput!
+}
+
+input LocationWhereInput {
+  """Logical AND on all given filters."""
+  AND: [LocationWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [LocationWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [LocationWhereInput!]
+  city: String
+
+  """All values that are not equal to given value."""
+  city_not: String
+
+  """All values that are contained in given list."""
+  city_in: [String!]
+
+  """All values that are not contained in given list."""
+  city_not_in: [String!]
+
+  """All values less than the given value."""
+  city_lt: String
+
+  """All values less than or equal the given value."""
+  city_lte: String
+
+  """All values greater than the given value."""
+  city_gt: String
+
+  """All values greater than or equal the given value."""
+  city_gte: String
+
+  """All values containing the given string."""
+  city_contains: String
+
+  """All values not containing the given string."""
+  city_not_contains: String
+
+  """All values starting with the given string."""
+  city_starts_with: String
+
+  """All values not starting with the given string."""
+  city_not_starts_with: String
+
+  """All values ending with the given string."""
+  city_ends_with: String
+
+  """All values not ending with the given string."""
+  city_not_ends_with: String
+  country: String
+
+  """All values that are not equal to given value."""
+  country_not: String
+
+  """All values that are contained in given list."""
+  country_in: [String!]
+
+  """All values that are not contained in given list."""
+  country_not_in: [String!]
+
+  """All values less than the given value."""
+  country_lt: String
+
+  """All values less than or equal the given value."""
+  country_lte: String
+
+  """All values greater than the given value."""
+  country_gt: String
+
+  """All values greater than or equal the given value."""
+  country_gte: String
+
+  """All values containing the given string."""
+  country_contains: String
+
+  """All values not containing the given string."""
+  country_not_contains: String
+
+  """All values starting with the given string."""
+  country_starts_with: String
+
+  """All values not starting with the given string."""
+  country_not_starts_with: String
+
+  """All values ending with the given string."""
+  country_ends_with: String
+
+  """All values not ending with the given string."""
+  country_not_ends_with: String
+  lat: Float
+
+  """All values that are not equal to given value."""
+  lat_not: Float
+
+  """All values that are contained in given list."""
+  lat_in: [Float!]
+
+  """All values that are not contained in given list."""
+  lat_not_in: [Float!]
+
+  """All values less than the given value."""
+  lat_lt: Float
+
+  """All values less than or equal the given value."""
+  lat_lte: Float
+
+  """All values greater than the given value."""
+  lat_gt: Float
+
+  """All values greater than or equal the given value."""
+  lat_gte: Float
+  lng: Float
+
+  """All values that are not equal to given value."""
+  lng_not: Float
+
+  """All values that are contained in given list."""
+  lng_in: [Float!]
+
+  """All values that are not contained in given list."""
+  lng_not_in: [Float!]
+
+  """All values less than the given value."""
+  lng_lt: Float
+
+  """All values less than or equal the given value."""
+  lng_lte: Float
+
+  """All values greater than the given value."""
+  lng_gt: Float
+
+  """All values greater than or equal the given value."""
+  lng_gte: Float
 }
 
 """
@@ -602,34 +1872,43 @@ scalar Long
 
 type Mutation {
   createItem(data: ItemCreateInput!): Item!
-  createRent(data: RentCreateInput!): Rent!
+  createBooking(data: BookingCreateInput!): Booking!
   createUserReview(data: UserReviewCreateInput!): UserReview!
-  createRentReview(data: RentReviewCreateInput!): RentReview!
+  createBookingReview(data: BookingReviewCreateInput!): BookingReview!
+  createCategory(data: CategoryCreateInput!): Category!
+  createLocation(data: LocationCreateInput!): Location!
   createUser(data: UserCreateInput!): User!
   updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
-  updateRent(data: RentUpdateInput!, where: RentWhereUniqueInput!): Rent
+  updateBooking(data: BookingUpdateInput!, where: BookingWhereUniqueInput!): Booking
   updateUserReview(data: UserReviewUpdateInput!, where: UserReviewWhereUniqueInput!): UserReview
-  updateRentReview(data: RentReviewUpdateInput!, where: RentReviewWhereUniqueInput!): RentReview
+  updateBookingReview(data: BookingReviewUpdateInput!, where: BookingReviewWhereUniqueInput!): BookingReview
+  updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteItem(where: ItemWhereUniqueInput!): Item
-  deleteRent(where: RentWhereUniqueInput!): Rent
+  deleteBooking(where: BookingWhereUniqueInput!): Booking
   deleteUserReview(where: UserReviewWhereUniqueInput!): UserReview
-  deleteRentReview(where: RentReviewWhereUniqueInput!): RentReview
+  deleteBookingReview(where: BookingReviewWhereUniqueInput!): BookingReview
+  deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteUser(where: UserWhereUniqueInput!): User
   upsertItem(where: ItemWhereUniqueInput!, create: ItemCreateInput!, update: ItemUpdateInput!): Item!
-  upsertRent(where: RentWhereUniqueInput!, create: RentCreateInput!, update: RentUpdateInput!): Rent!
+  upsertBooking(where: BookingWhereUniqueInput!, create: BookingCreateInput!, update: BookingUpdateInput!): Booking!
   upsertUserReview(where: UserReviewWhereUniqueInput!, create: UserReviewCreateInput!, update: UserReviewUpdateInput!): UserReview!
-  upsertRentReview(where: RentReviewWhereUniqueInput!, create: RentReviewCreateInput!, update: RentReviewUpdateInput!): RentReview!
+  upsertBookingReview(where: BookingReviewWhereUniqueInput!, create: BookingReviewCreateInput!, update: BookingReviewUpdateInput!): BookingReview!
+  upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
-  updateManyRents(data: RentUpdateManyMutationInput!, where: RentWhereInput): BatchPayload!
+  updateManyBookings(data: BookingUpdateManyMutationInput!, where: BookingWhereInput): BatchPayload!
   updateManyUserReviews(data: UserReviewUpdateManyMutationInput!, where: UserReviewWhereInput): BatchPayload!
-  updateManyRentReviews(data: RentReviewUpdateManyMutationInput!, where: RentReviewWhereInput): BatchPayload!
+  updateManyBookingReviews(data: BookingReviewUpdateManyMutationInput!, where: BookingReviewWhereInput): BatchPayload!
+  updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
+  updateManyLocations(data: LocationUpdateManyMutationInput!, where: LocationWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyItems(where: ItemWhereInput): BatchPayload!
-  deleteManyRents(where: RentWhereInput): BatchPayload!
+  deleteManyBookings(where: BookingWhereInput): BatchPayload!
   deleteManyUserReviews(where: UserReviewWhereInput): BatchPayload!
-  deleteManyRentReviews(where: RentReviewWhereInput): BatchPayload!
+  deleteManyBookingReviews(where: BookingReviewWhereInput): BatchPayload!
+  deleteManyCategories(where: CategoryWhereInput): BatchPayload!
+  deleteManyLocations(where: LocationWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -662,19 +1941,24 @@ type PageInfo {
 
 type Query {
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item]!
-  rents(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rent]!
+  bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking]!
   userReviews(where: UserReviewWhereInput, orderBy: UserReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserReview]!
-  rentReviews(where: RentReviewWhereInput, orderBy: RentReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [RentReview]!
+  bookingReviews(where: BookingReviewWhereInput, orderBy: BookingReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BookingReview]!
+  categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
+  locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   item(where: ItemWhereUniqueInput!): Item
-  rent(where: RentWhereUniqueInput!): Rent
+  booking(where: BookingWhereUniqueInput!): Booking
   userReview(where: UserReviewWhereUniqueInput!): UserReview
-  rentReview(where: RentReviewWhereUniqueInput!): RentReview
+  bookingReview(where: BookingReviewWhereUniqueInput!): BookingReview
+  category(where: CategoryWhereUniqueInput!): Category
   user(where: UserWhereUniqueInput!): User
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
-  rentsConnection(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RentConnection!
+  bookingsConnection(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookingConnection!
   userReviewsConnection(where: UserReviewWhereInput, orderBy: UserReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserReviewConnection!
-  rentReviewsConnection(where: RentReviewWhereInput, orderBy: RentReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RentReviewConnection!
+  bookingReviewsConnection(where: BookingReviewWhereInput, orderBy: BookingReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookingReviewConnection!
+  categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
+  locationsConnection(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
@@ -684,665 +1968,13 @@ type Query {
   ): Node
 }
 
-type Rent implements Node {
-  id: ID!
-  item: Item
-  renter: User
-  startDate: DateTime!
-  endDate: DateTime!
-  review: RentReview
-  cancelled: Boolean!
-}
-
-"""A connection to a list of items."""
-type RentConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [RentEdge]!
-  aggregate: AggregateRent!
-}
-
-input RentCreateInput {
-  startDate: DateTime!
-  endDate: DateTime!
-  cancelled: Boolean
-  item: ItemCreateOneWithoutRentsInput
-  renter: UserCreateOneWithoutRentsInput
-  review: RentReviewCreateOneWithoutRentInput
-}
-
-input RentCreateManyWithoutItemInput {
-  create: [RentCreateWithoutItemInput!]
-  connect: [RentWhereUniqueInput!]
-}
-
-input RentCreateManyWithoutRenterInput {
-  create: [RentCreateWithoutRenterInput!]
-  connect: [RentWhereUniqueInput!]
-}
-
-input RentCreateOneWithoutReviewInput {
-  create: RentCreateWithoutReviewInput
-  connect: RentWhereUniqueInput
-}
-
-input RentCreateWithoutItemInput {
-  startDate: DateTime!
-  endDate: DateTime!
-  cancelled: Boolean
-  renter: UserCreateOneWithoutRentsInput
-  review: RentReviewCreateOneWithoutRentInput
-}
-
-input RentCreateWithoutRenterInput {
-  startDate: DateTime!
-  endDate: DateTime!
-  cancelled: Boolean
-  item: ItemCreateOneWithoutRentsInput
-  review: RentReviewCreateOneWithoutRentInput
-}
-
-input RentCreateWithoutReviewInput {
-  startDate: DateTime!
-  endDate: DateTime!
-  cancelled: Boolean
-  item: ItemCreateOneWithoutRentsInput
-  renter: UserCreateOneWithoutRentsInput
-}
-
-"""An edge in a connection."""
-type RentEdge {
-  """The item at the end of the edge."""
-  node: Rent!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum RentOrderByInput {
-  id_ASC
-  id_DESC
-  startDate_ASC
-  startDate_DESC
-  endDate_ASC
-  endDate_DESC
-  cancelled_ASC
-  cancelled_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
-}
-
-type RentPreviousValues {
-  id: ID!
-  startDate: DateTime!
-  endDate: DateTime!
-  cancelled: Boolean!
-}
-
-type RentReview implements Node {
-  id: ID!
-  rating: Int!
-  rent: Rent!
-  reviewer: User
-}
-
-"""A connection to a list of items."""
-type RentReviewConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [RentReviewEdge]!
-  aggregate: AggregateRentReview!
-}
-
-input RentReviewCreateInput {
-  rating: Int!
-  rent: RentCreateOneWithoutReviewInput!
-  reviewer: UserCreateOneInput
-}
-
-input RentReviewCreateOneWithoutRentInput {
-  create: RentReviewCreateWithoutRentInput
-  connect: RentReviewWhereUniqueInput
-}
-
-input RentReviewCreateWithoutRentInput {
-  rating: Int!
-  reviewer: UserCreateOneInput
-}
-
-"""An edge in a connection."""
-type RentReviewEdge {
-  """The item at the end of the edge."""
-  node: RentReview!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-enum RentReviewOrderByInput {
-  id_ASC
-  id_DESC
-  rating_ASC
-  rating_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
-}
-
-type RentReviewPreviousValues {
-  id: ID!
-  rating: Int!
-}
-
-type RentReviewSubscriptionPayload {
-  mutation: MutationType!
-  node: RentReview
-  updatedFields: [String!]
-  previousValues: RentReviewPreviousValues
-}
-
-input RentReviewSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [RentReviewSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [RentReviewSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [RentReviewSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: RentReviewWhereInput
-}
-
-input RentReviewUpdateInput {
-  rating: Int
-  rent: RentUpdateOneRequiredWithoutReviewInput
-  reviewer: UserUpdateOneInput
-}
-
-input RentReviewUpdateManyMutationInput {
-  rating: Int
-}
-
-input RentReviewUpdateOneWithoutRentInput {
-  create: RentReviewCreateWithoutRentInput
-  connect: RentReviewWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: RentReviewUpdateWithoutRentDataInput
-  upsert: RentReviewUpsertWithoutRentInput
-}
-
-input RentReviewUpdateWithoutRentDataInput {
-  rating: Int
-  reviewer: UserUpdateOneInput
-}
-
-input RentReviewUpsertWithoutRentInput {
-  update: RentReviewUpdateWithoutRentDataInput!
-  create: RentReviewCreateWithoutRentInput!
-}
-
-input RentReviewWhereInput {
-  """Logical AND on all given filters."""
-  AND: [RentReviewWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [RentReviewWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [RentReviewWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  rating: Int
-
-  """All values that are not equal to given value."""
-  rating_not: Int
-
-  """All values that are contained in given list."""
-  rating_in: [Int!]
-
-  """All values that are not contained in given list."""
-  rating_not_in: [Int!]
-
-  """All values less than the given value."""
-  rating_lt: Int
-
-  """All values less than or equal the given value."""
-  rating_lte: Int
-
-  """All values greater than the given value."""
-  rating_gt: Int
-
-  """All values greater than or equal the given value."""
-  rating_gte: Int
-  rent: RentWhereInput
-  reviewer: UserWhereInput
-}
-
-input RentReviewWhereUniqueInput {
-  id: ID
-}
-
-input RentScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [RentScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [RentScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [RentScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  startDate: DateTime
-
-  """All values that are not equal to given value."""
-  startDate_not: DateTime
-
-  """All values that are contained in given list."""
-  startDate_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  startDate_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  startDate_lt: DateTime
-
-  """All values less than or equal the given value."""
-  startDate_lte: DateTime
-
-  """All values greater than the given value."""
-  startDate_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  startDate_gte: DateTime
-  endDate: DateTime
-
-  """All values that are not equal to given value."""
-  endDate_not: DateTime
-
-  """All values that are contained in given list."""
-  endDate_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  endDate_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  endDate_lt: DateTime
-
-  """All values less than or equal the given value."""
-  endDate_lte: DateTime
-
-  """All values greater than the given value."""
-  endDate_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  endDate_gte: DateTime
-  cancelled: Boolean
-
-  """All values that are not equal to given value."""
-  cancelled_not: Boolean
-}
-
-type RentSubscriptionPayload {
-  mutation: MutationType!
-  node: Rent
-  updatedFields: [String!]
-  previousValues: RentPreviousValues
-}
-
-input RentSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [RentSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [RentSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [RentSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: RentWhereInput
-}
-
-input RentUpdateInput {
-  startDate: DateTime
-  endDate: DateTime
-  cancelled: Boolean
-  item: ItemUpdateOneWithoutRentsInput
-  renter: UserUpdateOneWithoutRentsInput
-  review: RentReviewUpdateOneWithoutRentInput
-}
-
-input RentUpdateManyDataInput {
-  startDate: DateTime
-  endDate: DateTime
-  cancelled: Boolean
-}
-
-input RentUpdateManyMutationInput {
-  startDate: DateTime
-  endDate: DateTime
-  cancelled: Boolean
-}
-
-input RentUpdateManyWithoutItemInput {
-  create: [RentCreateWithoutItemInput!]
-  connect: [RentWhereUniqueInput!]
-  disconnect: [RentWhereUniqueInput!]
-  delete: [RentWhereUniqueInput!]
-  update: [RentUpdateWithWhereUniqueWithoutItemInput!]
-  updateMany: [RentUpdateManyWithWhereNestedInput!]
-  deleteMany: [RentScalarWhereInput!]
-  upsert: [RentUpsertWithWhereUniqueWithoutItemInput!]
-}
-
-input RentUpdateManyWithoutRenterInput {
-  create: [RentCreateWithoutRenterInput!]
-  connect: [RentWhereUniqueInput!]
-  disconnect: [RentWhereUniqueInput!]
-  delete: [RentWhereUniqueInput!]
-  update: [RentUpdateWithWhereUniqueWithoutRenterInput!]
-  updateMany: [RentUpdateManyWithWhereNestedInput!]
-  deleteMany: [RentScalarWhereInput!]
-  upsert: [RentUpsertWithWhereUniqueWithoutRenterInput!]
-}
-
-input RentUpdateManyWithWhereNestedInput {
-  where: RentScalarWhereInput!
-  data: RentUpdateManyDataInput!
-}
-
-input RentUpdateOneRequiredWithoutReviewInput {
-  create: RentCreateWithoutReviewInput
-  connect: RentWhereUniqueInput
-  update: RentUpdateWithoutReviewDataInput
-  upsert: RentUpsertWithoutReviewInput
-}
-
-input RentUpdateWithoutItemDataInput {
-  startDate: DateTime
-  endDate: DateTime
-  cancelled: Boolean
-  renter: UserUpdateOneWithoutRentsInput
-  review: RentReviewUpdateOneWithoutRentInput
-}
-
-input RentUpdateWithoutRenterDataInput {
-  startDate: DateTime
-  endDate: DateTime
-  cancelled: Boolean
-  item: ItemUpdateOneWithoutRentsInput
-  review: RentReviewUpdateOneWithoutRentInput
-}
-
-input RentUpdateWithoutReviewDataInput {
-  startDate: DateTime
-  endDate: DateTime
-  cancelled: Boolean
-  item: ItemUpdateOneWithoutRentsInput
-  renter: UserUpdateOneWithoutRentsInput
-}
-
-input RentUpdateWithWhereUniqueWithoutItemInput {
-  where: RentWhereUniqueInput!
-  data: RentUpdateWithoutItemDataInput!
-}
-
-input RentUpdateWithWhereUniqueWithoutRenterInput {
-  where: RentWhereUniqueInput!
-  data: RentUpdateWithoutRenterDataInput!
-}
-
-input RentUpsertWithoutReviewInput {
-  update: RentUpdateWithoutReviewDataInput!
-  create: RentCreateWithoutReviewInput!
-}
-
-input RentUpsertWithWhereUniqueWithoutItemInput {
-  where: RentWhereUniqueInput!
-  update: RentUpdateWithoutItemDataInput!
-  create: RentCreateWithoutItemInput!
-}
-
-input RentUpsertWithWhereUniqueWithoutRenterInput {
-  where: RentWhereUniqueInput!
-  update: RentUpdateWithoutRenterDataInput!
-  create: RentCreateWithoutRenterInput!
-}
-
-input RentWhereInput {
-  """Logical AND on all given filters."""
-  AND: [RentWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [RentWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [RentWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  startDate: DateTime
-
-  """All values that are not equal to given value."""
-  startDate_not: DateTime
-
-  """All values that are contained in given list."""
-  startDate_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  startDate_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  startDate_lt: DateTime
-
-  """All values less than or equal the given value."""
-  startDate_lte: DateTime
-
-  """All values greater than the given value."""
-  startDate_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  startDate_gte: DateTime
-  endDate: DateTime
-
-  """All values that are not equal to given value."""
-  endDate_not: DateTime
-
-  """All values that are contained in given list."""
-  endDate_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  endDate_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  endDate_lt: DateTime
-
-  """All values less than or equal the given value."""
-  endDate_lte: DateTime
-
-  """All values greater than the given value."""
-  endDate_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  endDate_gte: DateTime
-  cancelled: Boolean
-
-  """All values that are not equal to given value."""
-  cancelled_not: Boolean
-  item: ItemWhereInput
-  renter: UserWhereInput
-  review: RentReviewWhereInput
-}
-
-input RentWhereUniqueInput {
-  id: ID
-}
-
 type Subscription {
   item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload
-  rent(where: RentSubscriptionWhereInput): RentSubscriptionPayload
+  booking(where: BookingSubscriptionWhereInput): BookingSubscriptionPayload
   userReview(where: UserReviewSubscriptionWhereInput): UserReviewSubscriptionPayload
-  rentReview(where: RentReviewSubscriptionWhereInput): RentReviewSubscriptionPayload
+  bookingReview(where: BookingReviewSubscriptionWhereInput): BookingReviewSubscriptionPayload
+  category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
+  location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -1352,9 +1984,8 @@ type User implements Node {
   email: String!
   password: String!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
-  rents(where: RentWhereInput, orderBy: RentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rent!]
-  reviewsBy(where: UserReviewWhereInput, orderBy: UserReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserReview!]
-  reviews(where: UserReviewWhereInput, orderBy: UserReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserReview!]
+  bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
+  location: Location
 }
 
 """A connection to a list of items."""
@@ -1372,13 +2003,17 @@ input UserCreateInput {
   email: String!
   password: String!
   items: ItemCreateManyWithoutOwnerInput
-  rents: RentCreateManyWithoutRenterInput
-  reviewsBy: UserReviewCreateManyWithoutReviewerInput
-  reviews: UserReviewCreateManyWithoutUserInput
+  bookings: BookingCreateManyWithoutBookerInput
+  location: LocationCreateOneInput
 }
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutBookingsInput {
+  create: UserCreateWithoutBookingsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1387,55 +2022,20 @@ input UserCreateOneWithoutItemsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutRentsInput {
-  create: UserCreateWithoutRentsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutReviewsByInput {
-  create: UserCreateWithoutReviewsByInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutReviewsInput {
-  create: UserCreateWithoutReviewsInput
-  connect: UserWhereUniqueInput
+input UserCreateWithoutBookingsInput {
+  name: String!
+  email: String!
+  password: String!
+  items: ItemCreateManyWithoutOwnerInput
+  location: LocationCreateOneInput
 }
 
 input UserCreateWithoutItemsInput {
   name: String!
   email: String!
   password: String!
-  rents: RentCreateManyWithoutRenterInput
-  reviewsBy: UserReviewCreateManyWithoutReviewerInput
-  reviews: UserReviewCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutRentsInput {
-  name: String!
-  email: String!
-  password: String!
-  items: ItemCreateManyWithoutOwnerInput
-  reviewsBy: UserReviewCreateManyWithoutReviewerInput
-  reviews: UserReviewCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutReviewsByInput {
-  name: String!
-  email: String!
-  password: String!
-  items: ItemCreateManyWithoutOwnerInput
-  rents: RentCreateManyWithoutRenterInput
-  reviews: UserReviewCreateManyWithoutUserInput
-}
-
-input UserCreateWithoutReviewsInput {
-  name: String!
-  email: String!
-  password: String!
-  items: ItemCreateManyWithoutOwnerInput
-  rents: RentCreateManyWithoutRenterInput
-  reviewsBy: UserReviewCreateManyWithoutReviewerInput
+  bookings: BookingCreateManyWithoutBookerInput
+  location: LocationCreateOneInput
 }
 
 """An edge in a connection."""
@@ -1488,28 +2088,8 @@ type UserReviewConnection {
 
 input UserReviewCreateInput {
   rating: Int!
-  user: UserCreateOneWithoutReviewsInput!
-  reviewer: UserCreateOneWithoutReviewsByInput!
-}
-
-input UserReviewCreateManyWithoutReviewerInput {
-  create: [UserReviewCreateWithoutReviewerInput!]
-  connect: [UserReviewWhereUniqueInput!]
-}
-
-input UserReviewCreateManyWithoutUserInput {
-  create: [UserReviewCreateWithoutUserInput!]
-  connect: [UserReviewWhereUniqueInput!]
-}
-
-input UserReviewCreateWithoutReviewerInput {
-  rating: Int!
-  user: UserCreateOneWithoutReviewsInput!
-}
-
-input UserReviewCreateWithoutUserInput {
-  rating: Int!
-  reviewer: UserCreateOneWithoutReviewsByInput!
+  user: UserCreateOneInput!
+  reviewer: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -1535,79 +2115,6 @@ enum UserReviewOrderByInput {
 type UserReviewPreviousValues {
   id: ID!
   rating: Int!
-}
-
-input UserReviewScalarWhereInput {
-  """Logical AND on all given filters."""
-  AND: [UserReviewScalarWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [UserReviewScalarWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [UserReviewScalarWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  rating: Int
-
-  """All values that are not equal to given value."""
-  rating_not: Int
-
-  """All values that are contained in given list."""
-  rating_in: [Int!]
-
-  """All values that are not contained in given list."""
-  rating_not_in: [Int!]
-
-  """All values less than the given value."""
-  rating_lt: Int
-
-  """All values less than or equal the given value."""
-  rating_lte: Int
-
-  """All values greater than the given value."""
-  rating_gt: Int
-
-  """All values greater than or equal the given value."""
-  rating_gte: Int
 }
 
 type UserReviewSubscriptionPayload {
@@ -1651,75 +2158,12 @@ input UserReviewSubscriptionWhereInput {
 
 input UserReviewUpdateInput {
   rating: Int
-  user: UserUpdateOneRequiredWithoutReviewsInput
-  reviewer: UserUpdateOneRequiredWithoutReviewsByInput
-}
-
-input UserReviewUpdateManyDataInput {
-  rating: Int
+  user: UserUpdateOneRequiredInput
+  reviewer: UserUpdateOneRequiredInput
 }
 
 input UserReviewUpdateManyMutationInput {
   rating: Int
-}
-
-input UserReviewUpdateManyWithoutReviewerInput {
-  create: [UserReviewCreateWithoutReviewerInput!]
-  connect: [UserReviewWhereUniqueInput!]
-  disconnect: [UserReviewWhereUniqueInput!]
-  delete: [UserReviewWhereUniqueInput!]
-  update: [UserReviewUpdateWithWhereUniqueWithoutReviewerInput!]
-  updateMany: [UserReviewUpdateManyWithWhereNestedInput!]
-  deleteMany: [UserReviewScalarWhereInput!]
-  upsert: [UserReviewUpsertWithWhereUniqueWithoutReviewerInput!]
-}
-
-input UserReviewUpdateManyWithoutUserInput {
-  create: [UserReviewCreateWithoutUserInput!]
-  connect: [UserReviewWhereUniqueInput!]
-  disconnect: [UserReviewWhereUniqueInput!]
-  delete: [UserReviewWhereUniqueInput!]
-  update: [UserReviewUpdateWithWhereUniqueWithoutUserInput!]
-  updateMany: [UserReviewUpdateManyWithWhereNestedInput!]
-  deleteMany: [UserReviewScalarWhereInput!]
-  upsert: [UserReviewUpsertWithWhereUniqueWithoutUserInput!]
-}
-
-input UserReviewUpdateManyWithWhereNestedInput {
-  where: UserReviewScalarWhereInput!
-  data: UserReviewUpdateManyDataInput!
-}
-
-input UserReviewUpdateWithoutReviewerDataInput {
-  rating: Int
-  user: UserUpdateOneRequiredWithoutReviewsInput
-}
-
-input UserReviewUpdateWithoutUserDataInput {
-  rating: Int
-  reviewer: UserUpdateOneRequiredWithoutReviewsByInput
-}
-
-input UserReviewUpdateWithWhereUniqueWithoutReviewerInput {
-  where: UserReviewWhereUniqueInput!
-  data: UserReviewUpdateWithoutReviewerDataInput!
-}
-
-input UserReviewUpdateWithWhereUniqueWithoutUserInput {
-  where: UserReviewWhereUniqueInput!
-  data: UserReviewUpdateWithoutUserDataInput!
-}
-
-input UserReviewUpsertWithWhereUniqueWithoutReviewerInput {
-  where: UserReviewWhereUniqueInput!
-  update: UserReviewUpdateWithoutReviewerDataInput!
-  create: UserReviewCreateWithoutReviewerInput!
-}
-
-input UserReviewUpsertWithWhereUniqueWithoutUserInput {
-  where: UserReviewWhereUniqueInput!
-  update: UserReviewUpdateWithoutUserDataInput!
-  create: UserReviewCreateWithoutUserInput!
 }
 
 input UserReviewWhereInput {
@@ -1845,9 +2289,8 @@ input UserUpdateDataInput {
   email: String
   password: String
   items: ItemUpdateManyWithoutOwnerInput
-  rents: RentUpdateManyWithoutRenterInput
-  reviewsBy: UserReviewUpdateManyWithoutReviewerInput
-  reviews: UserReviewUpdateManyWithoutUserInput
+  bookings: BookingUpdateManyWithoutBookerInput
+  location: LocationUpdateOneInput
 }
 
 input UserUpdateInput {
@@ -1855,9 +2298,8 @@ input UserUpdateInput {
   email: String
   password: String
   items: ItemUpdateManyWithoutOwnerInput
-  rents: RentUpdateManyWithoutRenterInput
-  reviewsBy: UserReviewUpdateManyWithoutReviewerInput
-  reviews: UserReviewUpdateManyWithoutUserInput
+  bookings: BookingUpdateManyWithoutBookerInput
+  location: LocationUpdateOneInput
 }
 
 input UserUpdateManyMutationInput {
@@ -1875,6 +2317,13 @@ input UserUpdateOneInput {
   upsert: UserUpsertNestedInput
 }
 
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+}
+
 input UserUpdateOneRequiredWithoutItemsInput {
   create: UserCreateWithoutItemsInput
   connect: UserWhereUniqueInput
@@ -1882,63 +2331,29 @@ input UserUpdateOneRequiredWithoutItemsInput {
   upsert: UserUpsertWithoutItemsInput
 }
 
-input UserUpdateOneRequiredWithoutReviewsByInput {
-  create: UserCreateWithoutReviewsByInput
-  connect: UserWhereUniqueInput
-  update: UserUpdateWithoutReviewsByDataInput
-  upsert: UserUpsertWithoutReviewsByInput
-}
-
-input UserUpdateOneRequiredWithoutReviewsInput {
-  create: UserCreateWithoutReviewsInput
-  connect: UserWhereUniqueInput
-  update: UserUpdateWithoutReviewsDataInput
-  upsert: UserUpsertWithoutReviewsInput
-}
-
-input UserUpdateOneWithoutRentsInput {
-  create: UserCreateWithoutRentsInput
+input UserUpdateOneWithoutBookingsInput {
+  create: UserCreateWithoutBookingsInput
   connect: UserWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: UserUpdateWithoutRentsDataInput
-  upsert: UserUpsertWithoutRentsInput
+  update: UserUpdateWithoutBookingsDataInput
+  upsert: UserUpsertWithoutBookingsInput
+}
+
+input UserUpdateWithoutBookingsDataInput {
+  name: String
+  email: String
+  password: String
+  items: ItemUpdateManyWithoutOwnerInput
+  location: LocationUpdateOneInput
 }
 
 input UserUpdateWithoutItemsDataInput {
   name: String
   email: String
   password: String
-  rents: RentUpdateManyWithoutRenterInput
-  reviewsBy: UserReviewUpdateManyWithoutReviewerInput
-  reviews: UserReviewUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutRentsDataInput {
-  name: String
-  email: String
-  password: String
-  items: ItemUpdateManyWithoutOwnerInput
-  reviewsBy: UserReviewUpdateManyWithoutReviewerInput
-  reviews: UserReviewUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutReviewsByDataInput {
-  name: String
-  email: String
-  password: String
-  items: ItemUpdateManyWithoutOwnerInput
-  rents: RentUpdateManyWithoutRenterInput
-  reviews: UserReviewUpdateManyWithoutUserInput
-}
-
-input UserUpdateWithoutReviewsDataInput {
-  name: String
-  email: String
-  password: String
-  items: ItemUpdateManyWithoutOwnerInput
-  rents: RentUpdateManyWithoutRenterInput
-  reviewsBy: UserReviewUpdateManyWithoutReviewerInput
+  bookings: BookingUpdateManyWithoutBookerInput
+  location: LocationUpdateOneInput
 }
 
 input UserUpsertNestedInput {
@@ -1946,24 +2361,14 @@ input UserUpsertNestedInput {
   create: UserCreateInput!
 }
 
+input UserUpsertWithoutBookingsInput {
+  update: UserUpdateWithoutBookingsDataInput!
+  create: UserCreateWithoutBookingsInput!
+}
+
 input UserUpsertWithoutItemsInput {
   update: UserUpdateWithoutItemsDataInput!
   create: UserCreateWithoutItemsInput!
-}
-
-input UserUpsertWithoutRentsInput {
-  update: UserUpdateWithoutRentsDataInput!
-  create: UserCreateWithoutRentsInput!
-}
-
-input UserUpsertWithoutReviewsByInput {
-  update: UserUpdateWithoutReviewsByDataInput!
-  create: UserCreateWithoutReviewsByInput!
-}
-
-input UserUpsertWithoutReviewsInput {
-  update: UserUpdateWithoutReviewsDataInput!
-  create: UserCreateWithoutReviewsInput!
 }
 
 input UserWhereInput {
@@ -2138,15 +2543,10 @@ input UserWhereInput {
   items_every: ItemWhereInput
   items_some: ItemWhereInput
   items_none: ItemWhereInput
-  rents_every: RentWhereInput
-  rents_some: RentWhereInput
-  rents_none: RentWhereInput
-  reviewsBy_every: UserReviewWhereInput
-  reviewsBy_some: UserReviewWhereInput
-  reviewsBy_none: UserReviewWhereInput
-  reviews_every: UserReviewWhereInput
-  reviews_some: UserReviewWhereInput
-  reviews_none: UserReviewWhereInput
+  bookings_every: BookingWhereInput
+  bookings_some: BookingWhereInput
+  bookings_none: BookingWhereInput
+  location: LocationWhereInput
 }
 
 input UserWhereUniqueInput {

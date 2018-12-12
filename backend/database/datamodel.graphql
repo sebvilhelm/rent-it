@@ -4,9 +4,15 @@ type User {
   email: String! @unique
   password: String!
   items: [Item!]!
-  rents: [Rent!]!
-  reviewsBy: [UserReview!]! @relation(name: "ReviewsByUser")
-  reviews: [UserReview!]! @relation(name: "ReviewsOfUser")
+  bookings: [Booking!]!
+  location: Location
+}
+
+type Location {
+  city: String!
+  country: String!
+  lat: Float!
+  lng: Float!
 }
 
 type Item {
@@ -14,36 +20,51 @@ type Item {
   title: String!
   description: String!
   owner: User!
-  rents: [Rent!]!
+  bookings: [Booking!]!
   price: Int!
   maxDuration: Int
+  category: Category!
 }
 
-type Rent {
+type Booking {
   id: ID! @unique
   item: Item
-  renter: User
+  booker: User
   startDate: DateTime!
   endDate: DateTime!
-  review: RentReview
-  cancelled: Boolean! @default(value: "true")
+  review: BookingReview
+  status: BookingStatus! @default(value: "PENDING")
 }
 
 type UserReview {
   id: ID! @unique
   rating: Int!
-  user: User! @relation(name: "ReviewsOfUser")
-  reviewer: User! @relation(name: "ReviewsByUser")
+  user: User! @relation(name: "UserReviewByUser")
+  reviewer: User! @relation(name: "UserReviewOfUser")
 }
 
-type RentReview {
+type BookingReview {
   id: ID! @unique
   rating: Int!
-  rent: Rent!
+  booking: Booking!
   reviewer: User
+}
+
+type Category {
+  name: String! @unique
+  slug: String! @unique
+  description: String!
+  items: [Item!]!
 }
 
 enum Permission {
   ADMIN
   USER
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  DENIED
+  CANCELLED
 }
