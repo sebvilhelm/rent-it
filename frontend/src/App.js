@@ -1,9 +1,11 @@
 /** @jsx jsx */
+import React from 'react'
 import { jsx, css } from '@emotion/core'
 import { Suspense } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import SpacerGif from './components/SpacerGif'
+import Spinner from './components/Spinner'
 
 const query = gql`
   query testQuery {
@@ -26,10 +28,10 @@ function C() {
   )
 }
 
-function Header() {
+function Header(props) {
   return (
-    <header>
-      <div css={{ display: 'flex' }}>
+    <header {...props}>
+      <div css={{ display: 'flex', padding: '1rem' }}>
         <div>Logo</div>
         <SpacerGif />
         <div>
@@ -44,19 +46,19 @@ function Header() {
 
 function App() {
   return (
-    <div>
-      <Header />
-      <h1
-        css={css`
-          color: hotpink;
-        `}
-      >
-        Hello
-      </h1>
-      <Suspense fallback={<div>Loading...</div>}>
+    <>
+      <Suspense fallback={<Spinner />}>
+        <Header />
+        <h1
+          css={css`
+            color: hotpink;
+          `}
+        >
+          Hello
+        </h1>
         <C />
       </Suspense>
-    </div>
+    </>
   )
 }
 
