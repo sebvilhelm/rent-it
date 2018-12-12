@@ -3,9 +3,10 @@ import { jsx, css } from '@emotion/core'
 import { Suspense } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
+import SpacerGif from './components/SpacerGif'
 
 const query = gql`
-  query {
+  query testQuery {
     items {
       title
     }
@@ -25,9 +26,26 @@ function C() {
   )
 }
 
+function Header() {
+  return (
+    <header>
+      <div css={{ display: 'flex' }}>
+        <div>Logo</div>
+        <SpacerGif />
+        <div>
+          <input type="search" />
+        </div>
+
+        <nav>link link link link</nav>
+      </div>
+    </header>
+  )
+}
+
 function App() {
   return (
     <div>
+      <Header />
       <h1
         css={css`
           color: hotpink;
