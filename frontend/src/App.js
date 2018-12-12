@@ -13,8 +13,9 @@ const query = gql`
 `
 
 function C() {
-  const { data } = useQuery(query)
-  const { items } = data
+  const {
+    data: { items },
+  } = useQuery(query)
   return (
     <ul>
       {items.map(item => (
