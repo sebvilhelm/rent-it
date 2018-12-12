@@ -1,6 +1,28 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-// import React from 'react'
+import { Suspense } from 'react'
+import { useQuery } from 'react-apollo-hooks'
+import gql from 'graphql-tag'
+
+const query = gql`
+  query {
+    items {
+      title
+    }
+  }
+`
+
+function C() {
+  const { data } = useQuery(query)
+  const { items } = data
+  return (
+    <ul>
+      {items.map(item => (
+        <li key={item.title}>{item.title}</li>
+      ))}
+    </ul>
+  )
+}
 
 function App() {
   return (
@@ -12,6 +34,9 @@ function App() {
       >
         Hello
       </h1>
+      <Suspense fallback={<div>Loading...</div>}>
+        <C />
+      </Suspense>
     </div>
   )
 }
