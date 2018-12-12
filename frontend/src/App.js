@@ -1,13 +1,19 @@
-import React, { Component } from 'react'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+// import React from 'react'
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Hello</h1>
-      </div>
-    )
-  }
+function App() {
+  return (
+    <div>
+      <h1
+        css={css`
+          color: hotpink;
+        `}
+      >
+        Hello
+      </h1>
+    </div>
+  )
 }
 
 export default App
