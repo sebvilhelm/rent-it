@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/sebastian-vilhelm-nielsen-e462bc/bachelor/dev
-# timestamp: Wed Dec 12 2018 10:41:40 GMT+0100 (Central European Standard Time)
+# timestamp: Thu Dec 13 2018 10:18:36 GMT+0100 (Central European Standard Time)
 
 type AggregateBooking {
   count: Int!
@@ -707,10 +707,11 @@ input BookingWhereUniqueInput {
   id: ID
 }
 
-type Category {
+type Category implements Node {
+  id: ID!
   name: String!
   slug: String!
-  description: String!
+  description: String
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
 }
 
@@ -727,7 +728,7 @@ type CategoryConnection {
 input CategoryCreateInput {
   name: String!
   slug: String!
-  description: String!
+  description: String
   items: ItemCreateManyWithoutCategoryInput
 }
 
@@ -739,7 +740,7 @@ input CategoryCreateOneWithoutItemsInput {
 input CategoryCreateWithoutItemsInput {
   name: String!
   slug: String!
-  description: String!
+  description: String
 }
 
 """An edge in a connection."""
@@ -752,14 +753,14 @@ type CategoryEdge {
 }
 
 enum CategoryOrderByInput {
+  id_ASC
+  id_DESC
   name_ASC
   name_DESC
   slug_ASC
   slug_DESC
   description_ASC
   description_DESC
-  id_ASC
-  id_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -767,9 +768,10 @@ enum CategoryOrderByInput {
 }
 
 type CategoryPreviousValues {
+  id: ID!
   name: String!
   slug: String!
-  description: String!
+  description: String
 }
 
 type CategorySubscriptionPayload {
@@ -851,6 +853,46 @@ input CategoryWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [CategoryWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   name: String
 
   """All values that are not equal to given value."""
@@ -977,6 +1019,7 @@ input CategoryWhereInput {
 }
 
 input CategoryWhereUniqueInput {
+  id: ID
   name: String
   slug: String
 }
