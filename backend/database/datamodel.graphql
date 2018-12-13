@@ -51,9 +51,10 @@ type BookingReview {
 }
 
 type Category {
+  id: ID! @unique
   name: String! @unique
   slug: String! @unique
-  description: String!
+  description: String
   items: [Item!]!
 }
 
