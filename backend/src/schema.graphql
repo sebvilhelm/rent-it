@@ -10,6 +10,7 @@ type Query {
     first: Int
     last: Int
   ): [Item!]!
+  itemsConnection(where: ItemWhereInput): ItemConnection!
   item(where: ItemWhereUniqueInput!): Item
   me: User
 }
