@@ -12,6 +12,18 @@ type Query {
   ): [Item!]!
   itemsConnection(where: ItemWhereInput): ItemConnection!
   item(where: ItemWhereUniqueInput!): Item
+
+  categories(
+    where: CategoryWhereInput
+    orderBy: CategoryOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Category!]!
+  categoriesConnection(where: CategoryWhereInput): CategoryConnection!
+
   me: User
 }
 

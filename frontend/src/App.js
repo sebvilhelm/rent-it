@@ -7,6 +7,8 @@ import gql from 'graphql-tag'
 import SpacerGif from './components/SpacerGif'
 import Spinner from './components/Spinner'
 import Item from './components/Item'
+import Category from './components/Category'
+import Search from './components/Search'
 
 const query = gql`
   query testQuery {
@@ -22,13 +24,16 @@ function Test() {
     data: { items },
   } = useQuery(query)
   return (
-    <ul>
-      {items.map(item => (
-        <li key={item.id}>
-          <Link to={`/item/${item.id}`}>{item.title}</Link>
-        </li>
-      ))}
-    </ul>
+    <div>
+      {/* <Search /> */}
+      <ul>
+        {items.map(item => (
+          <li key={item.id}>
+            <Link to={`/item/${item.id}`}>{item.title}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -38,9 +43,6 @@ function Header(props) {
       <div css={{ display: 'flex', padding: '1rem' }}>
         <div>Logo</div>
         <SpacerGif />
-        <div>
-          <input type="search" />
-        </div>
 
         <nav>
           <a href="#">Link</a>
@@ -70,6 +72,7 @@ function App() {
           <Router>
             <Test path="/" />
             <Item path="item/:id" />
+            <Category path="category/:slug" />
           </Router>
         </Suspense>
       </Suspense>
