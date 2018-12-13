@@ -4,11 +4,20 @@ const { getUserId } = require('../utils')
 
 const Mutation = {
   createItem(_, args, ctx, info) {
+    const { category, ...data } = args
     const currentUserId = getUserId(ctx)
+
+    // TODO: Validate data, no empty strings!
+
     return ctx.db.mutation.createItem(
       {
         data: {
-          ...args,
+          ...data,
+          category: {
+            connect: {
+              id: category,
+            },
+          },
           owner: {
             connect: {
               id: currentUserId,

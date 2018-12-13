@@ -1,13 +1,14 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import { Fragment, Suspense } from 'react'
-import { Router, Link } from '@reach/router'
+import { Router } from '@reach/router'
 import SpacerGif from './components/SpacerGif'
 import Spinner from './components/Spinner'
 import Item from './components/Item'
 import Category from './components/Category'
 import Categories from './components/Categories'
-import Search from './components/Search'
+import { ButtonLink } from './components/elements/Button'
+// import Search from './components/Search'
 import AddItem from './components/AddItem'
 
 function Header(props) {
@@ -16,14 +17,8 @@ function Header(props) {
       <div css={{ display: 'flex', padding: '1rem' }}>
         <div>Logo</div>
         <SpacerGif />
-
         <nav>
-          <Link to="/add-item">Add Item</Link>
-          <a href="#">Link</a>
-          <a href="#">Link</a>
-          <a href="#">Link</a>
-          <a href="#">Link</a>
-          <a href="#">Link</a>
+          <ButtonLink to="/add-item">Add Item</ButtonLink>
         </nav>
       </div>
     </header>

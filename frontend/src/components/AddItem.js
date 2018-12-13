@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import gql from 'graphql-tag'
 import { Input, Label, Textarea, Form } from './elements/Form'
+import Button from './elements/Button'
+import { useMutation } from 'react-apollo-hooks'
 
 const MUTATION_ADD_ITEM = gql`
   mutation addItem(
@@ -8,12 +10,14 @@ const MUTATION_ADD_ITEM = gql`
     $description: String!
     $price: Int!
     $maxDuration: Int
+    $category: ID!
   ) {
     createItem(
       title: $title
       description: $description
       price: $price
       maxDuration: $maxDuration
+      category: $category
     ) {
       id
     }
@@ -22,25 +26,51 @@ const MUTATION_ADD_ITEM = gql`
 
 function useInput(initialValue) {
   const [value, setValue] = useState(initialValue)
-
   const onChange = event => setValue(event.target.value)
-
   return [value, onChange, setValue]
 }
 
 function AddItem() {
   const [durationToggle, setDurationToggle] = useState(false)
-  const [title, onChangeTitle] = useInput('')
-  const [description, onChangeDescription] = useInput('')
-  const [price, onChangePrice] = useInput(0)
-  const [maxDuration, onChangeMaxDuration] = useInput(0)
+  const [title, onChangeTitle, setTitle] = useInput('')
+  const [description, onChangeDescription, setDescription] = useInput('')
+  const [price, onChangePrice, setPrice] = useInput(0)
+  const [maxDuration, onChangeMaxDuration, setMaxDuration] = useInput(0)
+  const [busy, setBusy] = useState(false)
+  // TODO: Make category dynamic
+  const category = 'cjpi9rl3au3tq0a57j68jfr8q'
+  const variables = { title, description, category, price: Number(price) }
 
+  const addItem = useMutation(MUTATION_ADD_ITEM, {
+    variables: durationToggle
+      ? { ...variables, maxDuration: Number(maxDuration) }
+      : variables,
+  })
   return (
     <div>
-      <Form onSubmit={event => event.stopPropagation()}>
+      <Form
+        onSubmit={async event => {
+          event.preventDefault()
+          try {
+            setBusy(true)
+            const res = await addItem()
+            setTitle('')
+            setDescription('')
+            setPrice(0)
+            setMaxDuration(0)
+            // TODO: Success!
+          } catch (error) {
+            // TODO: Handle errors
+            console.error(error.message)
+          } finally {
+            setBusy(false)
+          }
+        }}
+      >
         <Label htmlFor="title">
           Title
           <Input
+            autoComplete="off"
             value={title}
             onChange={onChangeTitle}
             type="text"
@@ -52,6 +82,7 @@ function AddItem() {
         <Label htmlFor="description">
           Description
           <Textarea
+            autoComplete="off"
             value={description}
             onChange={onChangeDescription}
             id="description"
@@ -60,6 +91,7 @@ function AddItem() {
         <Label htmlFor="price">
           Price
           <Input
+            autoComplete="off"
             value={price}
             onChange={onChangePrice}
             type="number"
@@ -68,8 +100,9 @@ function AddItem() {
           />
         </Label>
         <Label htmlFor="durationToggle">
-          Max duration ?
+          Max duration?
           <Input
+            autoComplete="off"
             checked={durationToggle}
             onChange={event => setDurationToggle(event.target.checked)}
             type="checkbox"
@@ -81,6 +114,7 @@ function AddItem() {
           <Label htmlFor="maxDuration">
             Max Duration in days
             <Input
+              autoComplete="off"
               value={maxDuration}
               onChange={onChangeMaxDuration}
               type="number"
@@ -89,6 +123,7 @@ function AddItem() {
             />
           </Label>
         )}
+        <Button disabled={busy}>Add Item</Button>
       </Form>
     </div>
   )
