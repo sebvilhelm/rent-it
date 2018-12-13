@@ -32,6 +32,7 @@ type Mutation {
     title: String!
     description: String!
     price: Int!
+    categoryId: ID!
     maxDuration: Int
   ): Item!
   updateItem(
