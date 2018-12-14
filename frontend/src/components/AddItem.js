@@ -134,6 +134,7 @@ function AddItem() {
             setPrice(0)
             setMaxDuration(0)
             // TODO: Success!
+            console.log(res)
           } catch (error) {
             // TODO: Handle errors
             console.error(error.message)
