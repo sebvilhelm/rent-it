@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import gql from 'graphql-tag'
+import { useMutation, useQuery } from 'react-apollo-hooks'
+import Downshift from 'downshift'
 import { Input, Label, Textarea, Form } from './elements/Form'
 import Button from './elements/Button'
-import { useMutation } from 'react-apollo-hooks'
+import useInput from '../lib/useInput'
+import Spinner from './Spinner'
 
 const MUTATION_ADD_ITEM = gql`
   mutation addItem(
@@ -24,10 +27,77 @@ const MUTATION_ADD_ITEM = gql`
   }
 `
 
-function useInput(initialValue) {
-  const [value, setValue] = useState(initialValue)
-  const onChange = event => setValue(event.target.value)
-  return [value, onChange, setValue]
+const QUERY_SEARCH_CATEGORIES = gql`
+  query searchCategories($searchTerm: String!) {
+    categories(where: { name_contains: $searchTerm }) {
+      id
+      name
+    }
+  }
+`
+
+function CategoryList({ searchTerm, children }) {
+  const {
+    data: { categories },
+  } = useQuery(QUERY_SEARCH_CATEGORIES, { variables: { searchTerm } })
+
+  return children({ categories })
+}
+
+function CategoryInput(props) {
+  return (
+    <Downshift
+      itemToString={item => (item ? item.name : null)}
+      onChange={(selectedCategory, downshift) => {
+        props.setCategory(selectedCategory)
+      }}
+    >
+      {({
+        getInputProps,
+        getLabelProps,
+        getMenuProps,
+        getItemProps,
+        isOpen,
+        inputValue,
+        highlightedIndex,
+      }) => (
+        <div>
+          <Label {...getLabelProps()}>
+            Category
+            <Input {...getInputProps()} />
+          </Label>
+          {isOpen && (
+            <ul {...getMenuProps()}>
+              {!inputValue ? (
+                <div>Please enter a category</div>
+              ) : (
+                <Suspense fallback={<Spinner />}>
+                  <CategoryList searchTerm={inputValue}>
+                    {({ categories }) =>
+                      categories.map((item, index) => (
+                        <li
+                          style={{
+                            backgroundColor:
+                              highlightedIndex === index
+                                ? 'hotpink'
+                                : 'transparent',
+                          }}
+                          {...getItemProps({ item, index })}
+                          key={item.id}
+                        >
+                          {item.name}
+                        </li>
+                      ))
+                    }
+                  </CategoryList>
+                </Suspense>
+              )}
+            </ul>
+          )}
+        </div>
+      )}
+    </Downshift>
+  )
 }
 
 function AddItem() {
@@ -37,9 +107,14 @@ function AddItem() {
   const [price, onChangePrice, setPrice] = useInput(0)
   const [maxDuration, onChangeMaxDuration, setMaxDuration] = useInput(0)
   const [busy, setBusy] = useState(false)
-  // TODO: Make category dynamic
-  const category = 'cjpi9rl3au3tq0a57j68jfr8q'
-  const variables = { title, description, category, price: Number(price) }
+  const [category, setCategory] = useState({})
+
+  const variables = {
+    title,
+    description,
+    category: category.id || '',
+    price: Number(price),
+  }
 
   const addItem = useMutation(MUTATION_ADD_ITEM, {
     variables: durationToggle
@@ -78,6 +153,8 @@ function AddItem() {
             id="title"
           />
         </Label>
+
+        <CategoryInput setCategory={setCategory} />
 
         <Label htmlFor="description">
           Description
