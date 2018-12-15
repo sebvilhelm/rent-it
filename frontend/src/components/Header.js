@@ -1,20 +1,10 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { Fragment } from 'react'
-import { useMutation } from 'react-apollo-hooks'
-import graphql from 'graphql-tag'
+import { Fragment, useState } from 'react'
 import { Link } from '@reach/router'
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuLink,
-} from '@reach/menu-button'
-import '@reach/menu-button/styles.css'
 import { useUser } from './User'
 import SpacerGif from './SpacerGif'
-import { ButtonLink } from './elements/Button'
+import Button, { ButtonLink } from './elements/Button'
 
 const style = {
   flexWrapper: css`
@@ -27,21 +17,36 @@ const style = {
   `,
 }
 
+const profileStyle = {
+  wrapper: css`
+    display: inline-block;
+    position: relative;
+  `,
+  dropdown: css`
+    position: absolute;
+    top: 100%;
+    right: 0;
+  `,
+}
+
 function Profile(props) {
   const { signOut } = useUser()
+  const [open, setOpen] = useState(false)
   return (
-    <Menu>
-      <MenuButton>Profile</MenuButton>
-      <MenuList>
-        <MenuItem
-          onClick={async () => {
-            await signOut()
-          }}
-        >
-          Sign out
-        </MenuItem>
-      </MenuList>
-    </Menu>
+    <div css={profileStyle.wrapper}>
+      <Button onClick={() => setOpen(!open)}>Profile</Button>
+      {open && (
+        <div css={profileStyle.dropdown}>
+          <button
+            onClick={async () => {
+              await signOut()
+            }}
+          >
+            Sign out
+          </button>
+        </div>
+      )}
+    </div>
   )
 }
 
