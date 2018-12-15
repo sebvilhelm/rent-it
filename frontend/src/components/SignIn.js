@@ -15,21 +15,18 @@ const MUTATION_SIGNIN = graphql`
 `
 
 function LoginForm() {
-  const { setUser } = useUser()
+  const { signIn } = useUser()
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
   const [busy, setBusy] = useState(false)
-  const signIn = useMutation(MUTATION_SIGNIN, {
-    variables: { email, password },
-  })
+
   return (
     <Form
       onSubmit={async event => {
         event.preventDefault()
         setBusy(true)
         try {
-          const { data } = await signIn()
-          setUser(data.signIn)
+          await signIn({ email, password })
         } finally {
           setBusy(false)
         }

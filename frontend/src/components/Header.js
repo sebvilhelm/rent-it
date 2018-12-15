@@ -27,17 +27,8 @@ const style = {
   `,
 }
 
-const MUTATION_SIGNOUT = graphql`
-  mutation signOut {
-    signOut {
-      message
-    }
-  }
-`
-
 function Profile(props) {
-  const signOut = useMutation(MUTATION_SIGNOUT)
-  const { setUser } = useUser()
+  const { signOut } = useUser()
   return (
     <Menu>
       <MenuButton>Profile</MenuButton>
@@ -45,7 +36,6 @@ function Profile(props) {
         <MenuItem
           onClick={async () => {
             await signOut()
-            setUser(undefined)
           }}
         >
           Sign out

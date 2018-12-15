@@ -1,6 +1,30 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery, useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
+
+const MUTATION_SIGNIN = graphql`
+  mutation signIn($email: String!, $password: String!) {
+    signIn(email: $email, password: $password) {
+      name
+    }
+  }
+`
+
+const MUTATION_SIGNOUT = graphql`
+  mutation signOut {
+    signOut {
+      message
+    }
+  }
+`
+
+const QUERY_CURRENT_USER = graphql`
+  query currentUser {
+    me {
+      name
+    }
+  }
+`
 
 const userContext = createContext({ user: undefined })
 
@@ -10,16 +34,12 @@ const User = {}
 
 function Provider(props) {
   const [user, setUser] = useState(undefined)
+  const signInMutation = useMutation(MUTATION_SIGNIN)
+  const signOutMutation = useMutation(MUTATION_SIGNOUT)
 
   const {
     data: { me },
-  } = useQuery(graphql`
-    query {
-      me {
-        name
-      }
-    }
-  `)
+  } = useQuery(QUERY_CURRENT_USER)
 
   useEffect(
     () => {
@@ -30,7 +50,22 @@ function Provider(props) {
     [me]
   )
 
-  return <userContext.Provider {...props} value={{ user, setUser }} />
+  const signIn = async ({ email, password }) => {
+    const { data } = await signInMutation({ variables: { email, password } })
+    setUser(data.signIn)
+  }
+
+  const signOut = async () => {
+    await signOutMutation()
+    setUser(undefined)
+  }
+
+  return (
+    <userContext.Provider
+      {...props}
+      value={{ user, setUser, signIn, signOut }}
+    />
+  )
 }
 
 User.Provider = Provider
