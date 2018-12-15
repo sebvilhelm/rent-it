@@ -1,18 +1,9 @@
 import React, { useState } from 'react'
-import { useMutation } from 'react-apollo-hooks'
-import graphql from 'graphql-tag'
+import { navigate } from '@reach/router'
 import useInput from '../lib/useInput'
 import Button from './elements/Button'
 import { Form, Fieldset, Label, Input } from './elements/Form'
 import { useUser } from './User'
-
-const MUTATION_SIGNIN = graphql`
-  mutation signIn($email: String!, $password: String!) {
-    signIn(email: $email, password: $password) {
-      name
-    }
-  }
-`
 
 function LoginForm() {
   const { signIn } = useUser()
@@ -27,6 +18,8 @@ function LoginForm() {
         setBusy(true)
         try {
           await signIn({ email, password })
+          // TODO: navigate somewhere
+          navigate('/')
         } finally {
           setBusy(false)
         }
