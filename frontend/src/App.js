@@ -1,15 +1,17 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { Fragment, Suspense } from 'react'
+import { lazy, Fragment, Suspense } from 'react'
 import { Router } from '@reach/router'
 import SpacerGif from './components/SpacerGif'
 import Spinner from './components/Spinner'
-import Item from './components/Item'
-import Category from './components/Category'
-import Categories from './components/Categories'
 import { ButtonLink } from './components/elements/Button'
+
+const Item = lazy(() => import('./components/Item'))
+const Categories = lazy(() => import('./components/Categories'))
+const Category = lazy(() => import('./components/Category'))
+const AddItem = lazy(() => import('./components/AddItem'))
+const SignIn = lazy(() => import('./components/SignIn'))
 // import Search from './components/Search'
-import AddItem from './components/AddItem'
 
 function Header(props) {
   return (
@@ -43,6 +45,7 @@ function App() {
             <AddItem path="add-item" />
             <Item path="item/:id" />
             <Category path="category/:slug" />
+            <SignIn path="sign-in" />
           </Router>
         </Suspense>
       </Suspense>
