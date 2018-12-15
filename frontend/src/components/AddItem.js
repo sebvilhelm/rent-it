@@ -6,6 +6,7 @@ import { Input, Label, Textarea, Form } from './elements/Form'
 import Button from './elements/Button'
 import useInput from '../lib/useInput'
 import Spinner from './Spinner'
+import Error from './Error'
 
 const MUTATION_ADD_ITEM = gql`
   mutation addItem(
@@ -107,6 +108,7 @@ function AddItem() {
   const [price, onChangePrice, setPrice] = useInput(0)
   const [maxDuration, onChangeMaxDuration, setMaxDuration] = useInput(0)
   const [busy, setBusy] = useState(false)
+  const [error, setError] = useState(null)
   const [category, setCategory] = useState({})
 
   const variables = {
@@ -123,6 +125,7 @@ function AddItem() {
   })
   return (
     <div>
+      {error && <Error error={error} />}
       <Form
         onSubmit={async event => {
           event.preventDefault()
@@ -136,8 +139,7 @@ function AddItem() {
             // TODO: Success!
             console.log(res)
           } catch (error) {
-            // TODO: Handle errors
-            console.error(error.message)
+            setError(error)
           } finally {
             setBusy(false)
           }

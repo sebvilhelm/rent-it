@@ -115,7 +115,7 @@ const Mutation = {
   async book(_, args, ctx, info) {
     const currentUserId = getUserId(ctx)
 
-    const { itemId, startDate, endDate, ...rent } = args
+    const { itemId, startDate, endDate, ...booking } = args
 
     // TODO: Validate dates
 
@@ -131,10 +131,10 @@ const Mutation = {
 
     // TODO: Check if rent violates maxDuration
 
-    return ctx.db.mutation.createRent(
+    return ctx.db.mutation.createBooking(
       {
         data: {
-          ...rent,
+          ...booking,
           startDate,
           endDate,
           item: {
@@ -142,7 +142,7 @@ const Mutation = {
               id: itemId,
             },
           },
-          renter: {
+          booker: {
             connect: {
               id: currentUserId,
             },

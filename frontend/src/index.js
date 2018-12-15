@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ConcurrentMode } from 'react'
 import ReactDOM from 'react-dom'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
@@ -12,7 +12,9 @@ function Wrapper() {
   return (
     <ApolloProvider client={client}>
       <ApolloHooksProvider client={client}>
-        <App />
+        <ConcurrentMode>
+          <App />
+        </ConcurrentMode>
       </ApolloHooksProvider>
     </ApolloProvider>
   )
