@@ -11,11 +11,6 @@ const styles = {
     p {
       margin: 0;
     }
-
-    em {
-      font-weight: bold;
-      font-style: normal;
-    }
   `,
 }
 
@@ -30,7 +25,7 @@ function Error(props) {
     return graphQLErrors.map(error => (
       <div css={styles.error} key={error.message}>
         <p>
-          <em>Error:</em> {error.message.replace('GraphQL error: ', '')}
+          <strong>Error:</strong> {error.message.replace('GraphQL error: ', '')}
         </p>
       </div>
     ))
@@ -39,7 +34,7 @@ function Error(props) {
   return (
     <div css={styles.error}>
       <p>
-        <em>Error:</em> {error.message.replace('GraphQL error: ', '')}
+        <strong>Error:</strong> {error.message.replace('GraphQL error: ', '')}
       </p>
     </div>
   )

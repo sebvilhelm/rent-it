@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-exports.getUserId = ctx => {
+module.exports = ctx => {
   const { token } = ctx.request.cookies
   if (token) {
     const { userId } = jwt.verify(token, process.env.APP_SECRET)

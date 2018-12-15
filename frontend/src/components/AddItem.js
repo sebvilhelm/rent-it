@@ -1,8 +1,8 @@
-import React, { useState, Suspense } from 'react'
+import React, { Fragment, useState, Suspense } from 'react'
 import gql from 'graphql-tag'
 import { useMutation, useQuery } from 'react-apollo-hooks'
 import Downshift from 'downshift'
-import { Input, Label, Textarea, Form } from './elements/Form'
+import { Input, Label, Textarea, Form, Fieldset } from './elements/Form'
 import Button from './elements/Button'
 import useInput from '../lib/useInput'
 import Spinner from './Spinner'
@@ -46,11 +46,12 @@ function CategoryList({ searchTerm, children }) {
 }
 
 function CategoryInput(props) {
+  const { setCategory, ...inputProps } = props
   return (
     <Downshift
       itemToString={item => (item ? item.name : null)}
       onChange={(selectedCategory, downshift) => {
-        props.setCategory(selectedCategory)
+        setCategory(selectedCategory)
       }}
     >
       {({
@@ -65,7 +66,7 @@ function CategoryInput(props) {
         <div>
           <Label {...getLabelProps()}>
             Category
-            <Input {...getInputProps()} />
+            <Input {...getInputProps({ ...inputProps })} />
           </Label>
           {isOpen && (
             <ul {...getMenuProps()}>
@@ -145,65 +146,78 @@ function AddItem() {
           }
         }}
       >
-        <Label htmlFor="title">
-          Title
-          <Input
-            autoComplete="off"
-            value={title}
-            onChange={onChangeTitle}
-            type="text"
-            name="title"
-            id="title"
-          />
-        </Label>
-
-        <CategoryInput setCategory={setCategory} />
-
-        <Label htmlFor="description">
-          Description
-          <Textarea
-            autoComplete="off"
-            value={description}
-            onChange={onChangeDescription}
-            id="description"
-          />
-        </Label>
-        <Label htmlFor="price">
-          Price
-          <Input
-            autoComplete="off"
-            value={price}
-            onChange={onChangePrice}
-            type="number"
-            name="price"
-            id="price"
-          />
-        </Label>
-        <Label htmlFor="durationToggle">
-          Max duration?
-          <Input
-            autoComplete="off"
-            checked={durationToggle}
-            onChange={event => setDurationToggle(event.target.checked)}
-            type="checkbox"
-            name="durationToggle"
-            id="durationToggle"
-          />
-        </Label>
-        {durationToggle && (
-          <Label htmlFor="maxDuration">
-            Max Duration in days
+        <Fieldset disabled={busy}>
+          <Label htmlFor="title">
+            Title
             <Input
+              required
               autoComplete="off"
-              value={maxDuration}
-              onChange={onChangeMaxDuration}
-              type="number"
-              name="maxDuration"
-              id="maxDuration"
+              value={title}
+              onChange={onChangeTitle}
+              type="text"
+              name="title"
+              id="title"
             />
           </Label>
-        )}
-        <Button disabled={busy}>Add Item</Button>
+
+          <CategoryInput required setCategory={setCategory} />
+
+          <Label htmlFor="description">
+            Description
+            <Textarea
+              required
+              autoComplete="off"
+              value={description}
+              onChange={onChangeDescription}
+              id="description"
+            />
+          </Label>
+          <Label htmlFor="price">
+            Price
+            <Input
+              required
+              autoComplete="off"
+              value={price}
+              onChange={onChangePrice}
+              type="number"
+              name="price"
+              id="price"
+            />
+          </Label>
+          <Label htmlFor="durationToggle">
+            Max duration?
+            <Input
+              autoComplete="off"
+              checked={durationToggle}
+              onChange={event => setDurationToggle(event.target.checked)}
+              type="checkbox"
+              name="durationToggle"
+              id="durationToggle"
+            />
+          </Label>
+          {durationToggle && (
+            <Label htmlFor="maxDuration">
+              Max Duration in days
+              <Input
+                autoComplete="off"
+                value={maxDuration}
+                onChange={onChangeMaxDuration}
+                type="number"
+                name="maxDuration"
+                id="maxDuration"
+              />
+            </Label>
+          )}
+          <Button>
+            Add Item
+            {busy && (
+              <Fragment>
+                {' '}
+                <Spinner />
+              </Fragment>
+            )}
+          </Button>
+        </Fieldset>
       </Form>
     </div>
   )

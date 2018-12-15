@@ -1,13 +1,14 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { getUserId } = require('../utils')
+const getUserId = require('../utils/getUserId')
+const { itemSchema } = require('../utils/validation')
 
 const Mutation = {
-  createItem(_, args, ctx, info) {
+  async createItem(_, args, ctx, info) {
     const { category, ...data } = args
     const currentUserId = getUserId(ctx)
 
-    // TODO: Validate data, no empty strings!
+    await itemSchema.validate(data)
 
     return ctx.db.mutation.createItem(
       {
