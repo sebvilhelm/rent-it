@@ -2,7 +2,11 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { differenceInDays } = require('date-fns')
 const getUserId = require('../utils/getUserId')
-const { itemSchema, bookingSchema } = require('../utils/validation')
+const {
+  itemSchema,
+  bookingSchema,
+  userValidation,
+} = require('../utils/validation')
 
 const Mutation = {
   async createItem(_, args, ctx, info) {
@@ -56,26 +60,27 @@ const Mutation = {
   },
 
   async signUp(_, args, ctx, info) {
-    const { password, confirmPassword, email, ...user } = args
-
-    if (password !== confirmPassword) {
-      throw new Error("The two passwords doesn't match")
-    }
+    const { password, ...user } = await userValidation.validate(args)
 
     const hashedPassword = await bcrypt.hash(password, 10)
-
-    const formattedEmail = email.toLowerCase()
 
     const createdUser = await ctx.db.mutation.createUser(
       {
         data: {
           ...user,
           password: hashedPassword,
-          email: formattedEmail,
         },
       },
       info
     )
+
+    // Generate JWT
+    const token = jwt.sign({ userId: createdUser.id }, process.env.APP_SECRET)
+    // Set the token as a cookie
+    ctx.response.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365,
+    })
 
     return createdUser
   },
@@ -123,7 +128,15 @@ const Mutation = {
 
     const item = await ctx.db.query.item(
       { where: { id: itemId } },
-      '{ owner { id }, maxDuration }'
+      `{
+        owner { id }
+        maxDuration
+        bookings(where: {status: APPROVED}) {
+          id
+          startDate
+          endDate
+        }
+      }`
     )
 
     // Check if user is owner of item
@@ -146,6 +159,8 @@ const Mutation = {
         } days`
       )
     }
+
+    // TODO: check if there already is an approved booking for the item in the same timespan
 
     return ctx.db.mutation.createBooking(
       {

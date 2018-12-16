@@ -17,7 +17,7 @@ const styles = {
 function Error(props) {
   const { error } = props
 
-  if (!error.message) return null
+  if (!error || !error.message) return null
 
   const graphQLErrors = idx(error, _ => _.networkError.result.errors)
 

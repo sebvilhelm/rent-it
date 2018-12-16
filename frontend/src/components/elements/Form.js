@@ -3,13 +3,15 @@ import { jsx, css } from '@emotion/core'
 
 const styles = {
   input: css({ width: '100%' }),
-  label: css({ marginTop: '1rem', marginBottom: '1rem' }),
-  form: css({ padding: '1rem', maxWidth: '40rem' }),
+  label: css``,
+  form: css`
+    padding: 1rem;
+    max-width: 40rem;
+  `,
   fieldset: css`
     padding: 0;
     margin: 0;
     border: none;
-    min-inline-size: initial;
   `,
 }
 

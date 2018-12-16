@@ -43,12 +43,7 @@ type Mutation {
     maxDuration: Int
   ): Item!
 
-  signUp(
-    name: String!
-    email: String!
-    password: String!
-    confirmPassword: String!
-  ): User!
+  signUp(name: String!, email: String!, password: String!): User!
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
 

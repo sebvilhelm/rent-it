@@ -51,6 +51,7 @@ function AddBooking(props) {
           <Label htmlFor="startDate">
             Start Date
             <Input
+              required
               type="date"
               id="startDate"
               name="startDate"
@@ -61,6 +62,7 @@ function AddBooking(props) {
           <Label htmlFor="endDate">
             End Date
             <Input
+              required
               type="date"
               id="endDate"
               name="endDate"

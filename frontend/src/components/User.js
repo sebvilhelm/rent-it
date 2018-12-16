@@ -18,6 +18,15 @@ const MUTATION_SIGNOUT = graphql`
   }
 `
 
+const MUTATION_SIGNUP = graphql`
+  mutation signUp($name: String!, $email: String!, $password: String!) {
+    signUp(name: $name, email: $email, password: $password) {
+      id
+      name
+    }
+  }
+`
+
 const QUERY_CURRENT_USER = graphql`
   query currentUser {
     me {
@@ -34,6 +43,7 @@ const User = {}
 
 function Provider(props) {
   const [user, setUser] = useState(undefined)
+  const signUpMutation = useMutation(MUTATION_SIGNUP)
   const signInMutation = useMutation(MUTATION_SIGNIN)
   const signOutMutation = useMutation(MUTATION_SIGNOUT)
 
@@ -60,10 +70,17 @@ function Provider(props) {
     setUser(undefined)
   }
 
+  const signUp = async ({ email, name, password }) => {
+    const { data } = await signUpMutation({
+      variables: { email, password, name },
+    })
+    setUser(data.signUp)
+  }
+
   return (
     <userContext.Provider
       {...props}
-      value={{ user, setUser, signIn, signOut }}
+      value={{ user, setUser, signIn, signOut, signUp }}
     />
   )
 }

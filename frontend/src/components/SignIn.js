@@ -4,8 +4,9 @@ import useInput from '../lib/useInput'
 import Button from './elements/Button'
 import { Form, Fieldset, Label, Input } from './elements/Form'
 import { useUser } from './User'
+import { SignUpForm } from './SignUp'
 
-function LoginForm() {
+function SignInForm() {
   const { signIn } = useUser()
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
@@ -26,22 +27,22 @@ function LoginForm() {
       }}
     >
       <Fieldset disabled={busy}>
-        <Label htmlFor="email">
+        <Label htmlFor="signInEmail">
           Email
           <Input
             value={email}
             onChange={onChangeEmail}
-            id="email"
+            id="signInEmail"
             type="email"
             required
           />
         </Label>
-        <Label htmlFor="password">
+        <Label htmlFor="signInPassword">
           Password
           <Input
             value={password}
             onChange={onChangePassword}
-            id="password"
+            id="signInPassword"
             type="password"
             required
           />
@@ -55,7 +56,15 @@ function LoginForm() {
 function SignIn() {
   return (
     <div>
-      <LoginForm />
+      <div>
+        <h2>Sign in</h2>
+        <SignInForm />
+      </div>
+
+      <div>
+        <h2>Sign Up</h2>
+        <SignUpForm />
+      </div>
     </div>
   )
 }
