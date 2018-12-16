@@ -8,7 +8,7 @@ module.exports = ctx => {
     return userId
   }
 
-  throw new AuthError()
+  throw new AuthError('You must be logged in to do that')
 }
 
 class AuthError extends Error {

@@ -1,4 +1,5 @@
 const yup = require('yup')
+const { startOfToday, startOfTomorrow } = require('date-fns')
 
 exports.itemSchema = yup.object().shape({
   title: yup.string().required(),
@@ -14,4 +15,15 @@ exports.itemSchema = yup.object().shape({
     .positive()
     .integer()
     .moreThan(0),
+})
+
+exports.bookingSchema = yup.object().shape({
+  startDate: yup
+    .date()
+    .required()
+    .min(startOfToday(), 'Please choose a start date today or later'),
+  endDate: yup
+    .date()
+    .required()
+    .min(startOfTomorrow(), 'Please choose a end date tomorrow or later'),
 })

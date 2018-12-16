@@ -6,7 +6,10 @@ const styles = {
   label: css({ marginTop: '1rem', marginBottom: '1rem' }),
   form: css({ padding: '1rem', maxWidth: '40rem' }),
   fieldset: css`
-    border: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    min-inline-size: initial;
   `,
 }
 

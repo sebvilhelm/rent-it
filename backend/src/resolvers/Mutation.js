@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { differenceInDays } = require('date-fns')
 const getUserId = require('../utils/getUserId')
-const { itemSchema } = require('../utils/validation')
+const { itemSchema, bookingSchema } = require('../utils/validation')
 
 const Mutation = {
   async createItem(_, args, ctx, info) {
@@ -118,7 +119,7 @@ const Mutation = {
 
     const { itemId, startDate, endDate, ...booking } = args
 
-    // TODO: Validate dates
+    await bookingSchema.validate(args)
 
     const item = await ctx.db.query.item(
       { where: { id: itemId } },
@@ -130,7 +131,21 @@ const Mutation = {
       throw new Error("You can't book your own item, obviously")
     }
 
-    // TODO: Check if rent violates maxDuration
+    const duration = differenceInDays(endDate, startDate) + 1
+
+    // Check if booking is at least one day
+    if (duration < 1) {
+      throw new Error('The end date must be later than the start date')
+    }
+
+    // Check if booking violates maxDuration
+    if (item.maxDuration && duration > item.maxDuration) {
+      throw new Error(
+        `your booking exceeds the maximum allowed duration of ${
+          item.maxDuration
+        } days`
+      )
+    }
 
     return ctx.db.mutation.createBooking(
       {
@@ -159,23 +174,23 @@ const Mutation = {
 
     const { id } = args
 
-    const rent = await ctx.db.query.rent(
+    const booking = await ctx.db.query.booking(
       { where: { id } },
       '{ item { owner { id } }, renter { id } }'
     )
 
-    const isOwner = rent.item.owner.id === currentUserId
-    const isRenter = rent.renter.id === currentUserId
+    const isOwner = booking.item.owner.id === currentUserId
+    const isRenter = booking.renter.id === currentUserId
 
     if (!isOwner && !isRenter) {
       throw new Error("You don't have permission to do that")
     }
 
-    return ctx.db.mutation.updateRent(
+    return ctx.db.mutation.updateBooking(
       {
         where: { id },
         data: {
-          cancelled: true,
+          status: 'CANCELLED',
         },
       },
       info

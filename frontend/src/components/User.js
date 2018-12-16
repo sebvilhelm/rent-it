@@ -39,7 +39,7 @@ function Provider(props) {
 
   const {
     data: { me },
-  } = useQuery(QUERY_CURRENT_USER)
+  } = useQuery(QUERY_CURRENT_USER, { errorPolicy: 'ignore' })
 
   useEffect(
     () => {

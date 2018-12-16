@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
+import useInput from '../lib/useInput'
 import Error from './Error'
 import Button from './elements/Button'
-import { Form } from './elements/Form'
+import { Form, Label, Input, Fieldset } from './elements/Form'
 
 const MUTATION_BOOK_ITEM = graphql`
   mutation bookItem($id: ID!, $startDate: DateTime!, $endDate: DateTime!) {
@@ -16,8 +17,8 @@ const MUTATION_BOOK_ITEM = graphql`
 // TODO: Add calendar for start date
 // TODO: Add calendar for end date
 function AddBooking(props) {
-  const [startDate] = useState(new Date('2018-12-14'))
-  const [endDate] = useState(new Date('2018-12-24'))
+  const [startDate, onChangeStartDate] = useInput('')
+  const [endDate, onChangeEndDate] = useInput('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
 
@@ -35,8 +36,9 @@ function AddBooking(props) {
       <Form
         onSubmit={async event => {
           event.preventDefault()
+          setBusy(true)
+          setError(null)
           try {
-            setBusy(true)
             await bookItem()
           } catch (error) {
             setError(error)
@@ -45,9 +47,29 @@ function AddBooking(props) {
           }
         }}
       >
-        <fieldset disabled={busy}>
+        <Fieldset disabled={busy}>
+          <Label htmlFor="startDate">
+            Start Date
+            <Input
+              type="date"
+              id="startDate"
+              name="startDate"
+              value={startDate}
+              onChange={onChangeStartDate}
+            />
+          </Label>
+          <Label htmlFor="endDate">
+            End Date
+            <Input
+              type="date"
+              id="endDate"
+              name="endDate"
+              value={endDate}
+              onChange={onChangeEndDate}
+            />
+          </Label>
           <Button>Book it!</Button>
-        </fieldset>
+        </Fieldset>
       </Form>
     </div>
   )
