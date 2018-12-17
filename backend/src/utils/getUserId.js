@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-module.exports = ctx => {
+module.exports = (ctx, options = { throwError: true }) => {
   const { token } = ctx.request.cookies
   if (token) {
     const { userId } = jwt.verify(token, process.env.APP_SECRET)
@@ -8,7 +8,11 @@ module.exports = ctx => {
     return userId
   }
 
-  throw new AuthError('You must be logged in to do that')
+  if (options.throwError) {
+    throw new AuthError('You must be logged in to do that')
+  }
+
+  return null
 }
 
 class AuthError extends Error {

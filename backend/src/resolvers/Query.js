@@ -9,7 +9,11 @@ const Query = {
   categoriesConnection: forwardTo('db'),
 
   async me(_, args, ctx, info) {
-    const currentUserId = getUserId(ctx)
+    const currentUserId = getUserId(ctx, { throwError: false })
+
+    if (!currentUserId) {
+      return null
+    }
 
     const user = await ctx.db.query.user(
       {

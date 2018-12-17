@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext } from 'react'
 import { useQuery, useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
 
@@ -43,51 +43,44 @@ export const useUser = () => useContext(userContext)
 
 const User = {}
 
-function Provider(props) {
-  const [user, setUser] = useState(undefined)
+function UserProvider(props) {
+  const {
+    data: { me },
+  } = useQuery(QUERY_CURRENT_USER, { errorPolicy: 'ignore' })
   const signUpMutation = useMutation(MUTATION_SIGNUP)
   const signInMutation = useMutation(MUTATION_SIGNIN)
   const signOutMutation = useMutation(MUTATION_SIGNOUT)
 
-  const {
-    data: { me },
-  } = useQuery(QUERY_CURRENT_USER, { errorPolicy: 'ignore' })
-
-  useEffect(
-    () => {
-      if (me) {
-        setUser(me)
-      }
-    },
-    [me]
-  )
-
   const signIn = async ({ email, password }) => {
-    const { data } = await signInMutation({ variables: { email, password } })
-    setUser(data.signIn)
+    await signInMutation({
+      variables: { email, password },
+      refetchQueries: [{ query: QUERY_CURRENT_USER }],
+    })
   }
 
   const signOut = async () => {
-    await signOutMutation()
-    setUser(undefined)
+    await signOutMutation({
+      refetchQueries: [{ query: QUERY_CURRENT_USER }],
+    })
   }
 
   const signUp = async ({ email, name, password }) => {
-    const { data } = await signUpMutation({
+    await signUpMutation({
       variables: { email, password, name },
+      refetchQueries: [{ query: QUERY_CURRENT_USER }],
     })
-    setUser(data.signUp)
   }
 
   return (
     <userContext.Provider
       {...props}
-      value={{ user, setUser, signIn, signOut, signUp }}
+      value={{ user: me, signIn, signOut, signUp }}
     />
   )
 }
 
-User.Provider = Provider
+User.Provider = UserProvider
 User.Consumer = userContext.Consumer
 
 export default User
+export { QUERY_CURRENT_USER }
