@@ -26,6 +26,7 @@ const profileStyle = {
     position: absolute;
     top: 100%;
     right: 0;
+    min-width: 10rem;
   `,
 }
 
@@ -36,16 +37,20 @@ function ProfileButton(props) {
     <div css={profileStyle.wrapper}>
       <Button onClick={() => setOpen(!open)}>Profile</Button>
       {open && (
-        <div css={profileStyle.dropdown}>
-          <Link to="/profile/bookings">My bookings</Link>
-          <button
-            onClick={async () => {
-              await signOut()
-            }}
-          >
-            Sign out
-          </button>
-        </div>
+        <nav css={profileStyle.dropdown}>
+          <div>
+            <Link to="/profile/bookings">My bookings</Link>
+          </div>
+          <div>
+            <button
+              onClick={async () => {
+                await signOut()
+              }}
+            >
+              Sign out
+            </button>
+          </div>
+        </nav>
       )}
     </div>
   )

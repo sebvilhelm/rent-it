@@ -1,6 +1,15 @@
-import React from 'react'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import { useEffect } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
+
+const styles = {
+  bookingList: css`
+    display: grid;
+    row-gap: 1rem;
+  `,
+}
 
 const QUERY_MY_BOOKINGS = graphql`
   query myBookings {
@@ -38,21 +47,25 @@ function MyBookings() {
     data: {
       me: { bookings },
     },
+    refetch,
   } = useQuery(QUERY_MY_BOOKINGS)
 
-  console.log(bookings)
+  useEffect(() => {
+    refetch()
+  }, [])
+
   return (
     <div>
       <h2>My bookings</h2>
-      {/* <ul>
+      <div css={styles.bookingList}>
         {bookings.map(booking => {
           return (
-            <li key={booking.id}>
+            <div key={booking.id}>
               <Booking booking={booking} />
-            </li>
+            </div>
           )
         })}
-      </ul> */}
+      </div>
     </div>
   )
 }
