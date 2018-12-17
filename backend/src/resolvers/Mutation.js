@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { differenceInDays } = require('date-fns')
+const { differenceInCalendarDays } = require('date-fns')
 const getUserId = require('../utils/getUserId')
 const {
   itemSchema,
@@ -144,7 +144,7 @@ const Mutation = {
       throw new Error("You can't book your own item, obviously")
     }
 
-    const duration = differenceInDays(endDate, startDate) + 1
+    const duration = differenceInCalendarDays(endDate, startDate)
 
     // Check if booking is at least one day
     if (duration < 1) {

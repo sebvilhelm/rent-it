@@ -3,6 +3,7 @@ import { jsx, css } from '@emotion/core'
 import { useEffect } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
+import { differenceInCalendarDays, format } from 'date-fns'
 
 const styles = {
   bookingList: css`
@@ -30,13 +31,21 @@ const QUERY_MY_BOOKINGS = graphql`
 `
 
 function Booking({ booking, ...props }) {
-  const { item, status } = booking
+  const { item, status, startDate, endDate } = booking
   return (
     <div {...props}>
       <h3>{item.title}</h3>
       <dl>
         <dt>Status</dt>
         <dd>{status}</dd>
+        <dt>Duration</dt>
+        <dd>
+          <p>{differenceInCalendarDays(endDate, startDate)} days</p>
+          <p>
+            <time>{format(startDate, 'DD/MM/YYYY')}</time> –{' '}
+            <time>{format(endDate, 'DD/MM/YYYY')}</time>
+          </p>
+        </dd>
       </dl>
     </div>
   )
