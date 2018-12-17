@@ -48,7 +48,8 @@ type Mutation {
   signOut: SuccessMessage
 
   book(itemId: ID!, startDate: DateTime!, endDate: DateTime!): Booking!
-  cancel(id: ID!): Booking!
+  cancelBooking(id: ID!): Booking!
+  acceptBooking(id: ID!): Booking!
 
   reviewBooking(id: ID!, rating: Int!): BookingReview!
 }
