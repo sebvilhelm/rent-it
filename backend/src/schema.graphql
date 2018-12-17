@@ -65,9 +65,25 @@ type AuthPayload {
 type User {
   id: ID!
   name: String!
-  items: [Item!]
+  items(
+    where: ItemWhereInput
+    orderBy: ItemOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Item!]
   email: String!
-  bookings: [Booking!]
+  bookings(
+    where: BookingWhereInput
+    orderBy: BookingOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Booking!]
   #reviewsBy: [UserReview!]
   #reviews: [UserReview!]
 }

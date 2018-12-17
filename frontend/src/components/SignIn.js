@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { navigate } from '@reach/router'
 import useInput from '../lib/useInput'
 import Button from './elements/Button'
 import { Form, Fieldset, Label, Input } from './elements/Form'
 import { useUser } from './User'
 import { SignUpForm } from './SignUp'
 
-function SignInForm() {
+function SignInForm(props) {
   const { signIn } = useUser()
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
@@ -19,8 +18,6 @@ function SignInForm() {
         setBusy(true)
         try {
           await signIn({ email, password })
-          // TODO: navigate somewhere
-          navigate('/')
         } finally {
           setBusy(false)
         }

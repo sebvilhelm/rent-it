@@ -5,6 +5,7 @@ import graphql from 'graphql-tag'
 const MUTATION_SIGNIN = graphql`
   mutation signIn($email: String!, $password: String!) {
     signIn(email: $email, password: $password) {
+      id
       name
     }
   }
@@ -30,6 +31,7 @@ const MUTATION_SIGNUP = graphql`
 const QUERY_CURRENT_USER = graphql`
   query currentUser {
     me {
+      id
       name
     }
   }

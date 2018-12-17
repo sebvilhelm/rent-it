@@ -29,7 +29,7 @@ const profileStyle = {
   `,
 }
 
-function Profile(props) {
+function ProfileButton(props) {
   const { signOut } = useUser()
   const [open, setOpen] = useState(false)
   return (
@@ -37,6 +37,7 @@ function Profile(props) {
       <Button onClick={() => setOpen(!open)}>Profile</Button>
       {open && (
         <div css={profileStyle.dropdown}>
+          <Link to="/profile/bookings">My bookings</Link>
           <button
             onClick={async () => {
               await signOut()
@@ -55,18 +56,20 @@ function Header(props) {
   return (
     <header {...props}>
       <div css={style.flexWrapper}>
-        <div css={style.logo}>Logo</div>
+        <div css={style.logo}>
+          <Link to="/">Logo</Link>
+        </div>
         <SpacerGif />
         <nav>
           {user && (
             <Fragment>
               <ButtonLink to="/add-item">Add Item</ButtonLink>
-              <Profile>
+              <ProfileButton>
                 <button>Sign Out</button>
-              </Profile>
+              </ProfileButton>
             </Fragment>
           )}
-          {!user && <Link to="/sign-in">Sign in</Link>}
+          {!user && <Link to="/profile">Sign in</Link>}
         </nav>
       </div>
     </header>

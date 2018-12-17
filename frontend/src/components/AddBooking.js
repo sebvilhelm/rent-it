@@ -32,6 +32,7 @@ function AddBooking(props) {
 
   return (
     <div>
+      <h3>Book this!</h3>
       {error && <Error error={error} />}
       <Form
         onSubmit={async event => {
