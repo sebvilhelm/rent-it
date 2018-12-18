@@ -11,6 +11,7 @@ const Categories = lazy(() => import('./components/Categories'))
 const Category = lazy(() => import('./components/Category'))
 const AddItem = lazy(() => import('./components/AddItem'))
 const MyBookings = lazy(() => import('./components/MyBookings'))
+const PendingBookings = lazy(() => import('./components/PendingBookings'))
 const SignIn = lazy(() => import('./components/SignIn'))
 // import Search from './components/Search'
 
@@ -57,6 +58,7 @@ function App() {
               <AddItem path="add-item" />
               <ProfileGate path="profile">
                 <MyBookings path="bookings" />
+                <PendingBookings path="pending-bookings" />
                 <Profile path="/" />
               </ProfileGate>
               <SignIn path="sign-in" />

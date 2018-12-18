@@ -85,6 +85,7 @@ type User {
     first: Int
     last: Int
   ): [Booking!]
-  #reviewsBy: [UserReview!]
-  #reviews: [UserReview!]
+  pendingBookings: [Booking!]!
+  reviewsBy: [UserReview!]
+  reviews: [UserReview!]
 }

@@ -1,11 +1,21 @@
 const User = {
   reviewsBy(_, args, ctx, info) {
     // TODO: make query
-    return null
+    return []
   },
   reviews(_, args, ctx, info) {
     // TODO: make query
-    return null
+    return []
+  },
+  pendingBookings(parent, args, ctx, info) {
+    return ctx.db.query.bookings(
+      {
+        where: {
+          AND: [{ item: { owner: { id: parent.id } } }, { status: 'PENDING' }],
+        },
+      },
+      info
+    )
   },
 }
 

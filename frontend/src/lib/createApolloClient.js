@@ -1,5 +1,5 @@
 import ApolloClient from 'apollo-boost'
-import { endpoint } from './config'
+import { endpoint } from '../config'
 
 function createApolloClient() {
   return new ApolloClient({

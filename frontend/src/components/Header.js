@@ -27,6 +27,7 @@ const profileStyle = {
     top: 100%;
     right: 0;
     min-width: 10rem;
+    text-align: right;
   `,
 }
 
@@ -40,6 +41,9 @@ function ProfileButton(props) {
         <nav css={profileStyle.dropdown}>
           <div>
             <Link to="/profile/bookings">My bookings</Link>
+          </div>
+          <div>
+            <Link to="/profile/pending-bookings">Pending bookings</Link>
           </div>
           <div>
             <button
