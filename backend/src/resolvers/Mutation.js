@@ -6,6 +6,7 @@ const {
   itemSchema,
   bookingSchema,
   userValidation,
+  updateUserValidation,
 } = require('../utils/validation')
 
 const Mutation = {
@@ -117,6 +118,28 @@ const Mutation = {
   signOut(_, args, ctx) {
     ctx.response.clearCookie('token')
     return { message: 'Goodbye!' }
+  },
+
+  async updateProfile(_, args, ctx, info) {
+    const currentUserId = getUserId(ctx)
+
+    const { password, ...user } = args
+    const data = { ...user }
+
+    await updateUserValidation.validate(args)
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10)
+      data.password = hashedPassword
+    }
+
+    return ctx.db.mutation.updateUser(
+      {
+        where: { id: currentUserId },
+        data,
+      },
+      info
+    )
   },
 
   async book(_, args, ctx, info) {

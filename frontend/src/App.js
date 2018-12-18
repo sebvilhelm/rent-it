@@ -13,6 +13,7 @@ const AddItem = lazy(() => import('./components/AddItem'))
 const MyBookings = lazy(() => import('./components/MyBookings'))
 const PendingBookings = lazy(() => import('./components/PendingBookings'))
 const SignIn = lazy(() => import('./components/SignIn'))
+const Profile = lazy(() => import('./components/Profile'))
 // import Search from './components/Search'
 
 function ProfileGate(props) {
@@ -26,15 +27,6 @@ function ProfileGate(props) {
     )
   }
   return props.children
-}
-
-function Profile(props) {
-  const { user } = useUser()
-  return (
-    <div>
-      <h2>Welcome, {user.name}</h2>
-    </div>
-  )
 }
 
 function App() {

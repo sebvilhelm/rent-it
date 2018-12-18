@@ -41,3 +41,13 @@ exports.userValidation = yup.object().shape({
     .lowercase(),
   password: yup.string().required(),
 })
+
+exports.updateUserValidation = yup.object().shape({
+  name: yup.string().trim(),
+  email: yup
+    .string()
+    .email()
+    .trim()
+    .lowercase(),
+  password: yup.string(),
+})

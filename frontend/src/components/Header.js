@@ -40,6 +40,9 @@ function ProfileButton(props) {
       {open && (
         <nav css={profileStyle.dropdown}>
           <div>
+            <Link to="/profile">My profile</Link>
+          </div>
+          <div>
             <Link to="/profile/bookings">My bookings</Link>
           </div>
           <div>

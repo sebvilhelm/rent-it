@@ -46,6 +46,7 @@ type Mutation {
   signUp(name: String!, email: String!, password: String!): User!
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
+  updateProfile(name: String, email: String, password: String): User!
 
   book(itemId: ID!, startDate: DateTime!, endDate: DateTime!): Booking!
   cancelBooking(id: ID!): Booking!
