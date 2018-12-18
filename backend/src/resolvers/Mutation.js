@@ -261,6 +261,33 @@ const Mutation = {
       info
     )
   },
+  async denyBooking(_, args, ctx, info) {
+    const { id } = args
+    const currentUserId = getUserId(ctx)
+
+    // Check if current user is owner of item
+    const booking = await ctx.db.query.booking(
+      {
+        where: { id },
+      },
+      '{ item { owner { id } } }'
+    )
+    const isOwner = booking.item.owner.id === currentUserId
+
+    if (!isOwner) {
+      throw new Error("You don't have permission to do that")
+    }
+
+    return ctx.db.mutation.updateBooking(
+      {
+        where: { id },
+        data: {
+          status: 'DENIED',
+        },
+      },
+      info
+    )
+  },
 
   async reviewBooking(_, args, ctx, info) {
     const currentUserId = getUserId(ctx)

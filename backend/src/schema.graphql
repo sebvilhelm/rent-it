@@ -51,6 +51,7 @@ type Mutation {
   book(itemId: ID!, startDate: DateTime!, endDate: DateTime!): Booking!
   cancelBooking(id: ID!): Booking!
   acceptBooking(id: ID!): Booking!
+  denyBooking(id: ID!): Booking!
 
   reviewBooking(id: ID!, rating: Int!): BookingReview!
 }

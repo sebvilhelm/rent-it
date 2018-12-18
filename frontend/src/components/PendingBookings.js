@@ -25,6 +25,17 @@ const QUERY_MY_PENDING_BOOKINGS = graphql`
 const MUTATION_ACCEPT_BOOKING = graphql`
   mutation acceptBooking($id: ID!) {
     acceptBooking(id: $id) {
+      id
+      booker {
+        name
+      }
+    }
+  }
+`
+const MUTATION_DENY_BOOKING = graphql`
+  mutation denyBooking($id: ID!) {
+    denyBooking(id: $id) {
+      id
       booker {
         name
       }
@@ -36,6 +47,10 @@ function Booking(props) {
   const { booking } = props
 
   const acceptBooking = useMutation(MUTATION_ACCEPT_BOOKING, {
+    variables: { id: booking.id },
+    refetchQueries: [{ query: QUERY_MY_PENDING_BOOKINGS }],
+  })
+  const denyBooking = useMutation(MUTATION_DENY_BOOKING, {
     variables: { id: booking.id },
     refetchQueries: [{ query: QUERY_MY_PENDING_BOOKINGS }],
   })
@@ -51,7 +66,8 @@ function Booking(props) {
               'Are you sure you want to accept this booking?'
             )
             if (confirmed) {
-              acceptBooking()
+              await acceptBooking()
+              console.log('Booking accepted!')
             }
           } catch (error) {
             console.error(error.message)
@@ -60,7 +76,23 @@ function Booking(props) {
       >
         Accept
       </Button>
-      <Button>Deny</Button>
+      <Button
+        onClick={async () => {
+          try {
+            const confirmed = confirm(
+              'Are you sure you want to deny this booking?'
+            )
+            if (confirmed) {
+              await denyBooking()
+              console.log('Booking denied!')
+            }
+          } catch (error) {
+            console.error(error.message)
+          }
+        }}
+      >
+        Deny
+      </Button>
     </div>
   )
 }
