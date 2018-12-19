@@ -10,6 +10,15 @@ const ITEM_QUERY = graphql`
       title
       description
       price
+      reviews {
+        reviewer {
+          name
+        }
+        rating {
+          rating
+          description
+        }
+      }
     }
   }
 `
@@ -25,6 +34,21 @@ function Item(props) {
       <p>{item.description}</p>
       <p>Price: {formatPrice(item.price)}</p>
       <AddBooking id={props.id} />
+      <h3>Reviews</h3>
+      {item.reviews.length ? (
+        item.reviews.map(review => {
+          const { reviewer, rating } = review
+          return (
+            <div>
+              <span>{reviewer.name}</span>
+              <p>{rating.rating} out of 5</p>
+              <p>{rating.description}</p>
+            </div>
+          )
+        })
+      ) : (
+        <p>This item hasn't been reviewed yet</p>
+      )}
     </div>
   )
 }
