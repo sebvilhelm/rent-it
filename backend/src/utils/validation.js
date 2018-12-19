@@ -51,3 +51,12 @@ exports.updateUserValidation = yup.object().shape({
     .lowercase(),
   password: yup.string(),
 })
+
+exports.ratingValidation = yup.object().shape({
+  rating: yup
+    .number()
+    .min(1)
+    .max(5)
+    .required(),
+  description: yup.string(),
+})

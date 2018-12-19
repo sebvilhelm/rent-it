@@ -23,17 +23,21 @@ const profileStyle = {
     position: relative;
   `,
   dropdown: css`
+    padding: 1rem;
     position: absolute;
     top: 100%;
     right: 0;
     min-width: 10rem;
     text-align: right;
+    box-shadow: 1px 1px 2px hsla(0, 0%, 0%, 0.05),
+      1px 1px 5px hsla(0, 0%, 0%, 0.025);
   `,
 }
 
 function ProfileButton(props) {
   const { signOut } = useUser()
   const [open, setOpen] = useState(false)
+
   return (
     <div css={profileStyle.wrapper}>
       <Button onClick={() => setOpen(!open)}>Profile</Button>

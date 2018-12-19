@@ -21,6 +21,7 @@ type Item {
   description: String!
   owner: User!
   bookings: [Booking!]!
+  reviews: [ItemReview!]!
   price: Int!
   maxDuration: Int
   category: Category!
@@ -28,26 +29,30 @@ type Item {
 
 type Booking {
   id: ID! @unique
-  item: Item
-  booker: User
+  item: Item!
+  booker: User!
   startDate: DateTime!
   endDate: DateTime!
-  review: BookingReview
   status: BookingStatus! @default(value: "PENDING")
 }
 
 type UserReview {
   id: ID! @unique
-  rating: Int!
+  rating: Rating!
   user: User! @relation(name: "UserReviewByUser")
   reviewer: User! @relation(name: "UserReviewOfUser")
 }
 
-type BookingReview {
+type ItemReview {
   id: ID! @unique
-  rating: Int!
-  booking: Booking!
+  rating: Rating!
+  item: Item!
   reviewer: User
+}
+
+type Rating {
+  rating: Int!
+  description: String
 }
 
 type Category {

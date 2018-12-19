@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
 import { differenceInCalendarDays, format } from 'date-fns'
+import ReviewItem from './ReviewItem'
 
 const styles = {
   bookingList: css`
@@ -23,6 +24,7 @@ const QUERY_MY_BOOKINGS = graphql`
         startDate
         endDate
         item {
+          id
           title
         }
       }
@@ -47,6 +49,7 @@ function Booking({ booking, ...props }) {
           </p>
         </dd>
       </dl>
+      <ReviewItem id={item.id} />
     </div>
   )
 }

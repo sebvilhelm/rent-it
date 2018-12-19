@@ -53,7 +53,7 @@ type Mutation {
   acceptBooking(id: ID!): Booking!
   denyBooking(id: ID!): Booking!
 
-  reviewBooking(id: ID!, rating: Int!): BookingReview!
+  reviewItem(id: ID!, rating: Int!, description: String): ItemReview!
 }
 
 type SuccessMessage {

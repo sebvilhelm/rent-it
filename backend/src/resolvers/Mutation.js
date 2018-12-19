@@ -289,29 +289,53 @@ const Mutation = {
     )
   },
 
-  async reviewBooking(_, args, ctx, info) {
+  async reviewItem(_, args, ctx, info) {
     const currentUserId = getUserId(ctx)
 
-    const { id, rating } = args
+    const { id, rating, description } = args
 
-    const booking = await ctx.query.booking(
-      { where: { id } },
-      '{ booker { id }, startDate, cancelled }'
-    )
+    const itemQuery = `
+      query($id: ID!, $userId: ID!) {
+        item(where: { id: $id }) {
+          title
+          owner {
+            id
+          }
+          bookings(where: {
+            booker: {id: $userId}
+          }) {
+            id
+          }
+        }
+      }
+    `
 
-    // TODO: check if current user is booker
+    const {
+      data: { item },
+    } = await ctx.db.request(itemQuery, { id, userId: currentUserId })
 
-    // TODO: Check is start date is lapsed
+    // Check if user is owner
+    const isOwner = item.owner.id === currentUserId
 
-    // ?: Do something with cancelled?
+    if (isOwner) {
+      throw new Error("You can't review your own items, you cheat!")
+    }
 
-    return ctx.db.mutation.createBookingReview(
+    // Check if user has a booking
+    if (item.bookings.length < 1) {
+      throw new Error("You can't review items you haven't booked!")
+    }
+
+    return ctx.db.mutation.createItemReview(
       {
         data: {
-          rating,
-          booking: {
-            connect: {
-              id,
+          item: {
+            connect: { id },
+          },
+          rating: {
+            create: {
+              rating,
+              description,
             },
           },
           reviewer: {
