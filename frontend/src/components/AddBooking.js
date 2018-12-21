@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import { useState } from 'react'
 import { useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
 import useInput from '../lib/useInput'
@@ -30,9 +32,17 @@ function AddBooking(props) {
     },
   })
 
+  const styles = {
+    container: css`
+      padding: 1rem;
+      border: 1px solid hsl(0, 0%, 80%);
+    `,
+    title: css``,
+  }
+
   return (
-    <div>
-      <h3>Book this!</h3>
+    <div css={styles.container} {...props}>
+      <h3 css={styles.title}>Book this!</h3>
       {error && <Error error={error} />}
       <Form
         onSubmit={async event => {

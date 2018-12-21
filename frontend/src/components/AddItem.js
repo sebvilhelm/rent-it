@@ -126,6 +126,7 @@ function AddItem() {
   })
   return (
     <div>
+      <h1>Add item</h1>
       {error && <Error error={error} />}
       <Form
         onSubmit={async event => {

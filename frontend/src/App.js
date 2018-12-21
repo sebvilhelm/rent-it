@@ -35,13 +35,6 @@ function App() {
       <User.Provider>
         <Fragment>
           <Header />
-          <h1
-            css={css`
-              color: hotpink;
-            `}
-          >
-            Hello
-          </h1>
           <Suspense fallback={<Spinner />}>
             <Router>
               <Categories path="/" />

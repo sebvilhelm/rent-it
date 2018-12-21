@@ -34,6 +34,7 @@ function Categories() {
   } = useQuery(QUERY_CATEGORIES)
   return (
     <div>
+      <h1>Categories</h1>
       {categories.map(category => (
         <CategoryCard category={category} key={category.slug} />
       ))}

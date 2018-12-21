@@ -41,7 +41,7 @@ function Item(props) {
 
   return (
     <div>
-      <h2>{item.title}</h2>
+      <h1>{item.title}</h1>
       {item.averageRating && (
         <span>Average: {item.averageRating.toFixed(1)} out of 5</span>
       )}
