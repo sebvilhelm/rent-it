@@ -19,6 +19,7 @@ const QUERY_ITEMS_BY_CATEGORY = gql`
     ) {
       id
       title
+      averageRating
     }
     itemsConnection(
       where: {
@@ -63,8 +64,15 @@ function Category(props) {
       {items.map(item => {
         return (
           <div key={item.id}>
-            {item.title}
-            <Link to={`/item/${item.id}`}>Check it out here</Link>
+            <h3> {item.title}</h3>
+            {item.averageRating ? (
+              <span>{item.averageRating.toFixed(1)}</span>
+            ) : (
+              <span>Not rated</span>
+            )}
+            <div>
+              <Link to={`/item/${item.id}`}>Check it out here</Link>
+            </div>
           </div>
         )
       })}
