@@ -1,4 +1,5 @@
-import React from 'react'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
 import { useQuery } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
 import formatPrice from '../lib/formatPrice'
@@ -26,6 +27,13 @@ const ITEM_QUERY = graphql`
   }
 `
 
+const styles = {
+  grid: css`
+    display: grid;
+    gap: 1rem;
+  `,
+}
+
 function Item(props) {
   const {
     data: { item },
@@ -41,17 +49,20 @@ function Item(props) {
       <p>Price: {formatPrice(item.price)}</p>
       <AddBooking id={props.id} />
       <h3>Reviews</h3>
+
       {item.reviews.length ? (
-        item.reviews.map(review => {
-          const { id, reviewer, rating } = review
-          return (
-            <div key={id}>
-              <span>{reviewer.name}</span>
-              <p>{rating.stars} out of 5</p>
-              <p>{rating.description}</p>
-            </div>
-          )
-        })
+        <div css={styles.grid}>
+          {item.reviews.map(review => {
+            const { id, reviewer, rating } = review
+            return (
+              <div key={id}>
+                <span>{reviewer.name}</span>
+                <p>{rating.stars} out of 5</p>
+                <p>{rating.description}</p>
+              </div>
+            )
+          })}
+        </div>
       ) : (
         <p>This item hasn't been reviewed yet</p>
       )}
