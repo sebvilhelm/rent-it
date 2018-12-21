@@ -23,6 +23,7 @@ type Query {
     last: Int
   ): [Category!]!
   categoriesConnection(where: CategoryWhereInput): CategoryConnection!
+  category(where: CategoryWhereUniqueInput!): Category
 
   me: User
 }

@@ -6,6 +6,7 @@ const Query = {
   item: forwardTo('db'),
   itemsConnection: forwardTo('db'),
   categories: forwardTo('db'),
+  category: forwardTo('db'),
   categoriesConnection: forwardTo('db'),
 
   async me(_, args, ctx, info) {

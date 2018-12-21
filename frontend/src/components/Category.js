@@ -1,18 +1,15 @@
-import React from 'react'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
 import { Link } from '@reach/router'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
 const QUERY_ITEMS_BY_CATEGORY = gql`
-  query itemsByCategory(
-    $slug: String!
-    $perPage: Int!
-    $skip: Int!
-    $searchTerm: String
-  ) {
+  query itemsByCategory($slug: String!, $searchTerm: String) {
+    category(where: { slug: $slug }) {
+      title
+    }
     items(
-      first: $perPage
-      skip: $skip
       where: {
         AND: [{ category: { slug: $slug } }, { title_contains: $searchTerm }]
       }
@@ -33,6 +30,14 @@ const QUERY_ITEMS_BY_CATEGORY = gql`
   }
 `
 
+const styles = {
+  grid: css`
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+  `,
+}
+
 function Category(props) {
   const { slug } = props
 
@@ -44,38 +49,54 @@ function Category(props) {
     ? {
         slug,
         searchTerm: params.get('s'),
-        perPage: 10,
-        skip: 0,
       }
     : {
         slug,
-        perPage: 10,
-        skip: 0,
       }
 
   const {
-    data: { items },
+    data: { items, category },
   } = useQuery(QUERY_ITEMS_BY_CATEGORY, {
     variables,
   })
 
   return (
     <div>
-      {items.map(item => {
-        return (
-          <div key={item.id}>
-            <h3> {item.title}</h3>
-            {item.averageRating ? (
-              <span>{item.averageRating.toFixed(1)}</span>
-            ) : (
-              <span>Not rated</span>
-            )}
-            <div>
-              <Link to={`/item/${item.id}`}>Check it out here</Link>
-            </div>
-          </div>
-        )
-      })}
+      <h1>{category.title}</h1>
+      {items.length > 0 && (
+        <div css={styles.grid}>
+          {items.map(item => {
+            return <ItemCard key={item.id} item={item} />
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const cardStyles = {
+  card: css`
+    padding: 1rem;
+    background-color: tomato;
+  `,
+  title: css`
+    margin-top: 0;
+  `,
+}
+
+function ItemCard(props) {
+  const { item } = props
+  return (
+    <div css={cardStyles.card}>
+      <h3 css={cardStyles.title}>{item.title}</h3>
+      {item.averageRating ? (
+        <span>{item.averageRating.toFixed(1)}</span>
+      ) : (
+        <span>Not rated</span>
+      )}
+      <div>
+        <Link to={`/item/${item.id}`}>Check it out here</Link>
+      </div>
     </div>
   )
 }
