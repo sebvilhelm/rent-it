@@ -6,7 +6,7 @@ import { useUser } from './User'
 import SpacerGif from './SpacerGif'
 import Button, { ButtonLink } from './elements/Button'
 
-const style = {
+const styles = {
   flexWrapper: css`
     display: flex;
     align-items: center;
@@ -15,6 +15,7 @@ const style = {
   logo: css`
     background: tomato;
   `,
+  menuItem: css``,
 }
 
 const profileStyle = {
@@ -71,8 +72,8 @@ function Header(props) {
   const { user } = useUser()
   return (
     <header {...props}>
-      <div css={style.flexWrapper}>
-        <div css={style.logo}>
+      <div css={styles.flexWrapper}>
+        <div css={styles.logo}>
           <Link to="/">Logo</Link>
         </div>
         <SpacerGif />
