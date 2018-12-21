@@ -71,7 +71,7 @@ function AddBooking(props) {
               onChange={onChangeEndDate}
             />
           </Label>
-          <Button>Book it!</Button>
+          <Button>Book{busy && 'ing'} it!</Button>
         </Fieldset>
       </Form>
     </div>

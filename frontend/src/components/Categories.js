@@ -7,7 +7,7 @@ const QUERY_CATEGORIES = gql`
   query categoriesPage {
     categories {
       slug
-      name
+      title
     }
   }
 `
@@ -20,7 +20,7 @@ function Categories() {
     <div>
       {categories.map(category => (
         <div key={category.slug}>
-          <Link to={`/category/${category.slug}`}>{category.name}</Link>
+          <Link to={`/category/${category.slug}`}>{category.title}</Link>
         </div>
       ))}
     </div>

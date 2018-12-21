@@ -30,9 +30,9 @@ const MUTATION_ADD_ITEM = gql`
 
 const QUERY_SEARCH_CATEGORIES = gql`
   query searchCategories($searchTerm: String!) {
-    categories(where: { name_contains: $searchTerm }) {
+    categories(where: { title_contains: $searchTerm }) {
       id
-      name
+      title
     }
   }
 `
@@ -49,7 +49,7 @@ function CategoryInput(props) {
   const { setCategory, ...inputProps } = props
   return (
     <Downshift
-      itemToString={item => (item ? item.name : null)}
+      itemToString={item => (item ? item.title : null)}
       onChange={(selectedCategory, downshift) => {
         setCategory(selectedCategory)
       }}
@@ -87,7 +87,7 @@ function CategoryInput(props) {
                           {...getItemProps({ item, index })}
                           key={item.id}
                         >
-                          {item.name}
+                          {item.title}
                         </li>
                       ))
                     }

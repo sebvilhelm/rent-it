@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const slugify = require('slugify')
 const { differenceInCalendarDays } = require('date-fns')
 const getUserId = require('../utils/getUserId')
 const {
@@ -292,7 +293,7 @@ const Mutation = {
   async reviewItem(_, args, ctx, info) {
     const currentUserId = getUserId(ctx)
 
-    const { id, rating, description } = args
+    const { id, stars, description } = args
 
     const itemQuery = `
       query($id: ID!, $userId: ID!) {
@@ -334,7 +335,7 @@ const Mutation = {
           },
           rating: {
             create: {
-              rating,
+              stars,
               description,
             },
           },
@@ -343,6 +344,25 @@ const Mutation = {
               id: currentUserId,
             },
           },
+        },
+      },
+      info
+    )
+  },
+
+  createCategory(_, args, ctx, info) {
+    const { title, description } = args
+
+    // TODO: Check permissions
+
+    const slug = slugify(title, { lower: true })
+
+    return ctx.db.mutation.createCategory(
+      {
+        data: {
+          title,
+          description,
+          slug,
         },
       },
       info

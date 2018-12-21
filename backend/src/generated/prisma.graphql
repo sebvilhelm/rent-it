@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/sebastian-vilhelm-nielsen-e462bc/bachelor/dev
-# timestamp: Wed Dec 19 2018 10:05:05 GMT+0100 (Central European Standard Time)
+# timestamp: Fri Dec 21 2018 12:15:17 GMT+0100 (Central European Standard Time)
 
 type AggregateBooking {
   count: Int!
@@ -467,7 +467,7 @@ input BookingWhereUniqueInput {
 
 type Category implements Node {
   id: ID!
-  name: String!
+  title: String!
   slug: String!
   description: String
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
@@ -484,7 +484,7 @@ type CategoryConnection {
 }
 
 input CategoryCreateInput {
-  name: String!
+  title: String!
   slug: String!
   description: String
   items: ItemCreateManyWithoutCategoryInput
@@ -496,7 +496,7 @@ input CategoryCreateOneWithoutItemsInput {
 }
 
 input CategoryCreateWithoutItemsInput {
-  name: String!
+  title: String!
   slug: String!
   description: String
 }
@@ -513,8 +513,8 @@ type CategoryEdge {
 enum CategoryOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  title_ASC
+  title_DESC
   slug_ASC
   slug_DESC
   description_ASC
@@ -527,7 +527,7 @@ enum CategoryOrderByInput {
 
 type CategoryPreviousValues {
   id: ID!
-  name: String!
+  title: String!
   slug: String!
   description: String
 }
@@ -572,14 +572,14 @@ input CategorySubscriptionWhereInput {
 }
 
 input CategoryUpdateInput {
-  name: String
+  title: String
   slug: String
   description: String
   items: ItemUpdateManyWithoutCategoryInput
 }
 
 input CategoryUpdateManyMutationInput {
-  name: String
+  title: String
   slug: String
   description: String
 }
@@ -592,7 +592,7 @@ input CategoryUpdateOneRequiredWithoutItemsInput {
 }
 
 input CategoryUpdateWithoutItemsDataInput {
-  name: String
+  title: String
   slug: String
   description: String
 }
@@ -651,46 +651,46 @@ input CategoryWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
+  title: String
 
   """All values that are not equal to given value."""
-  name_not: String
+  title_not: String
 
   """All values that are contained in given list."""
-  name_in: [String!]
+  title_in: [String!]
 
   """All values that are not contained in given list."""
-  name_not_in: [String!]
+  title_not_in: [String!]
 
   """All values less than the given value."""
-  name_lt: String
+  title_lt: String
 
   """All values less than or equal the given value."""
-  name_lte: String
+  title_lte: String
 
   """All values greater than the given value."""
-  name_gt: String
+  title_gt: String
 
   """All values greater than or equal the given value."""
-  name_gte: String
+  title_gte: String
 
   """All values containing the given string."""
-  name_contains: String
+  title_contains: String
 
   """All values not containing the given string."""
-  name_not_contains: String
+  title_not_contains: String
 
   """All values starting with the given string."""
-  name_starts_with: String
+  title_starts_with: String
 
   """All values not starting with the given string."""
-  name_not_starts_with: String
+  title_not_starts_with: String
 
   """All values ending with the given string."""
-  name_ends_with: String
+  title_ends_with: String
 
   """All values not ending with the given string."""
-  name_not_ends_with: String
+  title_not_ends_with: String
   slug: String
 
   """All values that are not equal to given value."""
@@ -778,7 +778,7 @@ input CategoryWhereInput {
 
 input CategoryWhereUniqueInput {
   id: ID
-  name: String
+  title: String
   slug: String
 }
 
@@ -1685,7 +1685,8 @@ input ItemWhereUniqueInput {
   id: ID
 }
 
-type Location {
+type Location implements Node {
+  id: ID!
   city: String!
   country: String!
   lat: Float!
@@ -1711,6 +1712,7 @@ input LocationCreateInput {
 
 input LocationCreateOneInput {
   create: LocationCreateInput
+  connect: LocationWhereUniqueInput
 }
 
 """An edge in a connection."""
@@ -1723,6 +1725,8 @@ type LocationEdge {
 }
 
 enum LocationOrderByInput {
+  id_ASC
+  id_DESC
   city_ASC
   city_DESC
   country_ASC
@@ -1731,8 +1735,6 @@ enum LocationOrderByInput {
   lat_DESC
   lng_ASC
   lng_DESC
-  id_ASC
-  id_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1740,6 +1742,7 @@ enum LocationOrderByInput {
 }
 
 type LocationPreviousValues {
+  id: ID!
   city: String!
   country: String!
   lat: Float!
@@ -1792,6 +1795,13 @@ input LocationUpdateDataInput {
   lng: Float
 }
 
+input LocationUpdateInput {
+  city: String
+  country: String
+  lat: Float
+  lng: Float
+}
+
 input LocationUpdateManyMutationInput {
   city: String
   country: String
@@ -1801,6 +1811,7 @@ input LocationUpdateManyMutationInput {
 
 input LocationUpdateOneInput {
   create: LocationCreateInput
+  connect: LocationWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
   update: LocationUpdateDataInput
@@ -1821,6 +1832,46 @@ input LocationWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [LocationWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   city: String
 
   """All values that are not equal to given value."""
@@ -1947,6 +1998,10 @@ input LocationWhereInput {
   lng_gte: Float
 }
 
+input LocationWhereUniqueInput {
+  id: ID
+}
+
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -1967,18 +2022,24 @@ type Mutation {
   updateUserReview(data: UserReviewUpdateInput!, where: UserReviewWhereUniqueInput!): UserReview
   updateItemReview(data: ItemReviewUpdateInput!, where: ItemReviewWhereUniqueInput!): ItemReview
   updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  updateLocation(data: LocationUpdateInput!, where: LocationWhereUniqueInput!): Location
+  updateRating(data: RatingUpdateInput!, where: RatingWhereUniqueInput!): Rating
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteItem(where: ItemWhereUniqueInput!): Item
   deleteBooking(where: BookingWhereUniqueInput!): Booking
   deleteUserReview(where: UserReviewWhereUniqueInput!): UserReview
   deleteItemReview(where: ItemReviewWhereUniqueInput!): ItemReview
   deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteLocation(where: LocationWhereUniqueInput!): Location
+  deleteRating(where: RatingWhereUniqueInput!): Rating
   deleteUser(where: UserWhereUniqueInput!): User
   upsertItem(where: ItemWhereUniqueInput!, create: ItemCreateInput!, update: ItemUpdateInput!): Item!
   upsertBooking(where: BookingWhereUniqueInput!, create: BookingCreateInput!, update: BookingUpdateInput!): Booking!
   upsertUserReview(where: UserReviewWhereUniqueInput!, create: UserReviewCreateInput!, update: UserReviewUpdateInput!): UserReview!
   upsertItemReview(where: ItemReviewWhereUniqueInput!, create: ItemReviewCreateInput!, update: ItemReviewUpdateInput!): ItemReview!
   upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
+  upsertLocation(where: LocationWhereUniqueInput!, create: LocationCreateInput!, update: LocationUpdateInput!): Location!
+  upsertRating(where: RatingWhereUniqueInput!, create: RatingCreateInput!, update: RatingUpdateInput!): Rating!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
   updateManyBookings(data: BookingUpdateManyMutationInput!, where: BookingWhereInput): BatchPayload!
@@ -2037,6 +2098,8 @@ type Query {
   userReview(where: UserReviewWhereUniqueInput!): UserReview
   itemReview(where: ItemReviewWhereUniqueInput!): ItemReview
   category(where: CategoryWhereUniqueInput!): Category
+  location(where: LocationWhereUniqueInput!): Location
+  rating(where: RatingWhereUniqueInput!): Rating
   user(where: UserWhereUniqueInput!): User
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
   bookingsConnection(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookingConnection!
@@ -2054,8 +2117,9 @@ type Query {
   ): Node
 }
 
-type Rating {
-  rating: Int!
+type Rating implements Node {
+  id: ID!
+  stars: Int!
   description: String
 }
 
@@ -2070,12 +2134,13 @@ type RatingConnection {
 }
 
 input RatingCreateInput {
-  rating: Int!
+  stars: Int!
   description: String
 }
 
 input RatingCreateOneInput {
   create: RatingCreateInput
+  connect: RatingWhereUniqueInput
 }
 
 """An edge in a connection."""
@@ -2088,12 +2153,12 @@ type RatingEdge {
 }
 
 enum RatingOrderByInput {
-  rating_ASC
-  rating_DESC
-  description_ASC
-  description_DESC
   id_ASC
   id_DESC
+  stars_ASC
+  stars_DESC
+  description_ASC
+  description_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -2101,7 +2166,8 @@ enum RatingOrderByInput {
 }
 
 type RatingPreviousValues {
-  rating: Int!
+  id: ID!
+  stars: Int!
   description: String
 }
 
@@ -2145,17 +2211,23 @@ input RatingSubscriptionWhereInput {
 }
 
 input RatingUpdateDataInput {
-  rating: Int
+  stars: Int
+  description: String
+}
+
+input RatingUpdateInput {
+  stars: Int
   description: String
 }
 
 input RatingUpdateManyMutationInput {
-  rating: Int
+  stars: Int
   description: String
 }
 
 input RatingUpdateOneRequiredInput {
   create: RatingCreateInput
+  connect: RatingWhereUniqueInput
   update: RatingUpdateDataInput
   upsert: RatingUpsertNestedInput
 }
@@ -2174,28 +2246,68 @@ input RatingWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [RatingWhereInput!]
-  rating: Int
+  id: ID
 
   """All values that are not equal to given value."""
-  rating_not: Int
+  id_not: ID
 
   """All values that are contained in given list."""
-  rating_in: [Int!]
+  id_in: [ID!]
 
   """All values that are not contained in given list."""
-  rating_not_in: [Int!]
+  id_not_in: [ID!]
 
   """All values less than the given value."""
-  rating_lt: Int
+  id_lt: ID
 
   """All values less than or equal the given value."""
-  rating_lte: Int
+  id_lte: ID
 
   """All values greater than the given value."""
-  rating_gt: Int
+  id_gt: ID
 
   """All values greater than or equal the given value."""
-  rating_gte: Int
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  stars: Int
+
+  """All values that are not equal to given value."""
+  stars_not: Int
+
+  """All values that are contained in given list."""
+  stars_in: [Int!]
+
+  """All values that are not contained in given list."""
+  stars_not_in: [Int!]
+
+  """All values less than the given value."""
+  stars_lt: Int
+
+  """All values less than or equal the given value."""
+  stars_lte: Int
+
+  """All values greater than the given value."""
+  stars_gt: Int
+
+  """All values greater than or equal the given value."""
+  stars_gte: Int
   description: String
 
   """All values that are not equal to given value."""
@@ -2236,6 +2348,10 @@ input RatingWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
+}
+
+input RatingWhereUniqueInput {
+  id: ID
 }
 
 type Subscription {

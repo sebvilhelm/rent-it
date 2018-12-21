@@ -1,25 +1,26 @@
 import React, { useState } from 'react'
 import { useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
+import ErrorHandler from './Error'
 import { Form, Input, Textarea, Label, Fieldset } from './elements/Form'
 import Button from './elements/Button'
 import useInput from '../lib/useInput'
 
 const MUTATION_REVIEW_ITEM = graphql`
-  mutation reviewItem($id: ID!, $rating: Int!, $description: String) {
-    reviewItem(id: $id, rating: $rating, description: $description) {
+  mutation reviewItem($id: ID!, $stars: Int!, $description: String) {
+    reviewItem(id: $id, stars: $stars, description: $description) {
       id
     }
   }
 `
 
 function AddReview(props) {
-  const [rating, onChangeRating] = useInput(5)
+  const [stars, onChangeStars] = useInput(5)
   const [description, onChangeDescription] = useInput('')
   const reviewItem = useMutation(MUTATION_REVIEW_ITEM, {
     variables: {
       id: props.id,
-      rating: Number(rating),
+      stars: Number(stars),
       description: description || null,
     },
   })
@@ -40,6 +41,7 @@ function AddReview(props) {
         }
       }}
     >
+      <ErrorHandler error={error} />
       <Fieldset disabled={busy}>
         <Label htmlFor="rating">
           Rating from 1 to 5
@@ -50,8 +52,8 @@ function AddReview(props) {
             min="1"
             max="5"
             required
-            value={rating}
-            onChange={onChangeRating}
+            value={stars}
+            onChange={onChangeStars}
           />
         </Label>
         <Label htmlFor="description">

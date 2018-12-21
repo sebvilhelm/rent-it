@@ -53,7 +53,9 @@ type Mutation {
   acceptBooking(id: ID!): Booking!
   denyBooking(id: ID!): Booking!
 
-  reviewItem(id: ID!, rating: Int!, description: String): ItemReview!
+  reviewItem(id: ID!, stars: Int!, description: String): ItemReview!
+
+  createCategory(title: String!, description: String!): Category!
 }
 
 type SuccessMessage {
@@ -90,4 +92,33 @@ type User {
   pendingBookings: [Booking!]!
   reviewsBy: [UserReview!]
   reviews: [UserReview!]
+}
+
+type Item {
+  id: ID!
+  title: String!
+  description: String!
+  owner: User!
+  bookings(
+    where: BookingWhereInput
+    orderBy: BookingOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Booking!]
+  reviews(
+    where: ItemReviewWhereInput
+    orderBy: ItemReviewOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [ItemReview!]
+  price: Int!
+  maxDuration: Int
+  category: Category!
+  averageRating: Float
 }

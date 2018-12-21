@@ -25,6 +25,7 @@
     "graphql-yoga": "^1.16.7",
     "jsonwebtoken": "^8.4.0",
     "prisma-binding": "^2.2.8",
+    "slugify": "^1.3.4",
     "yup": "^0.26.6"
   },
   "devDependencies": {

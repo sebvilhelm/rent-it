@@ -15,7 +15,7 @@ const ITEM_QUERY = graphql`
           name
         }
         rating {
-          rating
+          stars
           description
         }
       }
@@ -41,7 +41,7 @@ function Item(props) {
           return (
             <div>
               <span>{reviewer.name}</span>
-              <p>{rating.rating} out of 5</p>
+              <p>{rating.stars} out of 5</p>
               <p>{rating.description}</p>
             </div>
           )
