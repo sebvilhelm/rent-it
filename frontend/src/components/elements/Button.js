@@ -1,14 +1,18 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { Link } from '@reach/router'
 
-const buttonStyle = css({
-  padding: '0.5rem 1rem',
-})
+const styles = {
+  button: css`
+    background-color: #22a3bb;
+    color: #edffff;
+    padding: 0.3rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    border: 3px solid #22a3bb;
+    min-width: 5rem;
+  `,
+}
 
-const Button = props => <button css={buttonStyle} {...props} />
-
-const ButtonLink = props => <Link css={buttonStyle} {...props} />
+const Button = props => <button css={styles.button} {...props} />
 
 export default Button
-export { ButtonLink }

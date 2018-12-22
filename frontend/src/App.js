@@ -38,6 +38,7 @@ function App() {
           <Suspense fallback={<Spinner />}>
             <Router>
               <Categories path="/" />
+              <Categories path="/categories" />
               <Category path="category/:slug" />
               <Item path="item/:id" />
               <AddItem path="add-item" />
