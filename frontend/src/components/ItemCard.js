@@ -10,12 +10,13 @@ const styles = {
     background-color: white;
     box-shadow: 2px 2px 35px hsla(0, 0%, 0%, 0.05),
       2px 2px 20px hsla(0, 0%, 0%, 0.1);
+    z-index: 1;
     transition: all 300ms;
   `,
   cardHovered: css`
     box-shadow: 2px 2px 60px hsla(0, 0%, 0%, 0.07),
       2px 2px 40px hsla(0, 0%, 0%, 0.15);
-    transform: translateY(-0.5rem);
+    transform: translateY(-1px);
   `,
   link: css`
     color: inherit;
