@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core'
+import { jsx } from '@emotion/core'
 import { lazy, Suspense, Fragment } from 'react'
 import { Router } from '@reach/router'
 import Spinner from './components/Spinner'
@@ -16,7 +16,7 @@ const SignIn = lazy(() => import('./components/SignIn'))
 const Profile = lazy(() => import('./components/Profile'))
 // import Search from './components/Search'
 
-function ProfileGate(props) {
+function Dashboard(props) {
   const { user } = useUser()
   if (!user) {
     return (
@@ -41,11 +41,11 @@ function App() {
               <Category path="category/:slug" />
               <Item path="item/:id" />
               <AddItem path="add-item" />
-              <ProfileGate path="profile">
+              <Dashboard path="profile">
                 <MyBookings path="bookings" />
                 <PendingBookings path="pending-bookings" />
                 <Profile path="/" />
-              </ProfileGate>
+              </Dashboard>
               <SignIn path="sign-in" />
             </Router>
           </Suspense>

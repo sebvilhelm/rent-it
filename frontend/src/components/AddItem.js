@@ -15,6 +15,8 @@ const MUTATION_ADD_ITEM = gql`
     $price: Int!
     $maxDuration: Int
     $category: ID!
+    $imageFull: String!
+    $imagePreview: String!
   ) {
     createItem(
       title: $title
@@ -22,6 +24,8 @@ const MUTATION_ADD_ITEM = gql`
       price: $price
       maxDuration: $maxDuration
       category: $category
+      imageFull: $imageFull
+      imagePreview: $imagePreview
     ) {
       id
     }
@@ -102,12 +106,33 @@ function CategoryInput(props) {
   )
 }
 
+async function uploadImage(event) {
+  console.log('Uploading image...')
+  const {
+    files: [file],
+  } = event.target
+
+  const data = new FormData()
+  data.append('file', file)
+  data.append('upload_preset', 'bachelor-project')
+
+  const res = await fetch(
+    'https://api.cloudinary.com/v1_1/vilhelmnielsen/image/upload',
+    { method: 'POST', body: data }
+  )
+
+  console.log('Upload complete')
+
+  return await res.json()
+}
+
 function AddItem() {
   const [durationToggle, setDurationToggle] = useState(false)
   const [title, onChangeTitle, setTitle] = useInput('')
   const [description, onChangeDescription, setDescription] = useInput('')
   const [price, onChangePrice, setPrice] = useInput(0)
   const [maxDuration, onChangeMaxDuration, setMaxDuration] = useInput(0)
+  const [image, setImage] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   const [category, setCategory] = useState({})
@@ -115,7 +140,9 @@ function AddItem() {
   const variables = {
     title,
     description,
-    category: category.id || '',
+    imageFull: image ? image.full : null,
+    imagePreview: image ? image.preview : null,
+    category: category.id || null,
     price: Number(price),
   }
 
@@ -131,8 +158,8 @@ function AddItem() {
       <Form
         onSubmit={async event => {
           event.preventDefault()
+          setBusy(true)
           try {
-            setBusy(true)
             const res = await addItem()
             setTitle('')
             setDescription('')
@@ -162,6 +189,26 @@ function AddItem() {
           </Label>
 
           <CategoryInput required setCategory={setCategory} />
+
+          <Label htmlFor="image">
+            Image
+            <Input
+              type="file"
+              id="image"
+              name="image"
+              required
+              accept="image/jpeg"
+              onChange={async event => {
+                const upload = await uploadImage(event)
+                const image = {
+                  full: upload.secure_url,
+                  preview: upload.eager[0].secure_url,
+                }
+                setImage(image)
+                console.log(image)
+              }}
+            />
+          </Label>
 
           <Label htmlFor="description">
             Description

@@ -12,7 +12,7 @@ const {
 
 const Mutation = {
   async createItem(_, args, ctx, info) {
-    const { category, ...data } = args
+    const { category, imageFull, imagePreview, ...data } = args
     const currentUserId = getUserId(ctx)
 
     await itemSchema.validate(data)
@@ -29,6 +29,12 @@ const Mutation = {
           owner: {
             connect: {
               id: currentUserId,
+            },
+          },
+          image: {
+            create: {
+              preview: imagePreview,
+              full: imageFull,
             },
           },
         },

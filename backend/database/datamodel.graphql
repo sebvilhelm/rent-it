@@ -19,6 +19,7 @@ type Location {
 type Item {
   id: ID! @unique
   title: String!
+  image: Image
   description: String!
   owner: User!
   bookings: [Booking!]!
@@ -63,6 +64,12 @@ type Category {
   slug: String! @unique
   description: String
   items: [Item!]!
+}
+
+type Image {
+  id: ID! @unique
+  full: String!
+  preview: String!
 }
 
 enum Permission {

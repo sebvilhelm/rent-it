@@ -35,6 +35,8 @@ type Mutation {
     price: Int!
     category: ID!
     maxDuration: Int
+    imageFull: String
+    imagePreview: String
   ): Item!
   updateItem(
     id: ID!
@@ -100,6 +102,7 @@ type Item {
   title: String!
   description: String!
   owner: User!
+  image: Image
   bookings(
     where: BookingWhereInput
     orderBy: BookingOrderByInput

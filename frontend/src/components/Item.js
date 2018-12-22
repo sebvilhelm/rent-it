@@ -1,7 +1,9 @@
 /** @jsx jsx */
+import { Suspense } from 'react'
 import { jsx, css } from '@emotion/core'
 import { useQuery } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
+import { Img } from 'the-platform'
 import formatPrice from '../lib/formatPrice'
 import AddBooking from './AddBooking'
 
@@ -13,6 +15,10 @@ const ITEM_QUERY = graphql`
       description
       price
       averageRating
+      image {
+        full
+        preview
+      }
       reviews {
         id
         reviewer {
@@ -32,6 +38,21 @@ const styles = {
     display: grid;
     gap: 1rem;
   `,
+  image: css`
+    max-width: 1000px;
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+  `,
+}
+
+function AverageRating(props) {
+  const { averageRating } = props
+  return (
+    <span>
+      <strong>{averageRating.toFixed(1)}</strong> out of 5
+    </span>
+  )
 }
 
 function Item(props) {
@@ -41,9 +62,17 @@ function Item(props) {
 
   return (
     <div>
+      {item.image && (
+        <Suspense
+          maxDuration={100}
+          fallback={<img src={item.image.preview} alt="" css={styles.image} />}
+        >
+          <Img src={item.image.full} alt="" css={styles.image} />
+        </Suspense>
+      )}
       <h1>{item.title}</h1>
       {item.averageRating && (
-        <span>Average: {item.averageRating.toFixed(1)} out of 5</span>
+        <AverageRating averageRating={item.averageRating} />
       )}
       <p>{item.description}</p>
       <p>Price: {formatPrice(item.price)}</p>

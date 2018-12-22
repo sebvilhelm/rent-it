@@ -1,11 +1,15 @@
 # source: https://eu1.prisma.sh/sebastian-vilhelm-nielsen-e462bc/bachelor/dev
-# timestamp: Fri Dec 21 2018 12:15:17 GMT+0100 (Central European Standard Time)
+# timestamp: Sat Dec 22 2018 15:57:17 GMT+0100 (Central European Standard Time)
 
 type AggregateBooking {
   count: Int!
 }
 
 type AggregateCategory {
+  count: Int!
+}
+
+type AggregateImage {
   count: Int!
 }
 
@@ -784,9 +788,267 @@ input CategoryWhereUniqueInput {
 
 scalar DateTime
 
+type Image implements Node {
+  id: ID!
+  full: String!
+  preview: String!
+}
+
+"""A connection to a list of items."""
+type ImageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [ImageEdge]!
+  aggregate: AggregateImage!
+}
+
+input ImageCreateInput {
+  full: String!
+  preview: String!
+}
+
+input ImageCreateOneInput {
+  create: ImageCreateInput
+  connect: ImageWhereUniqueInput
+}
+
+"""An edge in a connection."""
+type ImageEdge {
+  """The item at the end of the edge."""
+  node: Image!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum ImageOrderByInput {
+  id_ASC
+  id_DESC
+  full_ASC
+  full_DESC
+  preview_ASC
+  preview_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type ImagePreviousValues {
+  id: ID!
+  full: String!
+  preview: String!
+}
+
+type ImageSubscriptionPayload {
+  mutation: MutationType!
+  node: Image
+  updatedFields: [String!]
+  previousValues: ImagePreviousValues
+}
+
+input ImageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ImageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ImageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ImageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ImageWhereInput
+}
+
+input ImageUpdateDataInput {
+  full: String
+  preview: String
+}
+
+input ImageUpdateInput {
+  full: String
+  preview: String
+}
+
+input ImageUpdateManyMutationInput {
+  full: String
+  preview: String
+}
+
+input ImageUpdateOneInput {
+  create: ImageCreateInput
+  connect: ImageWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: ImageUpdateDataInput
+  upsert: ImageUpsertNestedInput
+}
+
+input ImageUpsertNestedInput {
+  update: ImageUpdateDataInput!
+  create: ImageCreateInput!
+}
+
+input ImageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ImageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ImageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ImageWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  full: String
+
+  """All values that are not equal to given value."""
+  full_not: String
+
+  """All values that are contained in given list."""
+  full_in: [String!]
+
+  """All values that are not contained in given list."""
+  full_not_in: [String!]
+
+  """All values less than the given value."""
+  full_lt: String
+
+  """All values less than or equal the given value."""
+  full_lte: String
+
+  """All values greater than the given value."""
+  full_gt: String
+
+  """All values greater than or equal the given value."""
+  full_gte: String
+
+  """All values containing the given string."""
+  full_contains: String
+
+  """All values not containing the given string."""
+  full_not_contains: String
+
+  """All values starting with the given string."""
+  full_starts_with: String
+
+  """All values not starting with the given string."""
+  full_not_starts_with: String
+
+  """All values ending with the given string."""
+  full_ends_with: String
+
+  """All values not ending with the given string."""
+  full_not_ends_with: String
+  preview: String
+
+  """All values that are not equal to given value."""
+  preview_not: String
+
+  """All values that are contained in given list."""
+  preview_in: [String!]
+
+  """All values that are not contained in given list."""
+  preview_not_in: [String!]
+
+  """All values less than the given value."""
+  preview_lt: String
+
+  """All values less than or equal the given value."""
+  preview_lte: String
+
+  """All values greater than the given value."""
+  preview_gt: String
+
+  """All values greater than or equal the given value."""
+  preview_gte: String
+
+  """All values containing the given string."""
+  preview_contains: String
+
+  """All values not containing the given string."""
+  preview_not_contains: String
+
+  """All values starting with the given string."""
+  preview_starts_with: String
+
+  """All values not starting with the given string."""
+  preview_not_starts_with: String
+
+  """All values ending with the given string."""
+  preview_ends_with: String
+
+  """All values not ending with the given string."""
+  preview_not_ends_with: String
+}
+
+input ImageWhereUniqueInput {
+  id: ID
+}
+
 type Item implements Node {
   id: ID!
   title: String!
+  image: Image
   description: String!
   owner: User!
   bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
@@ -811,6 +1073,7 @@ input ItemCreateInput {
   description: String!
   price: Int!
   maxDuration: Int
+  image: ImageCreateOneInput
   owner: UserCreateOneWithoutItemsInput!
   bookings: BookingCreateManyWithoutItemInput
   reviews: ItemReviewCreateManyWithoutItemInput
@@ -842,6 +1105,7 @@ input ItemCreateWithoutBookingsInput {
   description: String!
   price: Int!
   maxDuration: Int
+  image: ImageCreateOneInput
   owner: UserCreateOneWithoutItemsInput!
   reviews: ItemReviewCreateManyWithoutItemInput
   category: CategoryCreateOneWithoutItemsInput!
@@ -852,6 +1116,7 @@ input ItemCreateWithoutCategoryInput {
   description: String!
   price: Int!
   maxDuration: Int
+  image: ImageCreateOneInput
   owner: UserCreateOneWithoutItemsInput!
   bookings: BookingCreateManyWithoutItemInput
   reviews: ItemReviewCreateManyWithoutItemInput
@@ -862,6 +1127,7 @@ input ItemCreateWithoutOwnerInput {
   description: String!
   price: Int!
   maxDuration: Int
+  image: ImageCreateOneInput
   bookings: BookingCreateManyWithoutItemInput
   reviews: ItemReviewCreateManyWithoutItemInput
   category: CategoryCreateOneWithoutItemsInput!
@@ -872,6 +1138,7 @@ input ItemCreateWithoutReviewsInput {
   description: String!
   price: Int!
   maxDuration: Int
+  image: ImageCreateOneInput
   owner: UserCreateOneWithoutItemsInput!
   bookings: BookingCreateManyWithoutItemInput
   category: CategoryCreateOneWithoutItemsInput!
@@ -1365,6 +1632,7 @@ input ItemUpdateInput {
   description: String
   price: Int
   maxDuration: Int
+  image: ImageUpdateOneInput
   owner: UserUpdateOneRequiredWithoutItemsInput
   bookings: BookingUpdateManyWithoutItemInput
   reviews: ItemReviewUpdateManyWithoutItemInput
@@ -1431,6 +1699,7 @@ input ItemUpdateWithoutBookingsDataInput {
   description: String
   price: Int
   maxDuration: Int
+  image: ImageUpdateOneInput
   owner: UserUpdateOneRequiredWithoutItemsInput
   reviews: ItemReviewUpdateManyWithoutItemInput
   category: CategoryUpdateOneRequiredWithoutItemsInput
@@ -1441,6 +1710,7 @@ input ItemUpdateWithoutCategoryDataInput {
   description: String
   price: Int
   maxDuration: Int
+  image: ImageUpdateOneInput
   owner: UserUpdateOneRequiredWithoutItemsInput
   bookings: BookingUpdateManyWithoutItemInput
   reviews: ItemReviewUpdateManyWithoutItemInput
@@ -1451,6 +1721,7 @@ input ItemUpdateWithoutOwnerDataInput {
   description: String
   price: Int
   maxDuration: Int
+  image: ImageUpdateOneInput
   bookings: BookingUpdateManyWithoutItemInput
   reviews: ItemReviewUpdateManyWithoutItemInput
   category: CategoryUpdateOneRequiredWithoutItemsInput
@@ -1461,6 +1732,7 @@ input ItemUpdateWithoutReviewsDataInput {
   description: String
   price: Int
   maxDuration: Int
+  image: ImageUpdateOneInput
   owner: UserUpdateOneRequiredWithoutItemsInput
   bookings: BookingUpdateManyWithoutItemInput
   category: CategoryUpdateOneRequiredWithoutItemsInput
@@ -1671,6 +1943,7 @@ input ItemWhereInput {
 
   """All values greater than or equal the given value."""
   maxDuration_gte: Int
+  image: ImageWhereInput
   owner: UserWhereInput
   bookings_every: BookingWhereInput
   bookings_some: BookingWhereInput
@@ -2015,6 +2288,7 @@ type Mutation {
   createItemReview(data: ItemReviewCreateInput!): ItemReview!
   createCategory(data: CategoryCreateInput!): Category!
   createLocation(data: LocationCreateInput!): Location!
+  createImage(data: ImageCreateInput!): Image!
   createRating(data: RatingCreateInput!): Rating!
   createUser(data: UserCreateInput!): User!
   updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
@@ -2023,6 +2297,7 @@ type Mutation {
   updateItemReview(data: ItemReviewUpdateInput!, where: ItemReviewWhereUniqueInput!): ItemReview
   updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
   updateLocation(data: LocationUpdateInput!, where: LocationWhereUniqueInput!): Location
+  updateImage(data: ImageUpdateInput!, where: ImageWhereUniqueInput!): Image
   updateRating(data: RatingUpdateInput!, where: RatingWhereUniqueInput!): Rating
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteItem(where: ItemWhereUniqueInput!): Item
@@ -2031,6 +2306,7 @@ type Mutation {
   deleteItemReview(where: ItemReviewWhereUniqueInput!): ItemReview
   deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteLocation(where: LocationWhereUniqueInput!): Location
+  deleteImage(where: ImageWhereUniqueInput!): Image
   deleteRating(where: RatingWhereUniqueInput!): Rating
   deleteUser(where: UserWhereUniqueInput!): User
   upsertItem(where: ItemWhereUniqueInput!, create: ItemCreateInput!, update: ItemUpdateInput!): Item!
@@ -2039,12 +2315,14 @@ type Mutation {
   upsertItemReview(where: ItemReviewWhereUniqueInput!, create: ItemReviewCreateInput!, update: ItemReviewUpdateInput!): ItemReview!
   upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
   upsertLocation(where: LocationWhereUniqueInput!, create: LocationCreateInput!, update: LocationUpdateInput!): Location!
+  upsertImage(where: ImageWhereUniqueInput!, create: ImageCreateInput!, update: ImageUpdateInput!): Image!
   upsertRating(where: RatingWhereUniqueInput!, create: RatingCreateInput!, update: RatingUpdateInput!): Rating!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
   updateManyBookings(data: BookingUpdateManyMutationInput!, where: BookingWhereInput): BatchPayload!
   updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
   updateManyLocations(data: LocationUpdateManyMutationInput!, where: LocationWhereInput): BatchPayload!
+  updateManyImages(data: ImageUpdateManyMutationInput!, where: ImageWhereInput): BatchPayload!
   updateManyRatings(data: RatingUpdateManyMutationInput!, where: RatingWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyItems(where: ItemWhereInput): BatchPayload!
@@ -2053,6 +2331,7 @@ type Mutation {
   deleteManyItemReviews(where: ItemReviewWhereInput): BatchPayload!
   deleteManyCategories(where: CategoryWhereInput): BatchPayload!
   deleteManyLocations(where: LocationWhereInput): BatchPayload!
+  deleteManyImages(where: ImageWhereInput): BatchPayload!
   deleteManyRatings(where: RatingWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
@@ -2091,6 +2370,7 @@ type Query {
   itemReviews(where: ItemReviewWhereInput, orderBy: ItemReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemReview]!
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
   locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location]!
+  images(where: ImageWhereInput, orderBy: ImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Image]!
   ratings(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rating]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   item(where: ItemWhereUniqueInput!): Item
@@ -2099,6 +2379,7 @@ type Query {
   itemReview(where: ItemReviewWhereUniqueInput!): ItemReview
   category(where: CategoryWhereUniqueInput!): Category
   location(where: LocationWhereUniqueInput!): Location
+  image(where: ImageWhereUniqueInput!): Image
   rating(where: RatingWhereUniqueInput!): Rating
   user(where: UserWhereUniqueInput!): User
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
@@ -2107,6 +2388,7 @@ type Query {
   itemReviewsConnection(where: ItemReviewWhereInput, orderBy: ItemReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemReviewConnection!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
   locationsConnection(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationConnection!
+  imagesConnection(where: ImageWhereInput, orderBy: ImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ImageConnection!
   ratingsConnection(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RatingConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
@@ -2361,6 +2643,7 @@ type Subscription {
   itemReview(where: ItemReviewSubscriptionWhereInput): ItemReviewSubscriptionPayload
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
   location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
+  image(where: ImageSubscriptionWhereInput): ImageSubscriptionPayload
   rating(where: RatingSubscriptionWhereInput): RatingSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
