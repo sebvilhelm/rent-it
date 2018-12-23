@@ -30,6 +30,7 @@ function SignInForm(props) {
             value={email}
             onChange={onChangeEmail}
             id="signInEmail"
+            name="signInEmail"
             type="email"
             required
           />
@@ -40,11 +41,12 @@ function SignInForm(props) {
             value={password}
             onChange={onChangePassword}
             id="signInPassword"
+            name="signInPassword"
             type="password"
             required
           />
         </Label>
-        <Button>Sign in</Button>
+        <Button>Sign{busy && 'ing'} in</Button>
       </Fieldset>
     </Form>
   )

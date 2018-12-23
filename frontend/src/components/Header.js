@@ -19,6 +19,9 @@ const styles = {
   logo: css`
     opacity: 0;
   `,
+  navigation: css`
+    display: flex;
+  `,
   menuItem: {
     default: css`
       font-size: 0.9rem;
@@ -35,10 +38,12 @@ const styles = {
 function MenuItem({ type, ...props }) {
   const primary = type === 'primary'
   return (
-    <Link
-      css={[styles.menuItem.default, primary && styles.menuItem.primary]}
-      {...props}
-    />
+    <div>
+      <Link
+        css={[styles.menuItem.default, primary && styles.menuItem.primary]}
+        {...props}
+      />
+    </div>
   )
 }
 
@@ -52,8 +57,7 @@ function Header(props) {
       <SpacerGif />
       <SearchBar />
       <SpacerGif />
-
-      <nav>
+      <nav css={styles.navigation}>
         {user && (
           <MenuItem type="primary" to="/add-item">
             Add Item
@@ -66,7 +70,11 @@ function Header(props) {
             <button>Sign Out</button>
           </ProfileButton>
         )}
-        {!user && <MenuItem to="/profile">Sign in</MenuItem>}
+        {!user && (
+          <MenuItem type="primary" to="/profile">
+            Sign in
+          </MenuItem>
+        )}
       </nav>
     </header>
   )
