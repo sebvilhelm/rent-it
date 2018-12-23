@@ -6,6 +6,7 @@ import ErrorHandler from './Error'
 import { Form, Input, Label, Fieldset } from './elements/Form'
 import Button from './elements/Button'
 import useInput from '../lib/useInput'
+import Layout from './Layout'
 
 const QUERY_PROFILE = graphql`
   query profile {
@@ -24,23 +25,25 @@ function Profile() {
   } = useQuery(QUERY_PROFILE)
 
   return (
-    <div>
-      <h2>{editing ? 'Edit your profile' : `Welcome, ${me.name}`}</h2>
-      <Button onClick={() => setEditing(!editing)}>
-        {editing ? 'Cancel edit' : 'Edit'}
-      </Button>
-      {editing ? (
-        <Fragment>
-          <EditProfileForm profile={me} />
-        </Fragment>
-      ) : (
-        <Fragment>
-          <p>
-            Your email is: <strong>{me.email}</strong>
-          </p>
-        </Fragment>
-      )}
-    </div>
+    <Layout>
+      <section>
+        <h1>{editing ? 'Edit your profile' : `Welcome, ${me.name}`}</h1>
+        <Button onClick={() => setEditing(!editing)}>
+          {editing ? 'Cancel edit' : 'Edit'}
+        </Button>
+        {editing ? (
+          <Fragment>
+            <EditProfileForm profile={me} />
+          </Fragment>
+        ) : (
+          <Fragment>
+            <p>
+              Your email is: <strong>{me.email}</strong>
+            </p>
+          </Fragment>
+        )}
+      </section>
+    </Layout>
   )
 }
 

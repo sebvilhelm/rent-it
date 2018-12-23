@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import { useMedia } from 'the-platform'
 
 import ItemCard from './ItemCard'
+import Layout from './Layout'
 
 const QUERY_ITEMS_BY_CATEGORY = gql`
   query itemsByCategory($slug: String!, $searchTerm: String) {
@@ -71,16 +72,25 @@ function Category(props) {
   })
 
   return (
-    <div>
-      <h1>{category.title}</h1>
-      {items.length > 0 && (
-        <div css={[large && styles.grid]}>
-          {items.map(item => {
-            return <ItemCard key={item.id} item={item} />
-          })}
-        </div>
-      )}
-    </div>
+    <Layout>
+      <section>
+        <h1
+          css={theme => {
+            console.log(theme)
+            return null
+          }}
+        >
+          {category.title}
+        </h1>
+        {items.length > 0 && (
+          <div css={[large && styles.grid]}>
+            {items.map(item => {
+              return <ItemCard key={item.id} item={item} />
+            })}
+          </div>
+        )}
+      </section>
+    </Layout>
   )
 }
 

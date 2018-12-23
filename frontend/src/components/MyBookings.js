@@ -5,6 +5,7 @@ import { useQuery } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
 import { differenceInCalendarDays, format } from 'date-fns'
 import ReviewItem from './ReviewItem'
+import Layout from './Layout'
 
 const styles = {
   bookingList: css`
@@ -67,18 +68,20 @@ function MyBookings() {
   }, [])
 
   return (
-    <div>
-      <h2>My bookings</h2>
-      <div css={styles.bookingList}>
-        {bookings.map(booking => {
-          return (
-            <div key={booking.id}>
-              <Booking booking={booking} />
-            </div>
-          )
-        })}
-      </div>
-    </div>
+    <Layout>
+      <section>
+        <h2>My bookings</h2>
+        <div css={styles.bookingList}>
+          {bookings.map(booking => {
+            return (
+              <div key={booking.id}>
+                <Booking booking={booking} />
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    </Layout>
   )
 }
 

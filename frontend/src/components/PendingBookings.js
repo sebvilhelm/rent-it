@@ -3,6 +3,7 @@ import { useQuery, useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
 import Button from './elements/Button'
 import confirm from '../lib/confirm'
+import Layout from './Layout'
 
 const QUERY_MY_PENDING_BOOKINGS = graphql`
   query myPendingBookings {
@@ -108,12 +109,14 @@ function PendingBookings() {
   }, [])
 
   return (
-    <div>
-      <h2>Pending bookings</h2>
-      {me.pendingBookings.map(booking => (
-        <Booking key={booking.id} booking={booking} />
-      ))}
-    </div>
+    <Layout>
+      <section>
+        <h1>Pending bookings</h1>
+        {me.pendingBookings.map(booking => (
+          <Booking key={booking.id} booking={booking} />
+        ))}
+      </section>
+    </Layout>
   )
 }
 

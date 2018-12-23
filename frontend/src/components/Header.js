@@ -10,7 +10,8 @@ const styles = {
   header: css`
     height: 75px;
     padding: 0.5rem;
-    border: 1px solid #ebeff0;
+    border-bottom: 1px solid #ebeff0;
+    background-color: white;
   `,
   flexWrapper: css`
     display: flex;
@@ -19,11 +20,10 @@ const styles = {
   logo: css`
     opacity: 0;
   `,
-  navigation: css`
-    display: flex;
-  `,
+  navigation: css``,
   menuItem: {
     default: css`
+      display: inline-flex;
       font-size: 0.9rem;
       text-decoration: none;
       margin: 0 0.5rem;
@@ -38,12 +38,10 @@ const styles = {
 function MenuItem({ type, ...props }) {
   const primary = type === 'primary'
   return (
-    <div>
-      <Link
-        css={[styles.menuItem.default, primary && styles.menuItem.primary]}
-        {...props}
-      />
-    </div>
+    <Link
+      css={[styles.menuItem.default, primary && styles.menuItem.primary]}
+      {...props}
+    />
   )
 }
 
@@ -131,12 +129,6 @@ function ProfileButton(props) {
         <nav css={profileStyle.dropdown}>
           <div>
             <Link to="/profile">My profile</Link>
-          </div>
-          <div>
-            <Link to="/profile/bookings">My bookings</Link>
-          </div>
-          <div>
-            <Link to="/profile/pending-bookings">Pending bookings</Link>
           </div>
           <div>
             <button

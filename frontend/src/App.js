@@ -1,10 +1,10 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/core'
-import { lazy, Suspense, Fragment } from 'react'
+import { Global, jsx, css } from '@emotion/core'
+import { lazy, Suspense } from 'react'
 import { Router } from '@reach/router'
 import Spinner from './components/Spinner'
 import Header from './components/Header'
-import User, { useUser } from './components/User'
+import User from './components/User'
 
 const Item = lazy(() => import('./components/Item'))
 const Categories = lazy(() => import('./components/Categories'))
@@ -14,27 +14,15 @@ const MyBookings = lazy(() => import('./components/MyBookings'))
 const PendingBookings = lazy(() => import('./components/PendingBookings'))
 const SignIn = lazy(() => import('./components/SignIn'))
 const Profile = lazy(() => import('./components/Profile'))
-// import Search from './components/Search'
-
-function Dashboard(props) {
-  const { user } = useUser()
-  if (!user) {
-    return (
-      <div>
-        <h2>You need to sign in to see this</h2>
-        <SignIn />
-      </div>
-    )
-  }
-  return props.children
-}
+const Dashboard = lazy(() => import('./components/Dashboard'))
 
 function App() {
   return (
     <Suspense fallback={<Spinner />}>
+      <Global styles={styles.global} />
       <User.Provider>
-        <Fragment>
-          <Header />
+        <Header />
+        <main>
           <Suspense fallback={<Spinner />}>
             <Router>
               <Categories path="/" />
@@ -50,10 +38,41 @@ function App() {
               <SignIn path="sign-in" />
             </Router>
           </Suspense>
-        </Fragment>
+        </main>
       </User.Provider>
     </Suspense>
   )
+}
+
+const styles = {
+  global: css`
+    html {
+      box-sizing: border-box;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    code {
+      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+    }
+  `,
 }
 
 export default App

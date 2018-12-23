@@ -4,6 +4,7 @@ import Button from './elements/Button'
 import { Form, Fieldset, Label, Input } from './elements/Form'
 import { useUser } from './User'
 import { SignUpForm } from './SignUp'
+import Layout from './Layout'
 
 function SignInForm(props) {
   const { signIn } = useUser()
@@ -54,17 +55,19 @@ function SignInForm(props) {
 
 function SignIn() {
   return (
-    <div>
-      <div>
-        <h2>Sign in</h2>
-        <SignInForm />
-      </div>
+    <Layout>
+      <section>
+        <div>
+          <h2>Sign in</h2>
+          <SignInForm />
+        </div>
 
-      <div>
-        <h2>Sign Up</h2>
-        <SignUpForm />
-      </div>
-    </div>
+        <div>
+          <h2>Sign Up</h2>
+          <SignUpForm />
+        </div>
+      </section>
+    </Layout>
   )
 }
 

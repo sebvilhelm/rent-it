@@ -7,6 +7,7 @@ import Button from './elements/Button'
 import useInput from '../lib/useInput'
 import Spinner from './Spinner'
 import Error from './Error'
+import Layout from './Layout'
 
 const MUTATION_ADD_ITEM = gql`
   mutation addItem(
@@ -152,122 +153,124 @@ function AddItem() {
       : variables,
   })
   return (
-    <div>
-      <h1>Add item</h1>
-      {error && <Error error={error} />}
-      <Form
-        onSubmit={async event => {
-          event.preventDefault()
-          setBusy(true)
-          try {
-            const res = await addItem()
-            setTitle('')
-            setDescription('')
-            setPrice(0)
-            setMaxDuration(0)
-            // TODO: Success!
-            console.log(res)
-          } catch (error) {
-            setError(error)
-          } finally {
-            setBusy(false)
-          }
-        }}
-      >
-        <Fieldset disabled={busy}>
-          <Label htmlFor="title">
-            Title
-            <Input
-              required
-              autoComplete="off"
-              value={title}
-              onChange={onChangeTitle}
-              type="text"
-              name="title"
-              id="title"
-            />
-          </Label>
-
-          <CategoryInput required setCategory={setCategory} />
-
-          <Label htmlFor="image">
-            Image
-            <Input
-              type="file"
-              id="image"
-              name="image"
-              required
-              accept="image/jpeg"
-              onChange={async event => {
-                const upload = await uploadImage(event)
-                const image = {
-                  full: upload.secure_url,
-                  preview: upload.eager[0].secure_url,
-                }
-                setImage(image)
-                console.log(image)
-              }}
-            />
-          </Label>
-
-          <Label htmlFor="description">
-            Description
-            <Textarea
-              required
-              autoComplete="off"
-              value={description}
-              onChange={onChangeDescription}
-              id="description"
-            />
-          </Label>
-          <Label htmlFor="price">
-            Price
-            <Input
-              required
-              autoComplete="off"
-              value={price}
-              onChange={onChangePrice}
-              type="number"
-              name="price"
-              id="price"
-            />
-          </Label>
-          <Label htmlFor="durationToggle">
-            Max duration?
-            <Input
-              autoComplete="off"
-              checked={durationToggle}
-              onChange={event => setDurationToggle(event.target.checked)}
-              type="checkbox"
-              name="durationToggle"
-              id="durationToggle"
-            />
-          </Label>
-          {durationToggle && (
-            <Label htmlFor="maxDuration">
-              Max Duration in days
+    <Layout>
+      <section>
+        <h1>Add item</h1>
+        {error && <Error error={error} />}
+        <Form
+          onSubmit={async event => {
+            event.preventDefault()
+            setBusy(true)
+            try {
+              const res = await addItem()
+              setTitle('')
+              setDescription('')
+              setPrice(0)
+              setMaxDuration(0)
+              // TODO: Success!
+              console.log(res)
+            } catch (error) {
+              setError(error)
+            } finally {
+              setBusy(false)
+            }
+          }}
+        >
+          <Fieldset disabled={busy}>
+            <Label htmlFor="title">
+              Title
               <Input
+                required
                 autoComplete="off"
-                value={maxDuration}
-                onChange={onChangeMaxDuration}
-                type="number"
-                name="maxDuration"
-                id="maxDuration"
+                value={title}
+                onChange={onChangeTitle}
+                type="text"
+                name="title"
+                id="title"
               />
             </Label>
-          )}
-          <Button>
-            Add Item
-            {busy && (
-              <Fragment>
-                {' '}
-                <Spinner />
-              </Fragment>
+
+            <CategoryInput required setCategory={setCategory} />
+
+            <Label htmlFor="image">
+              Image
+              <Input
+                type="file"
+                id="image"
+                name="image"
+                required
+                accept="image/jpeg"
+                onChange={async event => {
+                  const upload = await uploadImage(event)
+                  const image = {
+                    full: upload.secure_url,
+                    preview: upload.eager[0].secure_url,
+                  }
+                  setImage(image)
+                  console.log(image)
+                }}
+              />
+            </Label>
+
+            <Label htmlFor="description">
+              Description
+              <Textarea
+                required
+                autoComplete="off"
+                value={description}
+                onChange={onChangeDescription}
+                id="description"
+              />
+            </Label>
+            <Label htmlFor="price">
+              Price
+              <Input
+                required
+                autoComplete="off"
+                value={price}
+                onChange={onChangePrice}
+                type="number"
+                name="price"
+                id="price"
+              />
+            </Label>
+            <Label htmlFor="durationToggle">
+              Max duration?
+              <Input
+                autoComplete="off"
+                checked={durationToggle}
+                onChange={event => setDurationToggle(event.target.checked)}
+                type="checkbox"
+                name="durationToggle"
+                id="durationToggle"
+              />
+            </Label>
+            {durationToggle && (
+              <Label htmlFor="maxDuration">
+                Max Duration in days
+                <Input
+                  autoComplete="off"
+                  value={maxDuration}
+                  onChange={onChangeMaxDuration}
+                  type="number"
+                  name="maxDuration"
+                  id="maxDuration"
+                />
+              </Label>
             )}
-          </Button>
-        </Fieldset>
-      </Form>
-    </div>
+            <Button>
+              Add Item
+              {busy && (
+                <Fragment>
+                  {' '}
+                  <Spinner />
+                </Fragment>
+              )}
+            </Button>
+          </Fieldset>
+        </Form>
+      </section>
+    </Layout>
   )
 }
 

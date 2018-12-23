@@ -4,6 +4,8 @@ import { Link } from '@reach/router'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
 
+import Layout from './Layout'
+
 const QUERY_CATEGORIES = gql`
   query categoriesPage {
     categories {
@@ -33,12 +35,14 @@ function Categories() {
     data: { categories },
   } = useQuery(QUERY_CATEGORIES)
   return (
-    <div>
-      <h1>Categories</h1>
-      {categories.map(category => (
-        <CategoryCard category={category} key={category.slug} />
-      ))}
-    </div>
+    <Layout>
+      <section>
+        <h1>Categories</h1>
+        {categories.map(category => (
+          <CategoryCard category={category} key={category.slug} />
+        ))}
+      </section>
+    </Layout>
   )
 }
 
