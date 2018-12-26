@@ -4,7 +4,8 @@ import { jsx, css } from '@emotion/core'
 const styles = {
   input: css`
     border: 0;
-    background: #f5f5f5;
+    background-color: #f5f5f5;
+    color: #444444;
     padding: 0.5rem;
     width: 100%;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',

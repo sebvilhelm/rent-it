@@ -13,6 +13,7 @@ const styles = {
     font-size: 0.8rem;
     border: 3px solid var(--button-color);
     min-width: 5rem;
+    line-height: 1;
   `,
   green: css`
     --button-color: #3d9951;

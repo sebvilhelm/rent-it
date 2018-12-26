@@ -1,10 +1,13 @@
-import React, { Fragment, useState, Suspense } from 'react'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import { Fragment, useState, Suspense } from 'react'
 import gql from 'graphql-tag'
 import { useMutation, useQuery } from 'react-apollo-hooks'
 import Downshift from 'downshift'
 import { Input, Label, Textarea, Form, Fieldset } from './elements/Form'
 import Button from './elements/Button'
 import useInput from '../lib/useInput'
+import formatPrice from '../lib/formatPrice'
 import Spinner from './Spinner'
 import Error from './Error'
 import Layout from './Layout'
@@ -42,6 +45,21 @@ const QUERY_SEARCH_CATEGORIES = gql`
   }
 `
 
+const styles = {
+  dropdownList: css`
+    margin: 0;
+    list-style: none;
+    background-color: #f5f5f5;
+    color: #444444;
+    border-top: 1px solid #eaeaea;
+    padding: 0.5rem 0 1rem;
+    border-radius: 0 0 6px 6px;
+  `,
+  item: css`
+    padding: 0.5rem;
+  `,
+}
+
 function CategoryList({ searchTerm, children }) {
   const {
     data: { categories },
@@ -74,7 +92,11 @@ function CategoryInput(props) {
             <Input {...getInputProps({ ...inputProps })} />
           </Label>
           {isOpen && (
-            <ul {...getMenuProps()}>
+            <ul
+              css={styles.dropdownList}
+              style={{ marginTop: '-0.5rem' }}
+              {...getMenuProps()}
+            >
               {!inputValue ? (
                 <div>Please enter a category</div>
               ) : (
@@ -83,10 +105,11 @@ function CategoryInput(props) {
                     {({ categories }) =>
                       categories.map((item, index) => (
                         <li
+                          css={styles.item}
                           style={{
                             backgroundColor:
                               highlightedIndex === index
-                                ? 'hotpink'
+                                ? '#eaeaea'
                                 : 'transparent',
                           }}
                           {...getItemProps({ item, index })}
@@ -234,6 +257,7 @@ function AddItem() {
                 id="price"
               />
             </Label>
+            <p>{formatPrice(price)} per day</p>
             <Label htmlFor="durationToggle">
               Max duration?
               <Input
