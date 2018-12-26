@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/sebastian-vilhelm-nielsen-e462bc/bachelor/dev
-# timestamp: Sat Dec 22 2018 15:57:17 GMT+0100 (Central European Standard Time)
+# timestamp: Wed Dec 26 2018 13:35:36 GMT+0100 (Central European Standard Time)
 
 type AggregateBooking {
   count: Int!
@@ -21,7 +21,7 @@ type AggregateItemReview {
   count: Int!
 }
 
-type AggregateLocation {
+type AggregatePayment {
   count: Int!
 }
 
@@ -48,7 +48,15 @@ type Booking implements Node {
   booker: User!
   startDate: DateTime!
   endDate: DateTime!
-  status: BookingStatus!
+  payment: Payment!
+  status: BOOKING_STATUS!
+}
+
+enum BOOKING_STATUS {
+  PENDING
+  APPROVED
+  DENIED
+  CANCELLED
 }
 
 """A connection to a list of items."""
@@ -64,9 +72,10 @@ type BookingConnection {
 input BookingCreateInput {
   startDate: DateTime!
   endDate: DateTime!
-  status: BookingStatus
+  status: BOOKING_STATUS
   item: ItemCreateOneWithoutBookingsInput!
   booker: UserCreateOneWithoutBookingsInput!
+  payment: PaymentCreateOneInput!
 }
 
 input BookingCreateManyWithoutBookerInput {
@@ -82,15 +91,17 @@ input BookingCreateManyWithoutItemInput {
 input BookingCreateWithoutBookerInput {
   startDate: DateTime!
   endDate: DateTime!
-  status: BookingStatus
+  status: BOOKING_STATUS
   item: ItemCreateOneWithoutBookingsInput!
+  payment: PaymentCreateOneInput!
 }
 
 input BookingCreateWithoutItemInput {
   startDate: DateTime!
   endDate: DateTime!
-  status: BookingStatus
+  status: BOOKING_STATUS
   booker: UserCreateOneWithoutBookingsInput!
+  payment: PaymentCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -121,7 +132,7 @@ type BookingPreviousValues {
   id: ID!
   startDate: DateTime!
   endDate: DateTime!
-  status: BookingStatus!
+  status: BOOKING_STATUS!
 }
 
 input BookingScalarWhereInput {
@@ -217,23 +228,16 @@ input BookingScalarWhereInput {
 
   """All values greater than or equal the given value."""
   endDate_gte: DateTime
-  status: BookingStatus
+  status: BOOKING_STATUS
 
   """All values that are not equal to given value."""
-  status_not: BookingStatus
+  status_not: BOOKING_STATUS
 
   """All values that are contained in given list."""
-  status_in: [BookingStatus!]
+  status_in: [BOOKING_STATUS!]
 
   """All values that are not contained in given list."""
-  status_not_in: [BookingStatus!]
-}
-
-enum BookingStatus {
-  PENDING
-  APPROVED
-  DENIED
-  CANCELLED
+  status_not_in: [BOOKING_STATUS!]
 }
 
 type BookingSubscriptionPayload {
@@ -278,21 +282,22 @@ input BookingSubscriptionWhereInput {
 input BookingUpdateInput {
   startDate: DateTime
   endDate: DateTime
-  status: BookingStatus
+  status: BOOKING_STATUS
   item: ItemUpdateOneRequiredWithoutBookingsInput
   booker: UserUpdateOneRequiredWithoutBookingsInput
+  payment: PaymentUpdateOneRequiredInput
 }
 
 input BookingUpdateManyDataInput {
   startDate: DateTime
   endDate: DateTime
-  status: BookingStatus
+  status: BOOKING_STATUS
 }
 
 input BookingUpdateManyMutationInput {
   startDate: DateTime
   endDate: DateTime
-  status: BookingStatus
+  status: BOOKING_STATUS
 }
 
 input BookingUpdateManyWithoutBookerInput {
@@ -325,15 +330,17 @@ input BookingUpdateManyWithWhereNestedInput {
 input BookingUpdateWithoutBookerDataInput {
   startDate: DateTime
   endDate: DateTime
-  status: BookingStatus
+  status: BOOKING_STATUS
   item: ItemUpdateOneRequiredWithoutBookingsInput
+  payment: PaymentUpdateOneRequiredInput
 }
 
 input BookingUpdateWithoutItemDataInput {
   startDate: DateTime
   endDate: DateTime
-  status: BookingStatus
+  status: BOOKING_STATUS
   booker: UserUpdateOneRequiredWithoutBookingsInput
+  payment: PaymentUpdateOneRequiredInput
 }
 
 input BookingUpdateWithWhereUniqueWithoutBookerInput {
@@ -451,18 +458,19 @@ input BookingWhereInput {
 
   """All values greater than or equal the given value."""
   endDate_gte: DateTime
-  status: BookingStatus
+  status: BOOKING_STATUS
 
   """All values that are not equal to given value."""
-  status_not: BookingStatus
+  status_not: BOOKING_STATUS
 
   """All values that are contained in given list."""
-  status_in: [BookingStatus!]
+  status_in: [BOOKING_STATUS!]
 
   """All values that are not contained in given list."""
-  status_not_in: [BookingStatus!]
+  status_not_in: [BOOKING_STATUS!]
   item: ItemWhereInput
   booker: UserWhereInput
+  payment: PaymentWhereInput
 }
 
 input BookingWhereUniqueInput {
@@ -1958,86 +1966,159 @@ input ItemWhereUniqueInput {
   id: ID
 }
 
-type Location implements Node {
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  createItem(data: ItemCreateInput!): Item!
+  createBooking(data: BookingCreateInput!): Booking!
+  createUserReview(data: UserReviewCreateInput!): UserReview!
+  createItemReview(data: ItemReviewCreateInput!): ItemReview!
+  createCategory(data: CategoryCreateInput!): Category!
+  createImage(data: ImageCreateInput!): Image!
+  createRating(data: RatingCreateInput!): Rating!
+  createPayment(data: PaymentCreateInput!): Payment!
+  createUser(data: UserCreateInput!): User!
+  updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
+  updateBooking(data: BookingUpdateInput!, where: BookingWhereUniqueInput!): Booking
+  updateUserReview(data: UserReviewUpdateInput!, where: UserReviewWhereUniqueInput!): UserReview
+  updateItemReview(data: ItemReviewUpdateInput!, where: ItemReviewWhereUniqueInput!): ItemReview
+  updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
+  updateImage(data: ImageUpdateInput!, where: ImageWhereUniqueInput!): Image
+  updateRating(data: RatingUpdateInput!, where: RatingWhereUniqueInput!): Rating
+  updatePayment(data: PaymentUpdateInput!, where: PaymentWhereUniqueInput!): Payment
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deleteItem(where: ItemWhereUniqueInput!): Item
+  deleteBooking(where: BookingWhereUniqueInput!): Booking
+  deleteUserReview(where: UserReviewWhereUniqueInput!): UserReview
+  deleteItemReview(where: ItemReviewWhereUniqueInput!): ItemReview
+  deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteImage(where: ImageWhereUniqueInput!): Image
+  deleteRating(where: RatingWhereUniqueInput!): Rating
+  deletePayment(where: PaymentWhereUniqueInput!): Payment
+  deleteUser(where: UserWhereUniqueInput!): User
+  upsertItem(where: ItemWhereUniqueInput!, create: ItemCreateInput!, update: ItemUpdateInput!): Item!
+  upsertBooking(where: BookingWhereUniqueInput!, create: BookingCreateInput!, update: BookingUpdateInput!): Booking!
+  upsertUserReview(where: UserReviewWhereUniqueInput!, create: UserReviewCreateInput!, update: UserReviewUpdateInput!): UserReview!
+  upsertItemReview(where: ItemReviewWhereUniqueInput!, create: ItemReviewCreateInput!, update: ItemReviewUpdateInput!): ItemReview!
+  upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
+  upsertImage(where: ImageWhereUniqueInput!, create: ImageCreateInput!, update: ImageUpdateInput!): Image!
+  upsertRating(where: RatingWhereUniqueInput!, create: RatingCreateInput!, update: RatingUpdateInput!): Rating!
+  upsertPayment(where: PaymentWhereUniqueInput!, create: PaymentCreateInput!, update: PaymentUpdateInput!): Payment!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
+  updateManyBookings(data: BookingUpdateManyMutationInput!, where: BookingWhereInput): BatchPayload!
+  updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
+  updateManyImages(data: ImageUpdateManyMutationInput!, where: ImageWhereInput): BatchPayload!
+  updateManyRatings(data: RatingUpdateManyMutationInput!, where: RatingWhereInput): BatchPayload!
+  updateManyPayments(data: PaymentUpdateManyMutationInput!, where: PaymentWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  deleteManyItems(where: ItemWhereInput): BatchPayload!
+  deleteManyBookings(where: BookingWhereInput): BatchPayload!
+  deleteManyUserReviews(where: UserReviewWhereInput): BatchPayload!
+  deleteManyItemReviews(where: ItemReviewWhereInput): BatchPayload!
+  deleteManyCategories(where: CategoryWhereInput): BatchPayload!
+  deleteManyImages(where: ImageWhereInput): BatchPayload!
+  deleteManyRatings(where: RatingWhereInput): BatchPayload!
+  deleteManyPayments(where: PaymentWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
   id: ID!
-  city: String!
-  country: String!
-  lat: Float!
-  lng: Float!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Payment implements Node {
+  id: ID!
+  price: Int!
 }
 
 """A connection to a list of items."""
-type LocationConnection {
+type PaymentConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [LocationEdge]!
-  aggregate: AggregateLocation!
+  edges: [PaymentEdge]!
+  aggregate: AggregatePayment!
 }
 
-input LocationCreateInput {
-  city: String!
-  country: String!
-  lat: Float!
-  lng: Float!
+input PaymentCreateInput {
+  price: Int!
 }
 
-input LocationCreateOneInput {
-  create: LocationCreateInput
-  connect: LocationWhereUniqueInput
+input PaymentCreateOneInput {
+  create: PaymentCreateInput
+  connect: PaymentWhereUniqueInput
 }
 
 """An edge in a connection."""
-type LocationEdge {
+type PaymentEdge {
   """The item at the end of the edge."""
-  node: Location!
+  node: Payment!
 
   """A cursor for use in pagination."""
   cursor: String!
 }
 
-enum LocationOrderByInput {
+enum PaymentOrderByInput {
   id_ASC
   id_DESC
-  city_ASC
-  city_DESC
-  country_ASC
-  country_DESC
-  lat_ASC
-  lat_DESC
-  lng_ASC
-  lng_DESC
+  price_ASC
+  price_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
 }
 
-type LocationPreviousValues {
+type PaymentPreviousValues {
   id: ID!
-  city: String!
-  country: String!
-  lat: Float!
-  lng: Float!
+  price: Int!
 }
 
-type LocationSubscriptionPayload {
+type PaymentSubscriptionPayload {
   mutation: MutationType!
-  node: Location
+  node: Payment
   updatedFields: [String!]
-  previousValues: LocationPreviousValues
+  previousValues: PaymentPreviousValues
 }
 
-input LocationSubscriptionWhereInput {
+input PaymentSubscriptionWhereInput {
   """Logical AND on all given filters."""
-  AND: [LocationSubscriptionWhereInput!]
+  AND: [PaymentSubscriptionWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [LocationSubscriptionWhereInput!]
+  OR: [PaymentSubscriptionWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [LocationSubscriptionWhereInput!]
+  NOT: [PaymentSubscriptionWhereInput!]
 
   """
   The subscription event gets dispatched when it's listed in mutation_in
@@ -2058,53 +2139,42 @@ input LocationSubscriptionWhereInput {
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
   updatedFields_contains_some: [String!]
-  node: LocationWhereInput
+  node: PaymentWhereInput
 }
 
-input LocationUpdateDataInput {
-  city: String
-  country: String
-  lat: Float
-  lng: Float
+input PaymentUpdateDataInput {
+  price: Int
 }
 
-input LocationUpdateInput {
-  city: String
-  country: String
-  lat: Float
-  lng: Float
+input PaymentUpdateInput {
+  price: Int
 }
 
-input LocationUpdateManyMutationInput {
-  city: String
-  country: String
-  lat: Float
-  lng: Float
+input PaymentUpdateManyMutationInput {
+  price: Int
 }
 
-input LocationUpdateOneInput {
-  create: LocationCreateInput
-  connect: LocationWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: LocationUpdateDataInput
-  upsert: LocationUpsertNestedInput
+input PaymentUpdateOneRequiredInput {
+  create: PaymentCreateInput
+  connect: PaymentWhereUniqueInput
+  update: PaymentUpdateDataInput
+  upsert: PaymentUpsertNestedInput
 }
 
-input LocationUpsertNestedInput {
-  update: LocationUpdateDataInput!
-  create: LocationCreateInput!
+input PaymentUpsertNestedInput {
+  update: PaymentUpdateDataInput!
+  create: PaymentCreateInput!
 }
 
-input LocationWhereInput {
+input PaymentWhereInput {
   """Logical AND on all given filters."""
-  AND: [LocationWhereInput!]
+  AND: [PaymentWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [LocationWhereInput!]
+  OR: [PaymentWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [LocationWhereInput!]
+  NOT: [PaymentWhereInput!]
   id: ID
 
   """All values that are not equal to given value."""
@@ -2145,222 +2215,32 @@ input LocationWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  city: String
+  price: Int
 
   """All values that are not equal to given value."""
-  city_not: String
+  price_not: Int
 
   """All values that are contained in given list."""
-  city_in: [String!]
+  price_in: [Int!]
 
   """All values that are not contained in given list."""
-  city_not_in: [String!]
+  price_not_in: [Int!]
 
   """All values less than the given value."""
-  city_lt: String
+  price_lt: Int
 
   """All values less than or equal the given value."""
-  city_lte: String
+  price_lte: Int
 
   """All values greater than the given value."""
-  city_gt: String
+  price_gt: Int
 
   """All values greater than or equal the given value."""
-  city_gte: String
-
-  """All values containing the given string."""
-  city_contains: String
-
-  """All values not containing the given string."""
-  city_not_contains: String
-
-  """All values starting with the given string."""
-  city_starts_with: String
-
-  """All values not starting with the given string."""
-  city_not_starts_with: String
-
-  """All values ending with the given string."""
-  city_ends_with: String
-
-  """All values not ending with the given string."""
-  city_not_ends_with: String
-  country: String
-
-  """All values that are not equal to given value."""
-  country_not: String
-
-  """All values that are contained in given list."""
-  country_in: [String!]
-
-  """All values that are not contained in given list."""
-  country_not_in: [String!]
-
-  """All values less than the given value."""
-  country_lt: String
-
-  """All values less than or equal the given value."""
-  country_lte: String
-
-  """All values greater than the given value."""
-  country_gt: String
-
-  """All values greater than or equal the given value."""
-  country_gte: String
-
-  """All values containing the given string."""
-  country_contains: String
-
-  """All values not containing the given string."""
-  country_not_contains: String
-
-  """All values starting with the given string."""
-  country_starts_with: String
-
-  """All values not starting with the given string."""
-  country_not_starts_with: String
-
-  """All values ending with the given string."""
-  country_ends_with: String
-
-  """All values not ending with the given string."""
-  country_not_ends_with: String
-  lat: Float
-
-  """All values that are not equal to given value."""
-  lat_not: Float
-
-  """All values that are contained in given list."""
-  lat_in: [Float!]
-
-  """All values that are not contained in given list."""
-  lat_not_in: [Float!]
-
-  """All values less than the given value."""
-  lat_lt: Float
-
-  """All values less than or equal the given value."""
-  lat_lte: Float
-
-  """All values greater than the given value."""
-  lat_gt: Float
-
-  """All values greater than or equal the given value."""
-  lat_gte: Float
-  lng: Float
-
-  """All values that are not equal to given value."""
-  lng_not: Float
-
-  """All values that are contained in given list."""
-  lng_in: [Float!]
-
-  """All values that are not contained in given list."""
-  lng_not_in: [Float!]
-
-  """All values less than the given value."""
-  lng_lt: Float
-
-  """All values less than or equal the given value."""
-  lng_lte: Float
-
-  """All values greater than the given value."""
-  lng_gt: Float
-
-  """All values greater than or equal the given value."""
-  lng_gte: Float
+  price_gte: Int
 }
 
-input LocationWhereUniqueInput {
+input PaymentWhereUniqueInput {
   id: ID
-}
-
-"""
-The `Long` scalar type represents non-fractional signed whole numeric values.
-Long can represent values between -(2^63) and 2^63 - 1.
-"""
-scalar Long
-
-type Mutation {
-  createItem(data: ItemCreateInput!): Item!
-  createBooking(data: BookingCreateInput!): Booking!
-  createUserReview(data: UserReviewCreateInput!): UserReview!
-  createItemReview(data: ItemReviewCreateInput!): ItemReview!
-  createCategory(data: CategoryCreateInput!): Category!
-  createLocation(data: LocationCreateInput!): Location!
-  createImage(data: ImageCreateInput!): Image!
-  createRating(data: RatingCreateInput!): Rating!
-  createUser(data: UserCreateInput!): User!
-  updateItem(data: ItemUpdateInput!, where: ItemWhereUniqueInput!): Item
-  updateBooking(data: BookingUpdateInput!, where: BookingWhereUniqueInput!): Booking
-  updateUserReview(data: UserReviewUpdateInput!, where: UserReviewWhereUniqueInput!): UserReview
-  updateItemReview(data: ItemReviewUpdateInput!, where: ItemReviewWhereUniqueInput!): ItemReview
-  updateCategory(data: CategoryUpdateInput!, where: CategoryWhereUniqueInput!): Category
-  updateLocation(data: LocationUpdateInput!, where: LocationWhereUniqueInput!): Location
-  updateImage(data: ImageUpdateInput!, where: ImageWhereUniqueInput!): Image
-  updateRating(data: RatingUpdateInput!, where: RatingWhereUniqueInput!): Rating
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteItem(where: ItemWhereUniqueInput!): Item
-  deleteBooking(where: BookingWhereUniqueInput!): Booking
-  deleteUserReview(where: UserReviewWhereUniqueInput!): UserReview
-  deleteItemReview(where: ItemReviewWhereUniqueInput!): ItemReview
-  deleteCategory(where: CategoryWhereUniqueInput!): Category
-  deleteLocation(where: LocationWhereUniqueInput!): Location
-  deleteImage(where: ImageWhereUniqueInput!): Image
-  deleteRating(where: RatingWhereUniqueInput!): Rating
-  deleteUser(where: UserWhereUniqueInput!): User
-  upsertItem(where: ItemWhereUniqueInput!, create: ItemCreateInput!, update: ItemUpdateInput!): Item!
-  upsertBooking(where: BookingWhereUniqueInput!, create: BookingCreateInput!, update: BookingUpdateInput!): Booking!
-  upsertUserReview(where: UserReviewWhereUniqueInput!, create: UserReviewCreateInput!, update: UserReviewUpdateInput!): UserReview!
-  upsertItemReview(where: ItemReviewWhereUniqueInput!, create: ItemReviewCreateInput!, update: ItemReviewUpdateInput!): ItemReview!
-  upsertCategory(where: CategoryWhereUniqueInput!, create: CategoryCreateInput!, update: CategoryUpdateInput!): Category!
-  upsertLocation(where: LocationWhereUniqueInput!, create: LocationCreateInput!, update: LocationUpdateInput!): Location!
-  upsertImage(where: ImageWhereUniqueInput!, create: ImageCreateInput!, update: ImageUpdateInput!): Image!
-  upsertRating(where: RatingWhereUniqueInput!, create: RatingCreateInput!, update: RatingUpdateInput!): Rating!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyItems(data: ItemUpdateManyMutationInput!, where: ItemWhereInput): BatchPayload!
-  updateManyBookings(data: BookingUpdateManyMutationInput!, where: BookingWhereInput): BatchPayload!
-  updateManyCategories(data: CategoryUpdateManyMutationInput!, where: CategoryWhereInput): BatchPayload!
-  updateManyLocations(data: LocationUpdateManyMutationInput!, where: LocationWhereInput): BatchPayload!
-  updateManyImages(data: ImageUpdateManyMutationInput!, where: ImageWhereInput): BatchPayload!
-  updateManyRatings(data: RatingUpdateManyMutationInput!, where: RatingWhereInput): BatchPayload!
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  deleteManyItems(where: ItemWhereInput): BatchPayload!
-  deleteManyBookings(where: BookingWhereInput): BatchPayload!
-  deleteManyUserReviews(where: UserReviewWhereInput): BatchPayload!
-  deleteManyItemReviews(where: ItemReviewWhereInput): BatchPayload!
-  deleteManyCategories(where: CategoryWhereInput): BatchPayload!
-  deleteManyLocations(where: LocationWhereInput): BatchPayload!
-  deleteManyImages(where: ImageWhereInput): BatchPayload!
-  deleteManyRatings(where: RatingWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
-}
-
-enum MutationType {
-  CREATED
-  UPDATED
-  DELETED
-}
-
-"""An object with an ID"""
-interface Node {
-  """The id of the object."""
-  id: ID!
-}
-
-"""Information about pagination in a connection."""
-type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
 }
 
 type Query {
@@ -2369,27 +2249,27 @@ type Query {
   userReviews(where: UserReviewWhereInput, orderBy: UserReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserReview]!
   itemReviews(where: ItemReviewWhereInput, orderBy: ItemReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemReview]!
   categories(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Category]!
-  locations(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Location]!
   images(where: ImageWhereInput, orderBy: ImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Image]!
   ratings(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rating]!
+  payments(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Payment]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   item(where: ItemWhereUniqueInput!): Item
   booking(where: BookingWhereUniqueInput!): Booking
   userReview(where: UserReviewWhereUniqueInput!): UserReview
   itemReview(where: ItemReviewWhereUniqueInput!): ItemReview
   category(where: CategoryWhereUniqueInput!): Category
-  location(where: LocationWhereUniqueInput!): Location
   image(where: ImageWhereUniqueInput!): Image
   rating(where: RatingWhereUniqueInput!): Rating
+  payment(where: PaymentWhereUniqueInput!): Payment
   user(where: UserWhereUniqueInput!): User
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
   bookingsConnection(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BookingConnection!
   userReviewsConnection(where: UserReviewWhereInput, orderBy: UserReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserReviewConnection!
   itemReviewsConnection(where: ItemReviewWhereInput, orderBy: ItemReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemReviewConnection!
   categoriesConnection(where: CategoryWhereInput, orderBy: CategoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CategoryConnection!
-  locationsConnection(where: LocationWhereInput, orderBy: LocationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LocationConnection!
   imagesConnection(where: ImageWhereInput, orderBy: ImageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ImageConnection!
   ratingsConnection(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RatingConnection!
+  paymentsConnection(where: PaymentWhereInput, orderBy: PaymentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PaymentConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
@@ -2642,9 +2522,9 @@ type Subscription {
   userReview(where: UserReviewSubscriptionWhereInput): UserReviewSubscriptionPayload
   itemReview(where: ItemReviewSubscriptionWhereInput): ItemReviewSubscriptionPayload
   category(where: CategorySubscriptionWhereInput): CategorySubscriptionPayload
-  location(where: LocationSubscriptionWhereInput): LocationSubscriptionPayload
   image(where: ImageSubscriptionWhereInput): ImageSubscriptionPayload
   rating(where: RatingSubscriptionWhereInput): RatingSubscriptionPayload
+  payment(where: PaymentSubscriptionWhereInput): PaymentSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -2655,7 +2535,6 @@ type User implements Node {
   password: String!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
   bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
-  location: Location
 }
 
 """A connection to a list of items."""
@@ -2674,7 +2553,6 @@ input UserCreateInput {
   password: String!
   items: ItemCreateManyWithoutOwnerInput
   bookings: BookingCreateManyWithoutBookerInput
-  location: LocationCreateOneInput
 }
 
 input UserCreateOneInput {
@@ -2697,7 +2575,6 @@ input UserCreateWithoutBookingsInput {
   email: String!
   password: String!
   items: ItemCreateManyWithoutOwnerInput
-  location: LocationCreateOneInput
 }
 
 input UserCreateWithoutItemsInput {
@@ -2705,7 +2582,6 @@ input UserCreateWithoutItemsInput {
   email: String!
   password: String!
   bookings: BookingCreateManyWithoutBookerInput
-  location: LocationCreateOneInput
 }
 
 """An edge in a connection."""
@@ -2932,7 +2808,6 @@ input UserUpdateDataInput {
   password: String
   items: ItemUpdateManyWithoutOwnerInput
   bookings: BookingUpdateManyWithoutBookerInput
-  location: LocationUpdateOneInput
 }
 
 input UserUpdateInput {
@@ -2941,7 +2816,6 @@ input UserUpdateInput {
   password: String
   items: ItemUpdateManyWithoutOwnerInput
   bookings: BookingUpdateManyWithoutBookerInput
-  location: LocationUpdateOneInput
 }
 
 input UserUpdateManyMutationInput {
@@ -2985,7 +2859,6 @@ input UserUpdateWithoutBookingsDataInput {
   email: String
   password: String
   items: ItemUpdateManyWithoutOwnerInput
-  location: LocationUpdateOneInput
 }
 
 input UserUpdateWithoutItemsDataInput {
@@ -2993,7 +2866,6 @@ input UserUpdateWithoutItemsDataInput {
   email: String
   password: String
   bookings: BookingUpdateManyWithoutBookerInput
-  location: LocationUpdateOneInput
 }
 
 input UserUpsertNestedInput {
@@ -3186,7 +3058,6 @@ input UserWhereInput {
   bookings_every: BookingWhereInput
   bookings_some: BookingWhereInput
   bookings_none: BookingWhereInput
-  location: LocationWhereInput
 }
 
 input UserWhereUniqueInput {

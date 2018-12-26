@@ -26,6 +26,9 @@ const QUERY_ITEMS_BY_CATEGORY = gql`
         full
         preview
       }
+      owner {
+        id
+      }
     }
     itemsConnection(
       where: {
@@ -74,14 +77,7 @@ function Category(props) {
   return (
     <Layout>
       <section>
-        <h1
-          css={theme => {
-            console.log(theme)
-            return null
-          }}
-        >
-          {category.title}
-        </h1>
+        <h1>{category.title}</h1>
         {items.length > 0 && (
           <div css={[large && styles.grid]}>
             {items.map(item => {

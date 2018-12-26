@@ -28,6 +28,7 @@ function AddReview(props) {
   const [error, setError] = useState(null)
   return (
     <Form
+      {...props}
       onSubmit={async event => {
         event.preventDefault()
         setBusy(true)
@@ -72,7 +73,7 @@ function AddReview(props) {
 }
 
 function ReviewItem(props) {
-  return <AddReview id={props.id} />
+  return <AddReview {...props} id={props.id} />
 }
 
 export default ReviewItem

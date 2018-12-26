@@ -5,15 +5,6 @@ type User {
   password: String!
   items: [Item!]!
   bookings: [Booking!]!
-  location: Location
-}
-
-type Location {
-  id: ID! @unique
-  city: String!
-  country: String!
-  lat: Float!
-  lng: Float!
 }
 
 type Item {
@@ -35,7 +26,13 @@ type Booking {
   booker: User!
   startDate: DateTime!
   endDate: DateTime!
-  status: BookingStatus! @default(value: "PENDING")
+  payment: Payment!
+  status: BOOKING_STATUS! @default(value: "PENDING")
+}
+
+type Payment {
+  id: ID! @unique
+  price: Int!
 }
 
 type UserReview {
@@ -72,12 +69,12 @@ type Image {
   preview: String!
 }
 
-enum Permission {
+enum PERMISSION {
   ADMIN
   USER
 }
 
-enum BookingStatus {
+enum BOOKING_STATUS {
   PENDING
   APPROVED
   DENIED

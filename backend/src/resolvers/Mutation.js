@@ -161,6 +161,7 @@ const Mutation = {
       `{
         owner { id }
         maxDuration
+        price
         bookings(where: {status: APPROVED}) {
           id
           startDate
@@ -190,6 +191,9 @@ const Mutation = {
       )
     }
 
+    // Calculate price
+    const price = duration * item.price
+
     // TODO: check if there already is an approved booking for the item in the same timespan
 
     return ctx.db.mutation.createBooking(
@@ -198,6 +202,11 @@ const Mutation = {
           ...booking,
           startDate,
           endDate,
+          payment: {
+            create: {
+              price,
+            },
+          },
           item: {
             connect: {
               id: itemId,

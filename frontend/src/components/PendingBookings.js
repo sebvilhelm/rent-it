@@ -61,6 +61,7 @@ function Booking(props) {
         {booking.booker.name} wants to book your {booking.item.title}
       </p>
       <Button
+        color="green"
         onClick={async () => {
           try {
             const confirmed = confirm(
@@ -78,6 +79,7 @@ function Booking(props) {
         Accept
       </Button>
       <Button
+        color="red"
         onClick={async () => {
           try {
             const confirmed = confirm(

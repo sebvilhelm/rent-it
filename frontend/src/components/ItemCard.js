@@ -4,6 +4,7 @@ import { jsx, css } from '@emotion/core'
 import { Link } from '@reach/router'
 import { Img } from 'the-platform'
 import formatPrice from '../lib/formatPrice'
+import { useUser } from './User'
 
 const styles = {
   card: css`
@@ -31,12 +32,27 @@ const styles = {
   `,
   image: css`
     background-color: #f8f9f8;
-    height: 180px;
+    height: 100%;
     width: 100%;
     object-fit: cover;
   `,
+  imageContainer: css`
+    position: relative;
+    height: 180px;
+  `,
   contentContainer: css`
     padding: 0.5rem 1rem;
+  `,
+  ownerLabel: css`
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0 1rem;
+    font-size: 0.8rem;
+    background: #898989;
+    color: #ffffff;
+    line-height: 2;
+    border-radius: 6px 0 0 0;
   `,
 }
 
@@ -50,6 +66,7 @@ function AverageRating(props) {
 }
 
 function ItemCard(props) {
+  const { user } = useUser()
   const [hovered, setHovered] = useState(false)
   const { item } = props
   return (
@@ -59,18 +76,23 @@ function ItemCard(props) {
       css={[styles.card, hovered && styles.cardHovered]}
     >
       <Link css={styles.link} to={`/item/${item.id}`}>
-        {item.image ? (
-          <Suspense
-            maxDuration={100}
-            fallback={
-              <img src={item.image.preview} alt="" css={styles.image} />
-            }
-          >
-            <Img src={item.image.full} alt="" css={styles.image} />
-          </Suspense>
-        ) : (
-          <div css={styles.image}>No image...</div>
-        )}
+        <div css={styles.imageContainer}>
+          {item.image ? (
+            <Suspense
+              maxDuration={100}
+              fallback={
+                <img src={item.image.preview} alt="" css={styles.image} />
+              }
+            >
+              <Img src={item.image.full} alt="" css={styles.image} />
+            </Suspense>
+          ) : (
+            <div css={styles.image}>No image...</div>
+          )}
+          {user.id === item.owner.id && (
+            <div css={styles.ownerLabel}>Your own item</div>
+          )}
+        </div>
         <div css={styles.contentContainer}>
           <h2 css={styles.title}>{item.title}</h2>
           {item.averageRating ? (
