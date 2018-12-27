@@ -8,6 +8,8 @@ server.express.use(cookieParser())
 
 server.start(
   {
+    tracing: false,
+    cacheControl: false,
     cors: {
       credentials: true,
       origin: process.env.FRONTEND_URL,

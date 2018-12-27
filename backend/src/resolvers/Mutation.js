@@ -229,13 +229,13 @@ const Mutation = {
 
     const booking = await ctx.db.query.booking(
       { where: { id } },
-      '{ item { owner { id } }, renter { id } }'
+      '{ item { owner { id } }, booker { id } }'
     )
 
     const isOwner = booking.item.owner.id === currentUserId
-    const isRenter = booking.renter.id === currentUserId
+    const isBooker = booking.booker.id === currentUserId
 
-    if (!isOwner && !isRenter) {
+    if (!isOwner && !isBooker) {
       throw new Error("You don't have permission to do that")
     }
 

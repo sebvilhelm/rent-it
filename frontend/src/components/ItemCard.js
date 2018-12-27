@@ -145,4 +145,66 @@ function ItemCard(props) {
   )
 }
 
+function MyItemCard(props) {
+  const [hovered, setHovered] = useState(false)
+  const { item } = props
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      css={[styles.card, hovered && styles.cardHovered]}
+    >
+      <Link css={styles.link} to={`/profile/item/${item.id}`}>
+        <div css={styles.imageContainer}>
+          {item.image ? (
+            <Suspense
+              maxDuration={100}
+              fallback={
+                <img src={item.image.preview} alt="" css={styles.image} />
+              }
+            >
+              <Img src={item.image.full} alt="" css={styles.image} />
+            </Suspense>
+          ) : (
+            <div css={styles.image}>No image...</div>
+          )}
+        </div>
+        <div css={styles.contentContainer}>
+          <h2
+            css={[
+              styles.title,
+              css`
+                margin-bottom: 0.5rem;
+              `,
+            ]}
+          >
+            {item.title}
+          </h2>
+          {item.averageRating ? (
+            <AverageRating css={styles.rating} rating={item.averageRating} />
+          ) : (
+            <p css={styles.rating}>No ratings yet</p>
+          )}
+          <div
+            css={css`
+              margin-bottom: 0.25rem;
+            `}
+          />
+          {item.bookings.length ? (
+            <p>{item.bookings.length} pending bookings</p>
+          ) : (
+            <p>No pending bookings</p>
+          )}
+          <div
+            css={css`
+              margin-bottom: 0.5rem;
+            `}
+          />
+        </div>
+      </Link>
+    </div>
+  )
+}
+
 export default ItemCard
+export { MyItemCard }

@@ -54,8 +54,9 @@ function Dashboard(props) {
           `}
         >
           <nav css={styles.sideNav}>
-            <MenuItem to="/profile/bookings">My bookings</MenuItem>
-            <MenuItem to="/profile/pending-bookings">Pending bookings</MenuItem>
+            <MenuItem to="/profile/bookings">My Bookings</MenuItem>
+            <MenuItem to="/profile/items">My Items</MenuItem>
+            <MenuItem to="/profile/pending-bookings">Pending Bookings</MenuItem>
           </nav>
         </aside>
         <main>{props.children}</main>
