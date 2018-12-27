@@ -311,19 +311,19 @@ const Mutation = {
     const { id, stars, description } = args
 
     const itemQuery = `
-      query($id: ID!, $userId: ID!) {
-        item(where: { id: $id }) {
-          title
-          owner {
-            id
-          }
-          bookings(where: {
-            booker: {id: $userId}
-          }) {
-            id
-          }
+    query($id: ID!, $userId: ID!) {
+      item(where: { id: $id }) {
+        title
+        owner {
+          id
+        }
+        bookings(where: {
+          booker: {id: $userId}
+        }) {
+          id
         }
       }
+    }
     `
 
     const {
@@ -357,6 +357,40 @@ const Mutation = {
           reviewer: {
             connect: {
               id: currentUserId,
+            },
+          },
+        },
+      },
+      info
+    )
+  },
+
+  reviewUser(_, args, ctx, info) {
+    const currentUserId = getUserId(ctx)
+
+    const { id, stars, description } = args
+
+    if (currentUserId === id) {
+      throw new Error("You can't review yourself")
+    }
+
+    return ctx.db.mutation.createUserReview(
+      {
+        data: {
+          reviewer: {
+            connect: {
+              id: currentUserId,
+            },
+          },
+          user: {
+            connect: {
+              id,
+            },
+          },
+          rating: {
+            create: {
+              stars,
+              description,
             },
           },
         },

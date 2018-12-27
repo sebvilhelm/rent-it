@@ -57,6 +57,7 @@ type Mutation {
   denyBooking(id: ID!): Booking!
 
   reviewItem(id: ID!, stars: Int!, description: String): ItemReview!
+  reviewUser(id: ID!, stars: Int!, description: String): UserReview!
 
   createCategory(title: String!, description: String!): Category!
 }
@@ -93,8 +94,6 @@ type User {
     last: Int
   ): [Booking!]
   pendingBookings: [Booking!]!
-  reviewsBy: [UserReview!]
-  reviews: [UserReview!]
 }
 
 type Item {
