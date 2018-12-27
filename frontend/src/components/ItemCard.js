@@ -54,15 +54,23 @@ const styles = {
     line-height: 2;
     border-radius: 6px 0 0 0;
   `,
+  emphasis: css`
+    font-size: 1.1em;
+    font-weight: 600;
+  `,
 }
 
 function AverageRating(props) {
   const { rating } = props
   return (
     <p {...props}>
-      <strong>{rating.toFixed(1)}</strong> out of 5
+      <Strong>{rating.toFixed(1)}</Strong> out of <Strong>5</Strong>
     </p>
   )
+}
+
+function Strong(props) {
+  return <span css={styles.emphasis} {...props} />
 }
 
 function ItemCard(props) {
@@ -94,24 +102,43 @@ function ItemCard(props) {
           )}
         </div>
         <div css={styles.contentContainer}>
-          <h2 css={styles.title}>{item.title}</h2>
+          <h2
+            css={[
+              styles.title,
+              css`
+                margin-bottom: 0.5rem;
+              `,
+            ]}
+          >
+            {item.title}
+          </h2>
           {item.averageRating ? (
             <AverageRating css={styles.rating} rating={item.averageRating} />
           ) : (
             <p css={styles.rating}>No ratings yet</p>
           )}
+          <div
+            css={css`
+              margin-bottom: 0.25rem;
+            `}
+          />
           <p>
             Rent for{' '}
             {item.maxDuration ? (
               <Fragment>
-                up to <strong>{item.maxDuration}</strong> days
+                up to <Strong>{item.maxDuration}</Strong> days
               </Fragment>
             ) : (
               "as long as you'd like"
             )}
             <br />
-            for <strong>{formatPrice(item.price)}</strong> / day
+            for <Strong>{formatPrice(item.price)}</Strong> / day
           </p>
+          <div
+            css={css`
+              margin-bottom: 0.5rem;
+            `}
+          />
         </div>
       </Link>
     </div>

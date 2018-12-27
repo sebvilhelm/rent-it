@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react'
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
+import { useEffect } from 'react'
 import { useQuery, useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
 import Button from './elements/Button'
@@ -12,9 +14,11 @@ const QUERY_MY_PENDING_BOOKINGS = graphql`
       pendingBookings {
         id
         item {
+          id
           title
         }
         booker {
+          id
           name
         }
         status
@@ -28,6 +32,7 @@ const MUTATION_ACCEPT_BOOKING = graphql`
     acceptBooking(id: $id) {
       id
       booker {
+        id
         name
       }
     }
@@ -38,11 +43,23 @@ const MUTATION_DENY_BOOKING = graphql`
     denyBooking(id: $id) {
       id
       booker {
+        id
         name
       }
     }
   }
 `
+
+const cardStyles = {
+  card: css`
+    background-color: white;
+    box-shadow: 2px 2px 35px hsla(0, 0%, 0%, 0.05),
+      2px 2px 20px hsla(0, 0%, 0%, 0.1);
+    z-index: 1;
+    transition: all 300ms;
+    padding: 1rem;
+  `,
+}
 
 function Booking(props) {
   const { booking } = props
@@ -56,10 +73,14 @@ function Booking(props) {
     refetchQueries: [{ query: QUERY_MY_PENDING_BOOKINGS }],
   })
   return (
-    <div {...props}>
-      <p>
+    <div css={cardStyles.card} {...props}>
+      <h2
+        css={css`
+          margin-bottom: 1rem;
+        `}
+      >
         {booking.booker.name} wants to book your {booking.item.title}
-      </p>
+      </h2>
       <Button
         color="green"
         onClick={async () => {
@@ -78,7 +99,9 @@ function Booking(props) {
       >
         Accept
       </Button>
+      <span style={{ marginRight: '0.25rem' }} />
       <Button
+        transparent
         color="red"
         onClick={async () => {
           try {
@@ -96,6 +119,11 @@ function Booking(props) {
       >
         Deny
       </Button>
+      <div
+        css={css`
+          margin-bottom: 0.5rem;
+        `}
+      />
     </div>
   )
 }
@@ -113,7 +141,13 @@ function PendingBookings() {
   return (
     <Layout>
       <section>
-        <h1>Pending bookings</h1>
+        <h1
+          css={css`
+            margin-bottom: 1rem;
+          `}
+        >
+          Pending bookings
+        </h1>
         {me.pendingBookings.map(booking => (
           <Booking key={booking.id} booking={booking} />
         ))}

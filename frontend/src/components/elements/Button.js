@@ -29,6 +29,8 @@ const styles = {
   `,
   transparent: css`
     background-color: transparent;
+    border-color: transparent;
+    font-weight: 500;
     color: var(--button-color);
   `,
   unstyled: css`
@@ -41,10 +43,21 @@ const styles = {
     -webkit-appearance: none;
     color: var(--text-color);
   `,
+  small: css`
+    min-width: 0;
+    padding: 0.1rem 0.5rem;
+  `,
 }
 
-const Button = ({ transparent, ...props }) => (
-  <button css={[styles.button, transparent && styles.transparent]} {...props} />
+const Button = ({ transparent, small, ...props }) => (
+  <button
+    css={[
+      styles.button,
+      transparent && styles.transparent,
+      small && styles.small,
+    ]}
+    {...props}
+  />
 )
 
 const UnstyledButton = props => <button css={styles.unstyled} {...props} />

@@ -49,12 +49,14 @@ const styles = {
     html {
       box-sizing: border-box;
       font-size: 18px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     *,
     *::before,
     *::after {
+      margin: 0;
+      padding: 0;
       box-sizing: inherit;
     }
 

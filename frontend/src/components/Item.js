@@ -37,6 +37,7 @@ const ITEM_QUERY = graphql`
 const styles = {
   grid: css`
     display: grid;
+    grid-template-columns: minmax(auto, 600px);
     gap: 1rem;
   `,
   image: css`
@@ -86,14 +87,7 @@ function Item(props) {
         {item.reviews.length ? (
           <div css={styles.grid}>
             {item.reviews.map(review => {
-              const { id, reviewer, rating } = review
-              return (
-                <div key={id}>
-                  <span>{reviewer.name}</span>
-                  <p>{rating.stars} out of 5</p>
-                  <p>{rating.description}</p>
-                </div>
-              )
+              return <ReviewCard key={review.id} review={review} />
             })}
           </div>
         ) : (
@@ -101,6 +95,28 @@ function Item(props) {
         )}
       </section>
     </Layout>
+  )
+}
+
+const cardStyles = {
+  card: css`
+    background-color: white;
+    box-shadow: 2px 2px 35px hsla(0, 0%, 0%, 0.05),
+      2px 2px 20px hsla(0, 0%, 0%, 0.1);
+    z-index: 1;
+    transition: all 300ms;
+    padding: 1rem;
+  `,
+}
+
+function ReviewCard(props) {
+  const { reviewer, rating } = props.review
+  return (
+    <div css={cardStyles.card}>
+      <span>{reviewer.name}</span>
+      <p>{rating.stars} out of 5</p>
+      <p>{rating.description}</p>
+    </div>
   )
 }
 

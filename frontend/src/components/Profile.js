@@ -28,7 +28,7 @@ function Profile() {
     <Layout>
       <section>
         <h1>{editing ? 'Edit your profile' : `Welcome, ${me.name}`}</h1>
-        <Button onClick={() => setEditing(!editing)}>
+        <Button transparent small onClick={() => setEditing(!editing)}>
           {editing ? 'Cancel edit' : 'Edit'}
         </Button>
         {editing ? (
