@@ -10,8 +10,8 @@ type User {
 type Item {
   id: ID! @unique
   title: String!
-  image: Image
   description: String!
+  image: Image
   owner: User!
   bookings: [Booking!]!
   reviews: [ItemReview!]!
@@ -46,7 +46,7 @@ type ItemReview {
   id: ID! @unique
   rating: Rating!
   item: Item!
-  reviewer: User
+  reviewer: User!
 }
 
 type Rating {

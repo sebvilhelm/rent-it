@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/sebastian-vilhelm-nielsen-e462bc/bachelor/dev
-# timestamp: Wed Dec 26 2018 13:35:36 GMT+0100 (Central European Standard Time)
+# timestamp: Fri Dec 28 2018 12:41:31 GMT+0100 (Central European Standard Time)
 
 type AggregateBooking {
   count: Int!
@@ -1056,8 +1056,8 @@ input ImageWhereUniqueInput {
 type Item implements Node {
   id: ID!
   title: String!
-  image: Image
   description: String!
+  image: Image
   owner: User!
   bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
   reviews(where: ItemReviewWhereInput, orderBy: ItemReviewOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemReview!]
@@ -1190,7 +1190,7 @@ type ItemReview implements Node {
   id: ID!
   rating: Rating!
   item: Item!
-  reviewer: User
+  reviewer: User!
 }
 
 """A connection to a list of items."""
@@ -1206,7 +1206,7 @@ type ItemReviewConnection {
 input ItemReviewCreateInput {
   rating: RatingCreateOneInput!
   item: ItemCreateOneWithoutReviewsInput!
-  reviewer: UserCreateOneInput
+  reviewer: UserCreateOneInput!
 }
 
 input ItemReviewCreateManyWithoutItemInput {
@@ -1216,7 +1216,7 @@ input ItemReviewCreateManyWithoutItemInput {
 
 input ItemReviewCreateWithoutItemInput {
   rating: RatingCreateOneInput!
-  reviewer: UserCreateOneInput
+  reviewer: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -1334,7 +1334,7 @@ input ItemReviewSubscriptionWhereInput {
 input ItemReviewUpdateInput {
   rating: RatingUpdateOneRequiredInput
   item: ItemUpdateOneRequiredWithoutReviewsInput
-  reviewer: UserUpdateOneInput
+  reviewer: UserUpdateOneRequiredInput
 }
 
 input ItemReviewUpdateManyWithoutItemInput {
@@ -1349,7 +1349,7 @@ input ItemReviewUpdateManyWithoutItemInput {
 
 input ItemReviewUpdateWithoutItemDataInput {
   rating: RatingUpdateOneRequiredInput
-  reviewer: UserUpdateOneInput
+  reviewer: UserUpdateOneRequiredInput
 }
 
 input ItemReviewUpdateWithWhereUniqueWithoutItemInput {
@@ -2822,15 +2822,6 @@ input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
-}
-
-input UserUpdateOneInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
 }
 
 input UserUpdateOneRequiredInput {
