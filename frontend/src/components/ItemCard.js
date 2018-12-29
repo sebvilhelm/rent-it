@@ -97,7 +97,7 @@ function ItemCard(props) {
           ) : (
             <div css={styles.image}>No image...</div>
           )}
-          {user.id === item.owner.id && (
+          {user && user.id === item.owner.id && (
             <div css={styles.ownerLabel}>Your own item</div>
           )}
         </div>
