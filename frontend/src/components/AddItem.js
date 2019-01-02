@@ -9,7 +9,7 @@ import Button from './elements/Button'
 import useInput from '../lib/useInput'
 import formatPrice from '../lib/formatPrice'
 import Spinner from './Spinner'
-import Error from './Error'
+import ErrorHandler from './ErrorHandler'
 import Layout from './Layout'
 
 const MUTATION_ADD_ITEM = gql`
@@ -179,7 +179,7 @@ function AddItem() {
     <Layout>
       <section>
         <h1>Add item</h1>
-        {error && <Error error={error} />}
+        {error && <ErrorHandler error={error} />}
         <Form
           onSubmit={async event => {
             event.preventDefault()

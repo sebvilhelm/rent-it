@@ -14,7 +14,7 @@ const styles = {
   `,
 }
 
-function Error(props) {
+function ErrorHandler(props) {
   const { error } = props
 
   if (!error || !error.message) return null
@@ -40,4 +40,4 @@ function Error(props) {
   )
 }
 
-export default Error
+export default ErrorHandler

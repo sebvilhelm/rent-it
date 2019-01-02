@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
-import ErrorHandler from './Error'
+import ErrorHandler from './ErrorHandler'
 import { Form, Input, Textarea, Label, Fieldset } from './elements/Form'
 import Button from './elements/Button'
 import useInput from '../lib/useInput'

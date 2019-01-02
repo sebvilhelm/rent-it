@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useMutation } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
 import useInput from '../lib/useInput'
-import Error from './Error'
+import ErrorHandler from './ErrorHandler'
 import Button from './elements/Button'
 import { Form, Label, Input, Fieldset } from './elements/Form'
 
@@ -43,7 +43,7 @@ function AddBooking(props) {
   return (
     <div css={styles.container} {...props}>
       <h3 css={styles.title}>Book this!</h3>
-      {error && <Error error={error} />}
+      {error && <ErrorHandler error={error} />}
       <Form
         onSubmit={async event => {
           event.preventDefault()

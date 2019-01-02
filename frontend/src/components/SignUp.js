@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Form, Label, Input, Fieldset } from './elements/Form'
 import Button from './elements/Button'
 import useInput from '../lib/useInput'
-import ErrorHandler from './Error'
+import ErrorHandler from './ErrorHandler'
 import { useUser } from './User'
 
 function SignUpForm() {
