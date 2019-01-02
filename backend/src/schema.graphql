@@ -66,11 +66,6 @@ type SuccessMessage {
   message: String
 }
 
-type AuthPayload {
-  token: String!
-  user: User!
-}
-
 type User {
   id: ID!
   name: String!
