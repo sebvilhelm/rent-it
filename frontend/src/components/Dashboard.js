@@ -7,6 +7,45 @@ import Layout from './Layout'
 
 const SignIn = lazy(() => import('./SignIn'))
 
+function Dashboard(props) {
+  return (
+    <Protected>
+      <Layout>
+        <section css={styles.grid}>
+          <aside
+            css={css`
+              padding-top: 60px;
+            `}
+          >
+            <nav css={styles.sideNav}>
+              <MenuItem to="/profile/bookings">My Bookings</MenuItem>
+              <MenuItem to="/profile/items">My Items</MenuItem>
+              <MenuItem to="/profile/pending-bookings">
+                Pending Bookings
+              </MenuItem>
+            </nav>
+          </aside>
+          <main>{props.children}</main>
+        </section>
+      </Layout>
+    </Protected>
+  )
+}
+
+function Protected(props) {
+  const { user } = useUser()
+  if (!user) {
+    return (
+      <Layout>
+        <h1>You need to sign in to see this</h1>
+        <SignIn />
+      </Layout>
+    )
+  }
+
+  return props.children
+}
+
 const styles = {
   grid: css`
     display: grid;
@@ -33,36 +72,6 @@ const styles = {
 
 function MenuItem(props) {
   return <Link css={styles.menuItem} {...props} />
-}
-
-function Dashboard(props) {
-  const { user } = useUser()
-  if (!user) {
-    return (
-      <Layout>
-        <h1>You need to sign in to see this</h1>
-        <SignIn />
-      </Layout>
-    )
-  }
-  return (
-    <Layout>
-      <section css={styles.grid}>
-        <aside
-          css={css`
-            padding-top: 60px;
-          `}
-        >
-          <nav css={styles.sideNav}>
-            <MenuItem to="/profile/bookings">My Bookings</MenuItem>
-            <MenuItem to="/profile/items">My Items</MenuItem>
-            <MenuItem to="/profile/pending-bookings">Pending Bookings</MenuItem>
-          </nav>
-        </aside>
-        <main>{props.children}</main>
-      </section>
-    </Layout>
-  )
 }
 
 export default Dashboard
