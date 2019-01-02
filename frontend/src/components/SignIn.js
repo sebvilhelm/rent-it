@@ -5,25 +5,31 @@ import { Form, Fieldset, Label, Input } from './elements/Form'
 import { useUser } from './User'
 import { SignUpForm } from './SignUp'
 import Layout from './Layout'
+import ErrorHandler from './ErrorHandler'
 
 function SignInForm(props) {
   const { signIn } = useUser()
   const [email, onChangeEmail] = useInput('')
   const [password, onChangePassword] = useInput('')
   const [busy, setBusy] = useState(false)
+  const [error, setError] = useState(null)
 
   return (
     <Form
       onSubmit={async event => {
         event.preventDefault()
         setBusy(true)
+        setError(null)
         try {
           await signIn({ email, password })
+        } catch (error) {
+          setError(error)
         } finally {
           setBusy(false)
         }
       }}
     >
+      <ErrorHandler error={error} />
       <Fieldset disabled={busy}>
         <Label htmlFor="signInEmail">
           Email
