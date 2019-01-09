@@ -11,7 +11,7 @@ const animation = css({
 })
 
 function Spinner() {
-  return <div css={[{ display: 'inline-block' }, animation]}>Loading...</div>
+  return <div css={[{ display: 'inline-block' }]}>Loading...</div>
 }
 
 export default Spinner
