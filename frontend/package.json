@@ -43,6 +43,7 @@
     "the-platform": "^0.9.3"
   },
   "devDependencies": {
+    "apollo-link-mock": "^1.0.1",
     "casual": "^1.5.19",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-prettier": "^3.0.0",
