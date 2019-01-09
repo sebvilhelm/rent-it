@@ -37,7 +37,7 @@ const QUERY_CURRENT_USER = graphql`
   }
 `
 
-const userContext = createContext({ user: undefined })
+export const userContext = createContext({ user: undefined })
 
 export const useUser = () => useContext(userContext)
 
@@ -83,4 +83,9 @@ User.Provider = UserProvider
 User.Consumer = userContext.Consumer
 
 export default User
-export { QUERY_CURRENT_USER }
+export {
+  QUERY_CURRENT_USER,
+  MUTATION_SIGNUP,
+  MUTATION_SIGNIN,
+  MUTATION_SIGNOUT,
+}
