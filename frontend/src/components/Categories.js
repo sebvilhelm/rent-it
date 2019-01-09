@@ -47,3 +47,4 @@ function Categories() {
 }
 
 export default Categories
+export { QUERY_CATEGORIES }

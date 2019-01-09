@@ -97,3 +97,4 @@ function Category(props) {
 }
 
 export default Category
+export { QUERY_ITEMS_BY_CATEGORY }
