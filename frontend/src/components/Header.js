@@ -62,7 +62,7 @@ function Header(props) {
           </MenuItem>
         )}
         <MenuItem to="/categories">Categories</MenuItem>
-        <MenuItem to="/profile">Dashboard</MenuItem>
+        {user && <MenuItem to="/profile">Dashboard</MenuItem>}
         {user && (
           <ProfileButton>
             <button>Sign Out</button>
@@ -96,7 +96,14 @@ const searchStyles = {
   `,
 }
 function SearchBar(props) {
-  return <input css={searchStyles.input} placeholder="Search..." type="text" />
+  return (
+    <input
+      css={searchStyles.input}
+      placeholder="Search..."
+      aria-label="search"
+      type="text"
+    />
+  )
 }
 
 const profileStyle = {
@@ -126,7 +133,7 @@ function ProfileButton(props) {
     <div {...props} css={profileStyle.wrapper}>
       <Button onClick={() => setOpen(!open)}>Profile</Button>
       {open && (
-        <nav css={profileStyle.dropdown}>
+        <nav aria-label="profile-dropdown" css={profileStyle.dropdown}>
           <div>
             <Link to="/profile">My profile</Link>
           </div>
