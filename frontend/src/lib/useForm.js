@@ -5,10 +5,10 @@ function useForm(initialValues) {
 
   const onChange = event => {
     event.persist()
-    const { name, value } = event.target
+    const { name, value, type } = event.target
     setForm(prevForm => ({
       ...prevForm,
-      [name]: value,
+      [name]: type === 'checkbox' ? event.target.checked : value,
     }))
   }
 
