@@ -6,15 +6,6 @@ import { useQuery } from 'react-apollo-hooks'
 
 import Layout from './Layout'
 
-const QUERY_CATEGORIES = gql`
-  query categoriesPage {
-    categories {
-      slug
-      title
-    }
-  }
-`
-
 function Categories() {
   const {
     data: { categories },
@@ -30,6 +21,15 @@ function Categories() {
     </Layout>
   )
 }
+
+const QUERY_CATEGORIES = gql`
+  query categoriesPage {
+    categories {
+      slug
+      title
+    }
+  }
+`
 
 const cardStyles = {
   card: css`
