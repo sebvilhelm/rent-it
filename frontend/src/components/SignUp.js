@@ -3,20 +3,22 @@ import { jsx, css } from '@emotion/core'
 import { useState } from 'react'
 import { Form, Label, Input, Fieldset } from './elements/Form'
 import Button from './elements/Button'
-import useInput from '../lib/useInput'
+import useForm from '../lib/useForm'
 import ErrorHandler from './ErrorHandler'
 import { useUser } from './User'
 
 function SignUpForm() {
   const { signUp } = useUser()
-  const [name, onChangeName, setName] = useInput('')
-  const [email, onChangeEmail, setEmail] = useInput('')
-  const [password, onChangePassword, setPassword] = useInput('')
   const [
-    confirmPassword,
-    onChangeConfirmPassword,
-    setConfirmPassword,
-  ] = useInput('')
+    { name, email, password, confirmPassword },
+    onChange,
+    resetForm,
+  ] = useForm({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   return (
@@ -30,10 +32,7 @@ function SignUpForm() {
             throw new Error("The two password doesn't match!")
           }
           await signUp({ email, password, name })
-          setName('')
-          setEmail('')
-          setPassword('')
-          setConfirmPassword('')
+          resetForm()
           // TODO: Success message
         } catch (error) {
           setError(error)
@@ -54,7 +53,7 @@ function SignUpForm() {
           Name
           <Input
             value={name}
-            onChange={onChangeName}
+            onChange={onChange}
             type="text"
             id="signUpName"
             name="name"
@@ -64,7 +63,7 @@ function SignUpForm() {
           Email
           <Input
             value={email}
-            onChange={onChangeEmail}
+            onChange={onChange}
             type="email"
             id="signUpEmail"
             name="email"
@@ -74,7 +73,7 @@ function SignUpForm() {
           Password
           <Input
             value={password}
-            onChange={onChangePassword}
+            onChange={onChange}
             type="password"
             id="signUpPassword"
             name="password"
@@ -85,7 +84,7 @@ function SignUpForm() {
           Confirm Password
           <Input
             value={confirmPassword}
-            onChange={onChangeConfirmPassword}
+            onChange={onChange}
             type="password"
             id="signUpConfirmPassword"
             name="confirmPassword"
