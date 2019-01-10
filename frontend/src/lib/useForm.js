@@ -5,9 +5,10 @@ function useForm(initialValues) {
 
   const onChange = event => {
     event.persist()
+    const { name, value } = event.target
     setForm(prevForm => ({
       ...prevForm,
-      [event.target.name]: event.target.value,
+      [name]: value,
     }))
   }
 
