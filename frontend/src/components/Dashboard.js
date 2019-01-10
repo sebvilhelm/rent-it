@@ -1,12 +1,8 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { lazy } from 'react'
 import { Link } from '@reach/router'
-import { useUser } from './User'
 import AuthProtected from './AuthProtected'
 import Layout from './Layout'
-
-const SignIn = lazy(() => import('./SignIn'))
 
 function Dashboard(props) {
   return (
