@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Categories /> renders and matches snapshot 1`] = `
+<div>
+  <div
+    class="css-anlc13-Layout"
+  >
+    <section>
+      <h1>
+        Categories
+      </h1>
+      <div
+        class="css-1o89bq6-CategoryCard"
+      >
+        <a
+          href="/category/tempora"
+        >
+          Quo quis molestiae
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
+`;
