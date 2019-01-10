@@ -52,6 +52,7 @@
     "jest-dom": "^3.0.0",
     "lint-staged": "^8.1.0",
     "prettier": "^1.15.3",
-    "react-testing-library": "^5.4.4"
+    "react-testing-library": "^5.4.4",
+    "user-event": "^1.4.4"
   }
 }
