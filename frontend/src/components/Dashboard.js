@@ -3,13 +3,14 @@ import { jsx, css } from '@emotion/core'
 import { lazy } from 'react'
 import { Link } from '@reach/router'
 import { useUser } from './User'
+import AuthProtected from './AuthProtected'
 import Layout from './Layout'
 
 const SignIn = lazy(() => import('./SignIn'))
 
 function Dashboard(props) {
   return (
-    <Protected>
+    <AuthProtected>
       <Layout>
         <section css={styles.grid}>
           <aside
@@ -28,22 +29,8 @@ function Dashboard(props) {
           <main>{props.children}</main>
         </section>
       </Layout>
-    </Protected>
+    </AuthProtected>
   )
-}
-
-function Protected(props) {
-  const { user } = useUser()
-  if (!user) {
-    return (
-      <Layout>
-        <h1>You need to sign in to see this</h1>
-        <SignIn />
-      </Layout>
-    )
-  }
-
-  return props.children
 }
 
 const styles = {
