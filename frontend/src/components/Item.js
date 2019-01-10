@@ -69,10 +69,14 @@ function Item(props) {
           <Suspense
             maxDuration={100}
             fallback={
-              <img src={item.image.preview} alt="" css={styles.image} />
+              <img
+                src={item.image.preview}
+                alt={item.title}
+                css={styles.image}
+              />
             }
           >
-            <Img src={item.image.full} alt="" css={styles.image} />
+            <Img src={item.image.full} alt={item.title} css={styles.image} />
           </Suspense>
         )}
         <h1>{item.title}</h1>
@@ -121,3 +125,4 @@ function ReviewCard(props) {
 }
 
 export default Item
+export { ITEM_QUERY }
