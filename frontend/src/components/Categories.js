@@ -15,21 +15,6 @@ const QUERY_CATEGORIES = gql`
   }
 `
 
-const cardStyles = {
-  card: css`
-    padding: 1rem;
-  `,
-}
-
-function CategoryCard(props) {
-  const { category } = props
-  return (
-    <div css={cardStyles.card}>
-      <Link to={`/category/${category.slug}`}>{category.title}</Link>
-    </div>
-  )
-}
-
 function Categories() {
   const {
     data: { categories },
@@ -43,6 +28,21 @@ function Categories() {
         ))}
       </section>
     </Layout>
+  )
+}
+
+const cardStyles = {
+  card: css`
+    padding: 1rem;
+  `,
+}
+
+function CategoryCard(props) {
+  const { category } = props
+  return (
+    <div css={cardStyles.card}>
+      <Link to={`/category/${category.slug}`}>{category.title}</Link>
+    </div>
   )
 }
 
