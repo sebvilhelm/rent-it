@@ -25,6 +25,42 @@ const Query = {
 
     return user
   },
+
+  async searchItems(_, args, ctx, info) {
+    const { searchTerm } = args
+
+    if (!searchTerm) return null
+
+    // Get the categories
+    const categories = await ctx.db.query.categories({
+      where: {
+        items_some: { title_contains: searchTerm },
+      },
+    })
+
+    for await (const category of categories) {
+      const where = {
+        AND: [
+          { category: { id: category.id } },
+          { title_contains: searchTerm },
+        ],
+      }
+
+      const itemsConnection = await ctx.db.query.itemsConnection(
+        {
+          where,
+        },
+        '{aggregate { count }}'
+      )
+
+      category.count = itemsConnection.aggregate.count
+    }
+
+    return categories.map(({ count, ...category }) => ({
+      category,
+      count,
+    }))
+  },
 }
 
 module.exports = Query

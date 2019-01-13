@@ -25,6 +25,8 @@ type Query {
   categoriesConnection(where: CategoryWhereInput): CategoryConnection!
   category(where: CategoryWhereUniqueInput!): Category
 
+  searchItems(searchTerm: String): [SearchResult!]
+
   me: User
 }
 
@@ -64,6 +66,11 @@ type Mutation {
 
 type SuccessMessage {
   message: String
+}
+
+type SearchResult {
+  count: Int
+  category: Category
 }
 
 type User {
