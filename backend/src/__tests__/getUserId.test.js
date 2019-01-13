@@ -6,36 +6,36 @@ global.process.env.APP_SECRET = 'test'
 test('can get user id from request', async () => {
   const id = 'abc123'
   const token = jwt.sign({ userId: id }, process.env.APP_SECRET)
-  const userId = await getUserId({
+  const ctx = {
     request: {
       cookies: {
         token,
       },
     },
-  })
+  }
+  const userId = await getUserId(ctx)
   expect(userId).toBe(id)
 })
 
 test('it fails when there is no userId', async () => {
   try {
-    await getUserId({
+    const ctx = {
       request: {
         cookies: {},
       },
-    })
+    }
+    await getUserId(ctx)
   } catch (error) {
     expect(error).toEqual(Error('You must be logged in to do that'))
   }
 })
 
 test('it returns fail when there is no userId and {throwError: false} is passed', async () => {
-  const userId = await getUserId(
-    {
-      request: {
-        cookies: {},
-      },
+  const ctx = {
+    request: {
+      cookies: {},
     },
-    { throwError: false }
-  )
+  }
+  const userId = await getUserId(ctx, { throwError: false })
   expect(userId).toBe(null)
 })
