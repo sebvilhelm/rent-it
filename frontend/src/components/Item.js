@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { jsx, css } from '@emotion/core'
 import { useQuery } from 'react-apollo-hooks'
 import graphql from 'graphql-tag'
@@ -7,6 +7,7 @@ import { Img } from 'the-platform'
 import formatPrice from '../lib/formatPrice'
 import AddBooking from './AddBooking'
 import Layout from './Layout'
+import { siteMeta } from '../config'
 
 const ITEM_QUERY = graphql`
   query item($id: ID!) {
@@ -57,10 +58,18 @@ function AverageRating(props) {
   )
 }
 
-function Item(props) {
+function Item({ id, ...props }) {
   const {
     data: { item },
-  } = useQuery(ITEM_QUERY, { variables: { id: props.id } })
+  } = useQuery(ITEM_QUERY, { variables: { id: id } })
+
+  useEffect(
+    () => {
+      document.title = item.title
+      return () => (document.title = siteMeta.title)
+    },
+    [item]
+  )
 
   return (
     <Layout>

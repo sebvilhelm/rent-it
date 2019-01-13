@@ -1,8 +1,10 @@
 /** @jsx jsx */
+import { useEffect } from 'react'
 import { jsx, css } from '@emotion/core'
 import { Link } from '@reach/router'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
+import { siteMeta } from '../config'
 
 import Layout from './Layout'
 
@@ -10,6 +12,12 @@ function Categories() {
   const {
     data: { categories },
   } = useQuery(QUERY_CATEGORIES)
+
+  useEffect(() => {
+    document.title = 'Categories'
+    return () => (document.title = siteMeta.title)
+  }, [])
+
   return (
     <Layout>
       <section>
