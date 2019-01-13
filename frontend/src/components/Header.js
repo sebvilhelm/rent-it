@@ -3,47 +3,9 @@ import { jsx, css } from '@emotion/core'
 import { useState } from 'react'
 import { Link } from '@reach/router'
 import { useUser } from './User'
+import SearchBar from './SearchBar'
 import SpacerGif from './SpacerGif'
 import Button from './elements/Button'
-
-const styles = {
-  header: css`
-    height: 75px;
-    padding: 0.5rem;
-    border-bottom: 1px solid #ebeff0;
-    background-color: white;
-  `,
-  flexWrapper: css`
-    display: flex;
-    align-items: center;
-  `,
-  logo: css`
-    opacity: 0;
-  `,
-  navigation: css``,
-  menuItem: {
-    default: css`
-      display: inline-flex;
-      font-size: 0.9rem;
-      text-decoration: none;
-      margin: 0 0.5rem;
-      color: #767677;
-    `,
-    primary: css`
-      color: #22a3bb;
-    `,
-  },
-}
-
-function MenuItem({ type, ...props }) {
-  const primary = type === 'primary'
-  return (
-    <Link
-      css={[styles.menuItem.default, primary && styles.menuItem.primary]}
-      {...props}
-    />
-  )
-}
 
 function Header(props) {
   const { user } = useUser()
@@ -53,7 +15,7 @@ function Header(props) {
         <Link to="/">Logo</Link>
       </div>
       <SpacerGif />
-      <SearchBar />
+      <SearchBar css={styles.searchBar} />
       <SpacerGif />
       <nav css={styles.navigation}>
         {user && (
@@ -77,31 +39,45 @@ function Header(props) {
     </header>
   )
 }
-const searchStyles = {
-  input: css`
-    border: 0;
-    background: #f5f5f5;
-    padding: 0.5rem 1rem;
-    width: 100%;
-    max-width: 512px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-      'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-size: 0.7rem;
-    &::placeholder {
-      color: #7d7f80;
-    }
+
+const styles = {
+  header: css`
+    height: 75px;
+    padding: 0.5rem;
+    border-bottom: 1px solid #ebeff0;
+    background-color: white;
   `,
+  flexWrapper: css`
+    display: flex;
+    align-items: center;
+  `,
+  logo: css`
+    opacity: 0;
+  `,
+  searchBar: css`
+    flex: 1 1 20%;
+  `,
+  navigation: css``,
+  menuItem: {
+    default: css`
+      display: inline-flex;
+      font-size: 0.9rem;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      color: #767677;
+    `,
+    primary: css`
+      color: #22a3bb;
+    `,
+  },
 }
-function SearchBar(props) {
+
+function MenuItem({ type, ...props }) {
+  const primary = type === 'primary'
   return (
-    <input
-      css={searchStyles.input}
-      placeholder="Search..."
-      aria-label="search"
-      type="text"
+    <Link
+      css={[styles.menuItem.default, primary && styles.menuItem.primary]}
+      {...props}
     />
   )
 }
