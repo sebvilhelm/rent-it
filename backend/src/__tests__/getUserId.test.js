@@ -27,3 +27,15 @@ test('it fails when there is no userId', async () => {
     expect(error).toEqual(Error('You must be logged in to do that'))
   }
 })
+
+test('it returns fail when there is no userId and {throwError: false} is passed', async () => {
+  const userId = await getUserId(
+    {
+      request: {
+        cookies: {},
+      },
+    },
+    { throwError: false }
+  )
+  expect(userId).toBe(null)
+})
