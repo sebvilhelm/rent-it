@@ -33,7 +33,13 @@ function SignUpForm() {
           if (password !== confirmPassword) {
             throw new Error("The two password doesn't match!")
           }
-          await signUp({ email, password, name, image })
+          await signUp({
+            email,
+            password,
+            name,
+            imageFull: image ? image.full : null,
+            imagePreview: image ? image.preview : null,
+          })
           resetForm()
           // TODO: Success message
         } catch (error) {

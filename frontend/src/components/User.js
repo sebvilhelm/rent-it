@@ -27,7 +27,13 @@ const MUTATION_SIGNUP = graphql`
     $imageFull: String
     $imagePreview: String
   ) {
-    signUp(name: $name, email: $email, password: $password) {
+    signUp(
+      name: $name
+      email: $email
+      password: $password
+      imageFull: $imageFull
+      imagePreview: $imagePreview
+    ) {
       id
       name
     }
@@ -70,9 +76,9 @@ function UserProvider(props) {
     })
   }
 
-  const signUp = async ({ email, name, password }) => {
+  const signUp = async ({ email, name, password, imageFull, imagePreview }) => {
     await signUpMutation({
-      variables: { email, password, name },
+      variables: { email, password, name, imageFull, imagePreview },
       refetchQueries: [{ query: QUERY_CURRENT_USER }],
     })
   }
