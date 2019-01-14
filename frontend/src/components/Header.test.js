@@ -1,5 +1,6 @@
 import React from 'react'
-import { render, waitForElement, fireEvent } from 'react-testing-library'
+import { render, waitForElement } from 'react-testing-library'
+import userEvent from 'user-event'
 import Header from './Header'
 import { userContext } from './User'
 
@@ -24,7 +25,7 @@ describe('<Header />', () => {
   })
 
   it('opens and closes dropdown when profile button is clicked', async () => {
-    const { getByText, getByLabelText, container } = render(
+    const { getByText, getByLabelText, container, debug } = render(
       <userContext.Provider
         value={{ user: { id: 'abc123', name: 'Sebastian Nielsen' } }}
       >
@@ -33,11 +34,11 @@ describe('<Header />', () => {
     )
 
     const profileButton = getByText(/Profile/i)
-    fireEvent.click(profileButton)
+    userEvent.click(profileButton)
     await waitForElement(() => expect(getByLabelText('profile-dropdown')), {
       container,
     })
-    fireEvent.click(profileButton)
+    userEvent.click(profileButton)
     expect(
       container.querySelector('[aria-label="profile-dropdown"]')
     ).not.toBeInTheDocument()
