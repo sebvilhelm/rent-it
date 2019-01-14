@@ -83,6 +83,7 @@ const styles = {
     position: absolute;
     background-color: #f5f5f5;
     width: 100%;
+    z-index: 9;
   `,
   count: css`
     font-weight: 100;
