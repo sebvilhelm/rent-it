@@ -75,6 +75,7 @@ describe('<SignUp />', () => {
       name: user.name,
       email: user.email,
       password: user.password,
+      image: null,
     })
     expect(signUp).toHaveBeenCalledTimes(1)
 

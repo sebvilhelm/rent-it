@@ -2,6 +2,7 @@ type User {
   id: ID! @unique
   name: String!
   email: String! @unique
+  image: Image
   password: String!
   items: [Item!]!
   bookings: [Booking!]!

@@ -37,6 +37,20 @@ exports[`<SignUp /> renders and matches snapshot 1`] = `
         </label>
         <label
           class="css-np4was-Label"
+          for="signUpImage"
+        >
+          Image
+          <input
+            accept="image/jpeg"
+            class="css-l68vri-Input"
+            id="signUpImage"
+            name="image"
+            required=""
+            type="file"
+          />
+        </label>
+        <label
+          class="css-np4was-Label"
           for="signUpPassword"
         >
           Password

@@ -8,147 +8,10 @@ import { Input, Label, Textarea, Form, Fieldset } from './elements/Form'
 import Button from './elements/Button'
 import useInput from '../lib/useInput'
 import formatPrice from '../lib/formatPrice'
+import uploadImage from '../lib/uploadImage'
 import Spinner from './Spinner'
 import ErrorHandler from './ErrorHandler'
 import Layout from './Layout'
-
-const MUTATION_ADD_ITEM = gql`
-  mutation addItem(
-    $title: String!
-    $description: String!
-    $price: Int!
-    $maxDuration: Int
-    $category: ID!
-    $imageFull: String!
-    $imagePreview: String!
-  ) {
-    createItem(
-      title: $title
-      description: $description
-      price: $price
-      maxDuration: $maxDuration
-      category: $category
-      imageFull: $imageFull
-      imagePreview: $imagePreview
-    ) {
-      id
-    }
-  }
-`
-
-const QUERY_SEARCH_CATEGORIES = gql`
-  query searchCategories($searchTerm: String!) {
-    categories(where: { title_contains: $searchTerm }) {
-      id
-      title
-    }
-  }
-`
-
-const styles = {
-  dropdownList: css`
-    margin: 0;
-    list-style: none;
-    background-color: #f5f5f5;
-    color: #444444;
-    border-top: 1px solid #eaeaea;
-    padding: 0.5rem 0 1rem;
-    border-radius: 0 0 6px 6px;
-  `,
-  item: css`
-    padding: 0.5rem;
-  `,
-}
-
-function CategoryList({ searchTerm, children }) {
-  const {
-    data: { categories },
-  } = useQuery(QUERY_SEARCH_CATEGORIES, { variables: { searchTerm } })
-
-  return children({ categories })
-}
-
-function CategoryInput(props) {
-  const { setCategory, ...inputProps } = props
-  return (
-    <Downshift
-      itemToString={item => (item ? item.title : null)}
-      onChange={(selectedCategory, downshift) => {
-        setCategory(selectedCategory)
-      }}
-    >
-      {({
-        getInputProps,
-        getLabelProps,
-        getMenuProps,
-        getItemProps,
-        isOpen,
-        inputValue,
-        highlightedIndex,
-      }) => (
-        <div>
-          <Label {...getLabelProps()}>
-            Category
-            <Input {...getInputProps({ ...inputProps })} />
-          </Label>
-          {isOpen && (
-            <ul
-              css={styles.dropdownList}
-              style={{ marginTop: '-0.5rem' }}
-              {...getMenuProps()}
-            >
-              {!inputValue ? (
-                <div>Please enter a category</div>
-              ) : (
-                <Suspense fallback={<Spinner />}>
-                  <CategoryList searchTerm={inputValue}>
-                    {({ categories }) =>
-                      categories.map((item, index) => (
-                        <li
-                          css={styles.item}
-                          style={{
-                            backgroundColor:
-                              highlightedIndex === index
-                                ? '#eaeaea'
-                                : 'transparent',
-                          }}
-                          {...getItemProps({ item, index })}
-                          key={item.id}
-                        >
-                          {item.title}
-                        </li>
-                      ))
-                    }
-                  </CategoryList>
-                </Suspense>
-              )}
-            </ul>
-          )}
-        </div>
-      )}
-    </Downshift>
-  )
-}
-
-async function uploadImage(event) {
-  console.log('Uploading image...')
-  const {
-    files: [file],
-  } = event.target
-
-  const data = new FormData()
-  data.append('file', file)
-  data.append('upload_preset', 'bachelor-project')
-
-  const res = await fetch(
-    'https://api.cloudinary.com/v1_1/vilhelmnielsen/image/upload',
-    { method: 'POST', body: data }
-  )
-
-  console.log('Upload complete')
-
-  return await res.json()
-}
 
 function AddItem() {
   const [durationToggle, setDurationToggle] = useState(false)
@@ -298,4 +161,123 @@ function AddItem() {
   )
 }
 
+const MUTATION_ADD_ITEM = gql`
+  mutation addItem(
+    $title: String!
+    $description: String!
+    $price: Int!
+    $maxDuration: Int
+    $category: ID!
+    $imageFull: String!
+    $imagePreview: String!
+  ) {
+    createItem(
+      title: $title
+      description: $description
+      price: $price
+      maxDuration: $maxDuration
+      category: $category
+      imageFull: $imageFull
+      imagePreview: $imagePreview
+    ) {
+      id
+    }
+  }
+`
+
+const QUERY_SEARCH_CATEGORIES = gql`
+  query searchCategories($searchTerm: String!) {
+    categories(where: { title_contains: $searchTerm }) {
+      id
+      title
+    }
+  }
+`
+
+const styles = {
+  dropdownList: css`
+    margin: 0;
+    list-style: none;
+    background-color: #f5f5f5;
+    color: #444444;
+    border-top: 1px solid #eaeaea;
+    padding: 0.5rem 0 1rem;
+    border-radius: 0 0 6px 6px;
+  `,
+  item: css`
+    padding: 0.5rem;
+  `,
+}
+
+function CategoryList({ searchTerm, children }) {
+  const {
+    data: { categories },
+  } = useQuery(QUERY_SEARCH_CATEGORIES, { variables: { searchTerm } })
+
+  return children({ categories })
+}
+
+function CategoryInput(props) {
+  const { setCategory, ...inputProps } = props
+  return (
+    <Downshift
+      itemToString={item => (item ? item.title : null)}
+      onChange={(selectedCategory, downshift) => {
+        setCategory(selectedCategory)
+      }}
+    >
+      {({
+        getInputProps,
+        getLabelProps,
+        getMenuProps,
+        getItemProps,
+        isOpen,
+        inputValue,
+        highlightedIndex,
+      }) => (
+        <div>
+          <Label {...getLabelProps()}>
+            Category
+            <Input {...getInputProps({ ...inputProps })} />
+          </Label>
+          {isOpen && (
+            <ul
+              css={styles.dropdownList}
+              style={{ marginTop: '-0.5rem' }}
+              {...getMenuProps()}
+            >
+              {!inputValue ? (
+                <div>Please enter a category</div>
+              ) : (
+                <Suspense fallback={<Spinner />}>
+                  <CategoryList searchTerm={inputValue}>
+                    {({ categories }) =>
+                      categories.map((item, index) => (
+                        <li
+                          css={styles.item}
+                          style={{
+                            backgroundColor:
+                              highlightedIndex === index
+                                ? '#eaeaea'
+                                : 'transparent',
+                          }}
+                          {...getItemProps({ item, index })}
+                          key={item.id}
+                        >
+                          {item.title}
+                        </li>
+                      ))
+                    }
+                  </CategoryList>
+                </Suspense>
+              )}
+            </ul>
+          )}
+        </div>
+      )}
+    </Downshift>
+  )
+}
+
 export default AddItem
+export { MUTATION_ADD_ITEM, QUERY_SEARCH_CATEGORIES }

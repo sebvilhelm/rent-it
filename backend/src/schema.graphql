@@ -76,6 +76,7 @@ type SearchResult {
 type User {
   id: ID!
   name: String!
+  image: Image
   items(
     where: ItemWhereInput
     orderBy: ItemOrderByInput

@@ -20,7 +20,13 @@ const MUTATION_SIGNOUT = graphql`
 `
 
 const MUTATION_SIGNUP = graphql`
-  mutation signUp($name: String!, $email: String!, $password: String!) {
+  mutation signUp(
+    $name: String!
+    $email: String!
+    $password: String!
+    $imageFull: String
+    $imagePreview: String
+  ) {
     signUp(name: $name, email: $email, password: $password) {
       id
       name

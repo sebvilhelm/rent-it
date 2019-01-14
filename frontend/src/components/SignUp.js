@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Form, Label, Input, Fieldset } from './elements/Form'
 import Button from './elements/Button'
 import useForm from '../lib/useForm'
+import uploadImage from '../lib/uploadImage'
 import ErrorHandler from './ErrorHandler'
 import { useUser } from './User'
 
@@ -19,6 +20,7 @@ function SignUpForm() {
     password: '',
     confirmPassword: '',
   })
+  const [image, setImage] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   return (
@@ -31,7 +33,7 @@ function SignUpForm() {
           if (password !== confirmPassword) {
             throw new Error("The two password doesn't match!")
           }
-          await signUp({ email, password, name })
+          await signUp({ email, password, name, image })
           resetForm()
           // TODO: Success message
         } catch (error) {
@@ -69,6 +71,27 @@ function SignUpForm() {
             name="email"
           />
         </Label>
+
+        <Label htmlFor="signUpImage">
+          Image
+          <Input
+            type="file"
+            id="signUpImage"
+            name="image"
+            required
+            accept="image/jpeg"
+            onChange={async event => {
+              const upload = await uploadImage(event)
+              const image = {
+                full: upload.secure_url,
+                preview: upload.eager[0].secure_url,
+              }
+              setImage(image)
+              console.log(image)
+            }}
+          />
+        </Label>
+
         <Label htmlFor="signUpPassword">
           Password
           <Input
