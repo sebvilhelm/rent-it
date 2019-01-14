@@ -1,8 +1,9 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from '@reach/router'
 import { useUser } from './User'
+import useFocus from '../lib/useFocus'
 import SearchBar from './SearchBar'
 import SpacerGif from './SpacerGif'
 import Button from './elements/Button'
@@ -104,24 +105,46 @@ const profileStyle = {
 function ProfileButton(props) {
   const { signOut } = useUser()
   const [open, setOpen] = useState(false)
+  const [hasFocus, onFocus, onBlur] = useFocus()
+
+  const nav = useRef()
+  useEffect(
+    () => {
+      if (open && nav.current) {
+        nav.current.firstChild.focus()
+      }
+    },
+    [open]
+  )
 
   return (
-    <div {...props} css={profileStyle.wrapper}>
-      <Button onClick={() => setOpen(!open)}>Profile</Button>
-      {open && (
-        <nav aria-label="profile-dropdown" css={profileStyle.dropdown}>
-          <div>
-            <Link to="/profile">My profile</Link>
-          </div>
-          <div>
-            <button
-              onClick={async () => {
-                await signOut()
-              }}
-            >
-              Sign out
-            </button>
-          </div>
+    <div
+      {...props}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      css={profileStyle.wrapper}
+    >
+      <Button
+        onClick={() => setOpen(!open)}
+        aria-haspopup="true"
+        aria-expanded={open && hasFocus}
+      >
+        Profile ▾
+      </Button>
+      {open && hasFocus && (
+        <nav
+          ref={nav}
+          aria-label="profile-dropdown"
+          css={profileStyle.dropdown}
+        >
+          <MenuItem to="/profile">My profile</MenuItem>
+          <Button
+            onClick={async () => {
+              await signOut()
+            }}
+          >
+            Sign out
+          </Button>
         </nav>
       )}
     </div>
