@@ -35,7 +35,7 @@ function AddBooking(props) {
   const styles = {
     container: css`
       padding: 1rem;
-      border: 1px solid hsl(0, 0%, 80%);
+      background-color: white;
     `,
     title: css``,
   }
