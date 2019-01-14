@@ -1,10 +1,11 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { Suspense, useState, useRef, useEffect } from 'react'
+import { Suspense, useState } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import { Link } from '@reach/router'
 import useInput from '../lib/useInput'
+import useFocus from '../lib/useFocus'
 import SpacerGif from './SpacerGif'
 
 function SearchBar(props) {
@@ -51,21 +52,6 @@ function SearchBar(props) {
       )}
     </div>
   )
-}
-
-function useFocus() {
-  const [hasFocus, setHasFocus] = useState(false)
-  const timer = useRef()
-
-  const onFocus = event => {
-    clearTimeout(timer.current)
-    setHasFocus(true)
-  }
-  const onBlur = event => {
-    timer.current = setTimeout(() => setHasFocus(false))
-  }
-
-  return [hasFocus, onFocus, onBlur]
 }
 
 const styles = {
