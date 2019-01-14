@@ -104,8 +104,17 @@ const profileStyle = {
 
 function ProfileButton(props) {
   const { signOut } = useUser()
+
   const [open, setOpen] = useState(false)
   const [hasFocus, onFocus, onBlur] = useFocus()
+  useEffect(
+    () => {
+      if (open && !hasFocus) {
+        setOpen(false)
+      }
+    },
+    [onFocus]
+  )
 
   const nav = useRef()
   useEffect(
@@ -131,7 +140,7 @@ function ProfileButton(props) {
       >
         Profile ▾
       </Button>
-      {open && hasFocus && (
+      {open && (
         <nav
           ref={nav}
           aria-label="profile-dropdown"
