@@ -15,6 +15,12 @@ mutation {
           title: "ATV"
           description: "My dirty dirt bike. Ride or die."
           price: 200000
+          image: {
+            create: {
+              full: "https://res.cloudinary.com/vilhelmnielsen/image/upload/v1547464993/bachelor-project/sowzxhfylclkfswxzmb9.jpg"
+              preview: "https://res.cloudinary.com/vilhelmnielsen/image/upload/c_scale,q_auto:low,w_50/v1547464993/bachelor-project/sowzxhfylclkfswxzmb9.jpg"
+            }
+          }
           bookings: {
             create: {
               status: APPROVED
