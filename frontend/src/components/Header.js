@@ -1,12 +1,13 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, Suspense } from 'react'
 import { Link } from '@reach/router'
 import { useUser } from './User'
+import { Img } from 'the-platform'
 import useFocus from '../lib/useFocus'
 import SearchBar from './SearchBar'
 import SpacerGif from './SpacerGif'
-import Button from './elements/Button'
+import Button, { UnstyledButton } from './elements/Button'
 
 function Header(props) {
   const { user } = useUser()
@@ -58,7 +59,10 @@ const styles = {
   searchBar: css`
     flex: 1 1 20%;
   `,
-  navigation: css``,
+  navigation: css`
+    display: flex;
+    align-items: center;
+  `,
   menuItem: {
     default: css`
       display: inline-flex;
@@ -85,7 +89,7 @@ function MenuItem({ type, ...props }) {
 
 const profileStyle = {
   wrapper: css`
-    display: inline-block;
+    display: inline-flex;
     position: relative;
   `,
   dropdown: css`
@@ -100,10 +104,18 @@ const profileStyle = {
       1px 1px 15px hsla(0, 0%, 0%, 0.025);
     z-index: 10;
   `,
+  image: css`
+    --image-dimension: 2.5rem;
+    width: var(--image-dimension);
+    height: var(--image-dimension);
+    object-fit: cover;
+    display: inline-flex;
+    border-radius: 50%;
+  `,
 }
 
 function ProfileButton(props) {
-  const { signOut } = useUser()
+  const { user, signOut } = useUser()
 
   const [open, setOpen] = useState(false)
   const [hasFocus, onFocus, onBlur] = useFocus()
@@ -133,13 +145,26 @@ function ProfileButton(props) {
       onBlur={onBlur}
       css={profileStyle.wrapper}
     >
-      <Button
+      <UnstyledButton
         onClick={() => setOpen(!open)}
+        css={styles.menuItem.default}
         aria-haspopup="true"
         aria-expanded={open && hasFocus}
+        aria-label="open profile menu"
       >
-        Profile ▾
-      </Button>
+        {user.image ? (
+          <Suspense
+            maxDuration={0}
+            fallback={
+              <img src={user.image.preview} alt="" css={profileStyle.image} />
+            }
+          >
+            <Img src={user.image.full} alt="" css={profileStyle.image} />
+          </Suspense>
+        ) : (
+          'Profile ▾'
+        )}
+      </UnstyledButton>
       {open && (
         <nav
           ref={nav}

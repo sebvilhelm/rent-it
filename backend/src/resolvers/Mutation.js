@@ -108,7 +108,7 @@ const Mutation = {
     return createdUser
   },
 
-  async signIn(_, args, ctx) {
+  async signIn(_, args, ctx, info) {
     const { email, password } = args
     const errorMessage = 'Login error'
 
@@ -134,7 +134,12 @@ const Mutation = {
       maxAge: 1000 * 60 * 60 * 24 * 365,
     })
 
-    return user
+    return ctx.db.query.user(
+      {
+        where: { id: user.id },
+      },
+      info
+    )
   },
 
   signOut(_, args, ctx) {
