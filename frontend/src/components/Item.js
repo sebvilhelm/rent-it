@@ -15,7 +15,6 @@ function Item({ id, ...props }) {
   const {
     data: { item },
   } = useQuery(ITEM_QUERY, { variables: { id: id } })
-  console.log(item)
 
   useEffect(
     () => {
@@ -28,16 +27,6 @@ function Item({ id, ...props }) {
   return (
     <Layout>
       <section css={[large && styles.grid]}>
-        <h1
-          css={[
-            styles.title,
-            css`
-              margin-bottom: 1rem;
-            `,
-          ]}
-        >
-          {item.title}
-        </h1>
         {item.image && (
           <Suspense
             maxDuration={100}
@@ -67,6 +56,16 @@ function Item({ id, ...props }) {
           </Suspense>
         )}
         <div css={styles.info}>
+          <h1
+            css={[
+              styles.title,
+              css`
+                margin-bottom: 1rem;
+              `,
+            ]}
+          >
+            {item.title}
+          </h1>
           {item.averageRating && (
             <AverageRating averageRating={item.averageRating} />
           )}
@@ -127,14 +126,11 @@ const styles = {
     display: grid;
     grid-template-columns: 50ex 1fr 1fr;
     grid-template-areas:
-      'image image image'
-      'title title form'
-      'info info form'
+      'image image form'
+      'info info empty'
       'reviews reviews reviews';
   `,
-  title: css`
-    grid-area: title;
-  `,
+  title: css``,
   info: css`
     grid-area: info;
   `,
