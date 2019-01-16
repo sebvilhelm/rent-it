@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useQuery, useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import {
@@ -16,7 +16,12 @@ import formatPrice from '../lib/formatPrice'
 function MyItem({ id }) {
   const {
     data: { item },
+    refetch,
   } = useQuery(QUERY_MY_ITEM, { variables: { id, now: startOfToday() } })
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   return (
     <section>
@@ -89,25 +94,7 @@ function MyItem({ id }) {
   )
 }
 
-const QUERY_MY_ITEM = gql`
-  query myItem($id: ID!, $now: DateTime!) {
-    item(where: { id: $id }) {
-      id
-      title
-      pendingBookings: bookings(where: { status: PENDING }) {
-        ...myItemBooking
-      }
-      notPendingBookings: bookings(where: { NOT: { status: PENDING } }) {
-        ...myItemBooking
-      }
-      upcomingBookings: bookings(
-        where: { AND: [{ status: APPROVED }, { startDate_gt: $now }] }
-      ) {
-        ...myItemBooking
-      }
-    }
-  }
-
+const FRAGMENT_MY_ITEM = gql`
   fragment myItemBooking on Booking {
     id
     status
@@ -127,6 +114,27 @@ const QUERY_MY_ITEM = gql`
   }
 `
 
+const QUERY_MY_ITEM = gql`
+  query myItem($id: ID!, $now: DateTime!) {
+    item(where: { id: $id }) {
+      id
+      title
+      pendingBookings: bookings(where: { status: PENDING }) {
+        ...myItemBooking
+      }
+      notPendingBookings: bookings(where: { NOT: { status: PENDING } }) {
+        ...myItemBooking
+      }
+      upcomingBookings: bookings(
+        where: { AND: [{ status: APPROVED }, { startDate_gt: $now }] }
+      ) {
+        ...myItemBooking
+      }
+    }
+  }
+  ${FRAGMENT_MY_ITEM}
+`
+
 const styles = {
   grid: css`
     display: grid;
@@ -135,7 +143,7 @@ const styles = {
   `,
 }
 
-function PendingBooking(props) {
+export function PendingBooking(props) {
   const { booking } = props
 
   const variables = { id: booking.item.id, now: startOfToday() }
@@ -397,7 +405,6 @@ function UpcomingBooking(props) {
       <p>For {formatPrice(booking.payment.price)}</p>
       <Button
         color="red"
-        transparent
         onClick={async () => {
           setError(null)
           try {
@@ -415,3 +422,4 @@ function UpcomingBooking(props) {
 }
 
 export default MyItem
+export { FRAGMENT_MY_ITEM }
