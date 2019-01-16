@@ -55,26 +55,79 @@ function Item({ id, ...props }) {
             />
           </Suspense>
         )}
-        <div css={styles.info}>
-          <h1
-            css={[
-              styles.title,
-              css`
-                margin-bottom: 1rem;
-              `,
-            ]}
-          >
-            {item.title}
-          </h1>
+        <div
+          css={[
+            styles.info,
+            css`
+              margin-bottom: 0.5rem;
+            `,
+          ]}
+        >
+          <h1 css={[styles.title]}>{item.title}</h1>
           {item.averageRating && (
             <AverageRating averageRating={item.averageRating} />
           )}
-          <p>{item.description}</p>
-          <p>Price: {formatPrice(item.price)}</p>
+          <div
+            css={css`
+              margin-bottom: 1rem;
+            `}
+          />
+          <p
+            css={[
+              styles.description,
+              css`
+                margin-bottom: 0.5rem;
+              `,
+            ]}
+          >
+            {item.description}
+          </p>
+          <p css={styles.price}>{formatPrice(item.price)} per day</p>
         </div>
-        <AddBooking css={styles.form} id={props.id} />
+        <div
+          css={[
+            ownerStyles.container,
+            styles.owner,
+            css`
+              margin-bottom: 1.5rem;
+            `,
+          ]}
+        >
+          <h3 css={ownerStyles.title}>Owner</h3>
+          {item.owner.image && (
+            <Suspense
+              maxDuration={0}
+              fallback={
+                <img
+                  css={ownerStyles.image}
+                  src={item.owner.image.preview}
+                  alt={item.owner.name}
+                />
+              }
+            >
+              <Img
+                css={ownerStyles.image}
+                src={item.owner.image.full}
+                alt={item.owner.name}
+              />
+            </Suspense>
+          )}
+          <div>
+            <p css={ownerStyles.name}>{item.owner.name}</p>
+            <a href={`mailto:${item.owner.email}`} css={ownerStyles.email}>
+              {item.owner.email}
+            </a>
+          </div>
+        </div>
+        <AddBooking css={[styles.form, large && styles.stickyForm]} id={id} />
         <div css={styles.reviews}>
-          <h2>Reviews</h2>
+          <h2
+            css={css`
+              margin-bottom: 1rem;
+            `}
+          >
+            Reviews
+          </h2>
 
           {item.reviews.length ? (
             <div css={styles.reviewGrid}>
@@ -99,6 +152,16 @@ const ITEM_QUERY = graphql`
       description
       price
       averageRating
+      maxDuration
+      owner {
+        id
+        name
+        email
+        image {
+          full
+          preview
+        }
+      }
       image {
         full
         preview
@@ -128,18 +191,32 @@ const styles = {
     grid-template-areas:
       'image image form'
       'info info empty'
+      'owner owner empty'
       'reviews reviews reviews';
   `,
   title: css``,
   info: css`
     grid-area: info;
   `,
-  form: css`
+  stickyForm: css`
     position: sticky;
-    top: 10px;
+    top: 0;
+  `,
+  form: css`
     box-shadow: 2px 2px 35px hsla(0, 0%, 0%, 0.05),
       2px 2px 20px hsla(0, 0%, 0%, 0.1);
     grid-area: form;
+  `,
+  owner: css`
+    grid-area: owner;
+  `,
+  price: css`
+    font-weight: 300;
+    font-size: 1.5em;
+  `,
+  description: css`
+    padding: 0.5rem;
+    background-color: #eee;
   `,
   reviews: css`
     grid-area: reviews;
@@ -156,10 +233,37 @@ const styles = {
   `,
 }
 
-function AverageRating(props) {
-  const { averageRating } = props
+const ownerStyles = {
+  container: css`
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 1rem;
+  `,
+  title: css`
+    grid-column: 1 / -1;
+    margin-bottom: 0.5rem;
+  `,
+  email: css`
+    color: #444;
+  `,
+  image: css`
+    --image-size: 6rem;
+    object-fit: cover;
+    height: var(--image-size);
+    width: var(--image-size);
+    border-radius: 50%;
+    display: inline-flex;
+  `,
+  name: css`
+    font-size: 1.2rem;
+    font-weight: 500;
+  `,
+}
+
+function AverageRating({ averageRating, ...rest }) {
   return (
-    <span>
+    <span {...rest}>
       <strong>{averageRating.toFixed(1)}</strong> out of 5
     </span>
   )
