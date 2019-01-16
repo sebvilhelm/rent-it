@@ -8,14 +8,21 @@ import useFocus from '../lib/useFocus'
 import SearchBar from './SearchBar'
 import SpacerGif from './SpacerGif'
 import Button, { UnstyledButton } from './elements/Button'
+import logo from '../logo.svg'
 
 function Header(props) {
   const { user } = useUser()
   return (
     <header css={[styles.header, styles.flexWrapper]} {...props}>
-      <div css={styles.logo}>
-        <Link to="/">Logo</Link>
-      </div>
+      <Link
+        css={css`
+          line-height: 0;
+        `}
+        to="/"
+      >
+        <img css={styles.logo} src={logo} alt="Rent it logo" />
+      </Link>
+
       <SpacerGif />
       <SearchBar css={styles.searchBar} />
       <SpacerGif />
@@ -54,7 +61,8 @@ const styles = {
     align-items: center;
   `,
   logo: css`
-    opacity: 0;
+    max-width: 100px;
+    margin: 0 1rem;
   `,
   searchBar: css`
     flex: 1 1 20%;
