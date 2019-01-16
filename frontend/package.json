@@ -9,6 +9,9 @@
     "eject": "react-scripts eject",
     "format": "prettier --write '**/*.+(js|jsx|md|ts|css|scss|sass|less|graphql|yml|yaml|json)'"
   },
+  "dokku": {
+    "predeploy": "npm run build"
+   },
   "husky": {
     "hooks": {
       "precommit": "lint-staged"
