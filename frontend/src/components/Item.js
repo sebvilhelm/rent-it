@@ -34,25 +34,11 @@ function Item({ id, ...props }) {
               <img
                 src={item.image.preview}
                 alt={item.title}
-                css={[
-                  styles.image,
-                  css`
-                    grid-area: image;
-                  `,
-                ]}
+                css={[styles.image]}
               />
             }
           >
-            <Img
-              src={item.image.full}
-              alt={item.title}
-              css={[
-                styles.image,
-                css`
-                  grid-area: image;
-                `,
-              ]}
-            />
+            <Img src={item.image.full} alt={item.title} css={[styles.image]} />
           </Suspense>
         )}
         <div
@@ -82,6 +68,16 @@ function Item({ id, ...props }) {
           >
             {item.description}
           </p>
+          {item.maxDuration && (
+            <p>
+              Rent for up to {item.maxDuration} day{item.maxDuration > 1 && 's'}
+            </p>
+          )}
+          <div
+            css={css`
+              margin-bottom: 1rem;
+            `}
+          />
           <p css={styles.price}>{formatPrice(item.price)} per day</p>
         </div>
         <div
@@ -227,6 +223,7 @@ const styles = {
     gap: 1rem;
   `,
   image: css`
+    grid-area: image;
     width: 100%;
     height: 500px;
     object-fit: cover;

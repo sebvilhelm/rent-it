@@ -11,11 +11,16 @@ import Layout from './Layout'
 function Categories() {
   const {
     data: { categories },
+    refetch,
   } = useQuery(QUERY_CATEGORIES)
 
   useEffect(() => {
     document.title = 'Categories'
     return () => (document.title = siteMeta.title)
+  }, [])
+
+  useEffect(() => {
+    refetch()
   }, [])
 
   return (
