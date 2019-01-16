@@ -38,6 +38,7 @@ function Categories() {
 const QUERY_CATEGORIES = gql`
   query categoriesPage {
     categories {
+      id
       slug
       title
     }
