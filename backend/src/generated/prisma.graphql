@@ -1,5 +1,5 @@
-# source: https://eu1.prisma.sh/sebastian-vilhelm-nielsen-e462bc/bachelor/dev
-# timestamp: Mon Jan 14 2019 11:20:42 GMT+0100 (GMT+01:00)
+# source: http://157.230.27.149:4466/database/dev
+# timestamp: Wed Jan 16 2019 10:37:11 GMT+0100 (GMT+01:00)
 
 type AggregateBooking {
   count: Int!
@@ -303,7 +303,6 @@ input BookingUpdateManyMutationInput {
 input BookingUpdateManyWithoutBookerInput {
   create: [BookingCreateWithoutBookerInput!]
   connect: [BookingWhereUniqueInput!]
-  set: [BookingWhereUniqueInput!]
   disconnect: [BookingWhereUniqueInput!]
   delete: [BookingWhereUniqueInput!]
   update: [BookingUpdateWithWhereUniqueWithoutBookerInput!]
@@ -315,7 +314,6 @@ input BookingUpdateManyWithoutBookerInput {
 input BookingUpdateManyWithoutItemInput {
   create: [BookingCreateWithoutItemInput!]
   connect: [BookingWhereUniqueInput!]
-  set: [BookingWhereUniqueInput!]
   disconnect: [BookingWhereUniqueInput!]
   delete: [BookingWhereUniqueInput!]
   update: [BookingUpdateWithWhereUniqueWithoutItemInput!]
@@ -1342,7 +1340,6 @@ input ItemReviewUpdateInput {
 input ItemReviewUpdateManyWithoutItemInput {
   create: [ItemReviewCreateWithoutItemInput!]
   connect: [ItemReviewWhereUniqueInput!]
-  set: [ItemReviewWhereUniqueInput!]
   disconnect: [ItemReviewWhereUniqueInput!]
   delete: [ItemReviewWhereUniqueInput!]
   update: [ItemReviewUpdateWithWhereUniqueWithoutItemInput!]
@@ -1667,7 +1664,6 @@ input ItemUpdateManyMutationInput {
 input ItemUpdateManyWithoutCategoryInput {
   create: [ItemCreateWithoutCategoryInput!]
   connect: [ItemWhereUniqueInput!]
-  set: [ItemWhereUniqueInput!]
   disconnect: [ItemWhereUniqueInput!]
   delete: [ItemWhereUniqueInput!]
   update: [ItemUpdateWithWhereUniqueWithoutCategoryInput!]
@@ -1679,7 +1675,6 @@ input ItemUpdateManyWithoutCategoryInput {
 input ItemUpdateManyWithoutOwnerInput {
   create: [ItemCreateWithoutOwnerInput!]
   connect: [ItemWhereUniqueInput!]
-  set: [ItemWhereUniqueInput!]
   disconnect: [ItemWhereUniqueInput!]
   delete: [ItemWhereUniqueInput!]
   update: [ItemUpdateWithWhereUniqueWithoutOwnerInput!]
