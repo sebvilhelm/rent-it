@@ -10,7 +10,7 @@ RUN apt-get update && apt-get -y install yarn
 
 COPY package.json ./
 COPY yarn.lock ./
-COPY /src ./
+COPY . .
 
 RUN yarn install --frozen-lockfile --no-cache --production
 
