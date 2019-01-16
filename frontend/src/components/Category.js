@@ -27,9 +27,14 @@ function Category(props) {
 
   const {
     data: { items, category },
+    refetch,
   } = useQuery(QUERY_ITEMS_BY_CATEGORY, {
     variables,
   })
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   useEffect(
     () => {
