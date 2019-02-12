@@ -25,6 +25,8 @@ type Query {
   categoriesConnection(where: CategoryWhereInput): CategoryConnection!
   category(where: CategoryWhereUniqueInput!): Category
 
+  searchItems(searchTerm: String): [SearchResult!]
+
   me: User
 }
 
@@ -46,7 +48,13 @@ type Mutation {
     maxDuration: Int
   ): Item!
 
-  signUp(name: String!, email: String!, password: String!): User!
+  signUp(
+    name: String!
+    email: String!
+    password: String!
+    imageFull: String
+    imagePreview: String
+  ): User!
   signIn(email: String!, password: String!): User!
   signOut: SuccessMessage
   updateProfile(name: String, email: String, password: String): User!
@@ -66,9 +74,15 @@ type SuccessMessage {
   message: String
 }
 
+type SearchResult {
+  count: Int
+  category: Category
+}
+
 type User {
   id: ID!
   name: String!
+  image: Image
   items(
     where: ItemWhereInput
     orderBy: ItemOrderByInput

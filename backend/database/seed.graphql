@@ -1,0 +1,102 @@
+mutation {
+  user: createUser(
+    data: {
+      name: "Sebastian Vilhelm Nielsen"
+      email: "seb.vilhelm@gmail.com"
+      password: "$2b$10$vKuEMG2IPK.habRMxqkRf.NzPSSw1kI5bp0ZbGgWuwaqG0qtJ4u8e"
+      image: {
+        create: {
+          full: "https://res.cloudinary.com/vilhelmnielsen/image/upload/v1547464993/bachelor-project/hcaim93plevmwxs3bpit.jpg"
+          preview: "https://res.cloudinary.com/vilhelmnielsen/image/upload/c_scale,q_auto:low,w_50/v1547464993/bachelor-project/hcaim93plevmwxs3bpit.jpg"
+        }
+      }
+      items: {
+        create: {
+          title: "ATV"
+          description: "My dirty dirt bike. Ride or die."
+          price: 200000
+          image: {
+            create: {
+              full: "https://res.cloudinary.com/vilhelmnielsen/image/upload/v1547464993/bachelor-project/sowzxhfylclkfswxzmb9.jpg"
+              preview: "https://res.cloudinary.com/vilhelmnielsen/image/upload/c_scale,q_auto:low,w_50/v1547464993/bachelor-project/sowzxhfylclkfswxzmb9.jpg"
+            }
+          }
+          bookings: {
+            create: {
+              status: APPROVED
+              startDate: "2019-01-01"
+              endDate: "2019-01-10"
+              payment: { create: { price: 90000 } }
+              booker: {
+                create: {
+                  name: "Judah Brown"
+                  email: "judah94@hotmail.com"
+                  password: "$2b$10$JJzDYJBJh1qNpOAq4naYI.nVyXY3gGxpVMlmwUBekDw0pT9pQ.K3i"
+                  image: {
+                    create: {
+                      full: "https://res.cloudinary.com/vilhelmnielsen/image/upload/v1547465078/bachelor-project/qcfgqe9wqwuthkzvb6ht.jpg"
+                      preview: "https://res.cloudinary.com/vilhelmnielsen/image/upload/c_scale,q_auto:low,w_50/v1547464993/bachelor-project/qcfgqe9wqwuthkzvb6ht.jpg"
+                    }
+                  }
+                  items: {
+                    create: {
+                      title: "Circular Saw"
+                      description: "My saw, that's circular, round and round, and cuts like a dream."
+                      image: {
+                        create: {
+                          full: "https://res.cloudinary.com/vilhelmnielsen/image/upload/v1547470746/bachelor-project/zbgmxppst8uz1oynvdcm.jpg"
+                          preview: "https://res.cloudinary.com/vilhelmnielsen/image/upload/c_scale,q_auto:low,w_50/v1547464993/bachelor-project/zbgmxppst8uz1oynvdcm.jpg"
+                        }
+                      }
+                      price: 10000
+                      maxDuration: 5
+                      reviews: {
+                        create: {
+                          reviewer: {
+                            create: {
+                              name: "Gail Beier"
+                              email: "gail_beier23@gmail.com"
+                              password: "$2b$10$PajI9bxWpoTXzTA/7EWaduMiwecuNl3p0vOJ3o9Cvve0o2jvNliVW"
+                              image: {
+                                create: {
+                                  full: "https://res.cloudinary.com/vilhelmnielsen/image/upload/v1547470746/bachelor-project/aniljcbr9dx4vi51pcfp.jpg"
+                                  preview: "https://res.cloudinary.com/vilhelmnielsen/image/upload/c_scale,q_auto:low,w_50/v1547464993/bachelor-project/aniljcbr9dx4vi51pcfp.jpg"
+                                }
+                              }
+                            }
+                          }
+                          rating: {
+                            create: {
+                              stars: 4
+                              description: "It could cut, and Judah is nice."
+                            }
+                          }
+                        }
+                      }
+                      category: {
+                        create: {
+                          title: "Tools"
+                          slug: "tools"
+                          description: "Everything for handy-work and DIY."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          category: {
+            create: {
+              title: "Transport"
+              slug: "transport"
+              description: "Everything for handy-work and DIY."
+            }
+          }
+        }
+      }
+    }
+  ) {
+    id
+  }
+}

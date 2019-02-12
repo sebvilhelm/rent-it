@@ -1,17 +1,27 @@
 import React, { createContext, useContext } from 'react'
 import { useQuery, useMutation } from 'react-apollo-hooks'
-import graphql from 'graphql-tag'
+import gql from 'graphql-tag'
 
-const MUTATION_SIGNIN = graphql`
-  mutation signIn($email: String!, $password: String!) {
-    signIn(email: $email, password: $password) {
-      id
-      name
+const FRAGMENT_USER_INFO = gql`
+  fragment userInfo on User {
+    id
+    name
+    image {
+      full
+      preview
     }
   }
 `
+const MUTATION_SIGNIN = gql`
+  mutation signIn($email: String!, $password: String!) {
+    signIn(email: $email, password: $password) {
+      ...userInfo
+    }
+  }
+  ${FRAGMENT_USER_INFO}
+`
 
-const MUTATION_SIGNOUT = graphql`
+const MUTATION_SIGNOUT = gql`
   mutation signOut {
     signOut {
       message
@@ -19,25 +29,37 @@ const MUTATION_SIGNOUT = graphql`
   }
 `
 
-const MUTATION_SIGNUP = graphql`
-  mutation signUp($name: String!, $email: String!, $password: String!) {
-    signUp(name: $name, email: $email, password: $password) {
-      id
-      name
+const MUTATION_SIGNUP = gql`
+  mutation signUp(
+    $name: String!
+    $email: String!
+    $password: String!
+    $imageFull: String
+    $imagePreview: String
+  ) {
+    signUp(
+      name: $name
+      email: $email
+      password: $password
+      imageFull: $imageFull
+      imagePreview: $imagePreview
+    ) {
+      ...userInfo
     }
   }
+  ${FRAGMENT_USER_INFO}
 `
 
-const QUERY_CURRENT_USER = graphql`
+const QUERY_CURRENT_USER = gql`
   query currentUser {
     me {
-      id
-      name
+      ...userInfo
     }
   }
+  ${FRAGMENT_USER_INFO}
 `
 
-const userContext = createContext({ user: undefined })
+export const userContext = createContext({ user: undefined })
 
 export const useUser = () => useContext(userContext)
 
@@ -54,20 +76,35 @@ function UserProvider(props) {
   const signIn = async ({ email, password }) => {
     await signInMutation({
       variables: { email, password },
-      refetchQueries: [{ query: QUERY_CURRENT_USER }],
+      update: (cache, { data: { signIn } }) => {
+        cache.writeQuery({
+          query: QUERY_CURRENT_USER,
+          data: { me: signIn },
+        })
+      },
     })
   }
 
   const signOut = async () => {
     await signOutMutation({
-      refetchQueries: [{ query: QUERY_CURRENT_USER }],
+      update: cache => {
+        cache.writeQuery({
+          query: QUERY_CURRENT_USER,
+          data: { me: null },
+        })
+      },
     })
   }
 
-  const signUp = async ({ email, name, password }) => {
+  const signUp = async ({ email, name, password, imageFull, imagePreview }) => {
     await signUpMutation({
-      variables: { email, password, name },
-      refetchQueries: [{ query: QUERY_CURRENT_USER }],
+      variables: { email, password, name, imageFull, imagePreview },
+      update: (cache, { data: { signUp } }) => {
+        cache.writeQuery({
+          query: QUERY_CURRENT_USER,
+          data: { me: signUp },
+        })
+      },
     })
   }
 
@@ -83,4 +120,9 @@ User.Provider = UserProvider
 User.Consumer = userContext.Consumer
 
 export default User
-export { QUERY_CURRENT_USER }
+export {
+  QUERY_CURRENT_USER,
+  MUTATION_SIGNUP,
+  MUTATION_SIGNIN,
+  MUTATION_SIGNOUT,
+}

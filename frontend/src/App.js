@@ -20,12 +20,25 @@ const Dashboard = lazy(() => import('./components/Dashboard'))
 
 function App() {
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense
+      fallback={
+        <div
+          css={{
+            display: 'flex',
+            height: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Spinner size="large" />
+        </div>
+      }
+    >
       <Global styles={styles.global} />
       <User.Provider>
         <Header />
-        <main>
-          <Suspense fallback={<Spinner />}>
+        <Suspense fallback={<Spinner />}>
+          <main>
             <Router>
               <Categories path="/" />
               <Categories path="/categories" />
@@ -41,8 +54,8 @@ function App() {
               </Dashboard>
               <SignIn path="sign-in" />
             </Router>
-          </Suspense>
-        </main>
+          </main>
+        </Suspense>
       </User.Provider>
     </Suspense>
   )

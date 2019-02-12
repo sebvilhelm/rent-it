@@ -3,20 +3,24 @@ import { jsx, css } from '@emotion/core'
 import { useState } from 'react'
 import { Form, Label, Input, Fieldset } from './elements/Form'
 import Button from './elements/Button'
-import useInput from '../lib/useInput'
+import useForm from '../lib/useForm'
+import uploadImage from '../lib/uploadImage'
 import ErrorHandler from './ErrorHandler'
 import { useUser } from './User'
 
 function SignUpForm() {
   const { signUp } = useUser()
-  const [name, onChangeName, setName] = useInput('')
-  const [email, onChangeEmail, setEmail] = useInput('')
-  const [password, onChangePassword, setPassword] = useInput('')
   const [
-    confirmPassword,
-    onChangeConfirmPassword,
-    setConfirmPassword,
-  ] = useInput('')
+    { name, email, password, confirmPassword },
+    onChange,
+    resetForm,
+  ] = useForm({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  })
+  const [image, setImage] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
   return (
@@ -29,11 +33,14 @@ function SignUpForm() {
           if (password !== confirmPassword) {
             throw new Error("The two password doesn't match!")
           }
-          await signUp({ email, password, name })
-          setName('')
-          setEmail('')
-          setPassword('')
-          setConfirmPassword('')
+          await signUp({
+            email,
+            password,
+            name,
+            imageFull: image ? image.full : null,
+            imagePreview: image ? image.preview : null,
+          })
+          resetForm()
           // TODO: Success message
         } catch (error) {
           setError(error)
@@ -54,7 +61,7 @@ function SignUpForm() {
           Name
           <Input
             value={name}
-            onChange={onChangeName}
+            onChange={onChange}
             type="text"
             id="signUpName"
             name="name"
@@ -64,17 +71,38 @@ function SignUpForm() {
           Email
           <Input
             value={email}
-            onChange={onChangeEmail}
+            onChange={onChange}
             type="email"
             id="signUpEmail"
             name="email"
           />
         </Label>
+
+        <Label htmlFor="signUpImage">
+          Image
+          <Input
+            type="file"
+            id="signUpImage"
+            name="image"
+            required
+            accept="image/jpeg"
+            onChange={async event => {
+              const upload = await uploadImage(event)
+              const image = {
+                full: upload.secure_url,
+                preview: upload.eager[0].secure_url,
+              }
+              setImage(image)
+              console.log(image)
+            }}
+          />
+        </Label>
+
         <Label htmlFor="signUpPassword">
           Password
           <Input
             value={password}
-            onChange={onChangePassword}
+            onChange={onChange}
             type="password"
             id="signUpPassword"
             name="password"
@@ -85,7 +113,7 @@ function SignUpForm() {
           Confirm Password
           <Input
             value={confirmPassword}
-            onChange={onChangeConfirmPassword}
+            onChange={onChange}
             type="password"
             id="signUpConfirmPassword"
             name="confirmPassword"

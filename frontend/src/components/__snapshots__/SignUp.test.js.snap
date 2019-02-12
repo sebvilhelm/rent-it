@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SignUp /> renders and matches snapshot 1`] = `
+<div>
+  <div>
+    <form
+      class="css-eje67j-Form"
+    >
+      <fieldset
+        class="css-1pwql6a-SignUpForm"
+      >
+        <label
+          class="css-np4was-Label"
+          for="signUpName"
+        >
+          Name
+          <input
+            class="css-l68vri-Input"
+            id="signUpName"
+            name="name"
+            type="text"
+            value=""
+          />
+        </label>
+        <label
+          class="css-np4was-Label"
+          for="signUpEmail"
+        >
+          Email
+          <input
+            class="css-l68vri-Input"
+            id="signUpEmail"
+            name="email"
+            type="email"
+            value=""
+          />
+        </label>
+        <label
+          class="css-np4was-Label"
+          for="signUpImage"
+        >
+          Image
+          <input
+            accept="image/jpeg"
+            class="css-l68vri-Input"
+            id="signUpImage"
+            name="image"
+            required=""
+            type="file"
+          />
+        </label>
+        <label
+          class="css-np4was-Label"
+          for="signUpPassword"
+        >
+          Password
+          <input
+            class="css-l68vri-Input"
+            id="signUpPassword"
+            name="password"
+            type="password"
+            value=""
+          />
+        </label>
+        <label
+          class="css-np4was-Label"
+          for="signUpConfirmPassword"
+        >
+          Confirm Password
+          <input
+            class="css-l68vri-Input"
+            id="signUpConfirmPassword"
+            name="confirmPassword"
+            type="password"
+            value=""
+          />
+        </label>
+        <button
+          class="css-1ajnxt9-Button"
+        >
+          Submit
+        </button>
+      </fieldset>
+    </form>
+  </div>
+</div>
+`;

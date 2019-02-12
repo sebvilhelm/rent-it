@@ -1,5 +1,5 @@
 # source: https://eu1.prisma.sh/sebastian-vilhelm-nielsen-e462bc/bachelor/dev
-# timestamp: Fri Dec 28 2018 12:41:31 GMT+0100 (Central European Standard Time)
+# timestamp: Wed Jan 16 2019 13:41:04 GMT+0100 (GMT+01:00)
 
 type AggregateBooking {
   count: Int!
@@ -303,6 +303,7 @@ input BookingUpdateManyMutationInput {
 input BookingUpdateManyWithoutBookerInput {
   create: [BookingCreateWithoutBookerInput!]
   connect: [BookingWhereUniqueInput!]
+  set: [BookingWhereUniqueInput!]
   disconnect: [BookingWhereUniqueInput!]
   delete: [BookingWhereUniqueInput!]
   update: [BookingUpdateWithWhereUniqueWithoutBookerInput!]
@@ -314,6 +315,7 @@ input BookingUpdateManyWithoutBookerInput {
 input BookingUpdateManyWithoutItemInput {
   create: [BookingCreateWithoutItemInput!]
   connect: [BookingWhereUniqueInput!]
+  set: [BookingWhereUniqueInput!]
   disconnect: [BookingWhereUniqueInput!]
   delete: [BookingWhereUniqueInput!]
   update: [BookingUpdateWithWhereUniqueWithoutItemInput!]
@@ -1340,6 +1342,7 @@ input ItemReviewUpdateInput {
 input ItemReviewUpdateManyWithoutItemInput {
   create: [ItemReviewCreateWithoutItemInput!]
   connect: [ItemReviewWhereUniqueInput!]
+  set: [ItemReviewWhereUniqueInput!]
   disconnect: [ItemReviewWhereUniqueInput!]
   delete: [ItemReviewWhereUniqueInput!]
   update: [ItemReviewUpdateWithWhereUniqueWithoutItemInput!]
@@ -1664,6 +1667,7 @@ input ItemUpdateManyMutationInput {
 input ItemUpdateManyWithoutCategoryInput {
   create: [ItemCreateWithoutCategoryInput!]
   connect: [ItemWhereUniqueInput!]
+  set: [ItemWhereUniqueInput!]
   disconnect: [ItemWhereUniqueInput!]
   delete: [ItemWhereUniqueInput!]
   update: [ItemUpdateWithWhereUniqueWithoutCategoryInput!]
@@ -1675,6 +1679,7 @@ input ItemUpdateManyWithoutCategoryInput {
 input ItemUpdateManyWithoutOwnerInput {
   create: [ItemCreateWithoutOwnerInput!]
   connect: [ItemWhereUniqueInput!]
+  set: [ItemWhereUniqueInput!]
   disconnect: [ItemWhereUniqueInput!]
   delete: [ItemWhereUniqueInput!]
   update: [ItemUpdateWithWhereUniqueWithoutOwnerInput!]
@@ -2532,6 +2537,7 @@ type User implements Node {
   id: ID!
   name: String!
   email: String!
+  image: Image
   password: String!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
   bookings(where: BookingWhereInput, orderBy: BookingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Booking!]
@@ -2551,6 +2557,7 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
+  image: ImageCreateOneInput
   items: ItemCreateManyWithoutOwnerInput
   bookings: BookingCreateManyWithoutBookerInput
 }
@@ -2574,6 +2581,7 @@ input UserCreateWithoutBookingsInput {
   name: String!
   email: String!
   password: String!
+  image: ImageCreateOneInput
   items: ItemCreateManyWithoutOwnerInput
 }
 
@@ -2581,6 +2589,7 @@ input UserCreateWithoutItemsInput {
   name: String!
   email: String!
   password: String!
+  image: ImageCreateOneInput
   bookings: BookingCreateManyWithoutBookerInput
 }
 
@@ -2806,6 +2815,7 @@ input UserUpdateDataInput {
   name: String
   email: String
   password: String
+  image: ImageUpdateOneInput
   items: ItemUpdateManyWithoutOwnerInput
   bookings: BookingUpdateManyWithoutBookerInput
 }
@@ -2814,6 +2824,7 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  image: ImageUpdateOneInput
   items: ItemUpdateManyWithoutOwnerInput
   bookings: BookingUpdateManyWithoutBookerInput
 }
@@ -2849,6 +2860,7 @@ input UserUpdateWithoutBookingsDataInput {
   name: String
   email: String
   password: String
+  image: ImageUpdateOneInput
   items: ItemUpdateManyWithoutOwnerInput
 }
 
@@ -2856,6 +2868,7 @@ input UserUpdateWithoutItemsDataInput {
   name: String
   email: String
   password: String
+  image: ImageUpdateOneInput
   bookings: BookingUpdateManyWithoutBookerInput
 }
 
@@ -3043,6 +3056,7 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
+  image: ImageWhereInput
   items_every: ItemWhereInput
   items_some: ItemWhereInput
   items_none: ItemWhereInput

@@ -1,14 +1,44 @@
 /** @jsx jsx */
+import { useEffect } from 'react'
 import { jsx, css } from '@emotion/core'
 import { Link } from '@reach/router'
 import gql from 'graphql-tag'
 import { useQuery } from 'react-apollo-hooks'
+import { siteMeta } from '../config'
 
 import Layout from './Layout'
+
+function Categories() {
+  const {
+    data: { categories },
+    refetch,
+  } = useQuery(QUERY_CATEGORIES)
+
+  useEffect(() => {
+    document.title = 'Categories'
+    return () => (document.title = siteMeta.title)
+  }, [])
+
+  useEffect(() => {
+    refetch()
+  }, [])
+
+  return (
+    <Layout>
+      <section>
+        <h1>Categories</h1>
+        {categories.map(category => (
+          <CategoryCard category={category} key={category.slug} />
+        ))}
+      </section>
+    </Layout>
+  )
+}
 
 const QUERY_CATEGORIES = gql`
   query categoriesPage {
     categories {
+      id
       slug
       title
     }
@@ -30,20 +60,5 @@ function CategoryCard(props) {
   )
 }
 
-function Categories() {
-  const {
-    data: { categories },
-  } = useQuery(QUERY_CATEGORIES)
-  return (
-    <Layout>
-      <section>
-        <h1>Categories</h1>
-        {categories.map(category => (
-          <CategoryCard category={category} key={category.slug} />
-        ))}
-      </section>
-    </Layout>
-  )
-}
-
 export default Categories
+export { QUERY_CATEGORIES }

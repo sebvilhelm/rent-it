@@ -6,6 +6,7 @@ import graphql from 'graphql-tag'
 import Button from './elements/Button'
 import confirm from '../lib/confirm'
 import Layout from './Layout'
+import { PendingBooking, FRAGMENT_MY_ITEM } from './MyItem'
 
 const QUERY_MY_PENDING_BOOKINGS = graphql`
   query myPendingBookings {
@@ -13,41 +14,15 @@ const QUERY_MY_PENDING_BOOKINGS = graphql`
       id
       pendingBookings {
         id
-        item {
-          id
-          title
-        }
+        ...myItemBooking
         booker {
           id
           name
         }
-        status
       }
     }
   }
-`
-
-const MUTATION_ACCEPT_BOOKING = graphql`
-  mutation acceptBooking($id: ID!) {
-    acceptBooking(id: $id) {
-      id
-      booker {
-        id
-        name
-      }
-    }
-  }
-`
-const MUTATION_DENY_BOOKING = graphql`
-  mutation denyBooking($id: ID!) {
-    denyBooking(id: $id) {
-      id
-      booker {
-        id
-        name
-      }
-    }
-  }
+  ${FRAGMENT_MY_ITEM}
 `
 
 const cardStyles = {
@@ -148,12 +123,59 @@ function PendingBookings() {
         >
           Pending bookings
         </h1>
-        {me.pendingBookings.map(booking => (
+        {/* {me.pendingBookings.map(booking => (
           <Booking key={booking.id} booking={booking} />
+        ))} */}
+        {me.pendingBookings.map(booking => (
+          <PendingBooking key={booking.id} booking={booking} />
         ))}
       </section>
     </Layout>
   )
 }
+
+const MUTATION_ACCEPT_BOOKING = graphql`
+  mutation acceptBooking($id: ID!) {
+    acceptBooking(id: $id) {
+      id
+      booker {
+        id
+        name
+      }
+    }
+  }
+`
+const MUTATION_DENY_BOOKING = graphql`
+  mutation denyBooking($id: ID!) {
+    denyBooking(id: $id) {
+      id
+      booker {
+        id
+        name
+      }
+    }
+  }
+`
+
+// const QUERY_MY_PENDING_BOOKINGS = graphql`
+//   query myPendingBookings {
+//     me {
+//       id
+//       pendingBookings {
+//         id
+//         item {
+//           id
+//           title
+//         }
+//         booker {
+//           id
+//           name
+//         }
+//         status
+//       }
+//     }
+//     ${FRAGMENT_MY_ITEM}
+//   }
+// `
 
 export default PendingBookings

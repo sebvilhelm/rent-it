@@ -1,9 +1,8 @@
 import ApolloClient from 'apollo-boost'
-import { endpoint } from '../config'
 
 function createApolloClient() {
   return new ApolloClient({
-    uri: endpoint,
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
     credentials: 'include',
   })
 }

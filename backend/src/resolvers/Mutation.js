@@ -68,15 +68,30 @@ const Mutation = {
   },
 
   async signUp(_, args, ctx, info) {
-    const { password, ...user } = await userValidation.validate(args)
+    const {
+      password,
+      imagePreview,
+      imageFull,
+      ...user
+    } = await userValidation.validate(args)
 
     const hashedPassword = await bcrypt.hash(password, 10)
+
+    const image = imageFull
+      ? {
+          create: {
+            preview: imagePreview,
+            full: imageFull,
+          },
+        }
+      : null
 
     const createdUser = await ctx.db.mutation.createUser(
       {
         data: {
           ...user,
           password: hashedPassword,
+          image,
         },
       },
       info
@@ -93,7 +108,7 @@ const Mutation = {
     return createdUser
   },
 
-  async signIn(_, args, ctx) {
+  async signIn(_, args, ctx, info) {
     const { email, password } = args
     const errorMessage = 'Login error'
 
@@ -119,7 +134,12 @@ const Mutation = {
       maxAge: 1000 * 60 * 60 * 24 * 365,
     })
 
-    return user
+    return ctx.db.query.user(
+      {
+        where: { id: user.id },
+      },
+      info
+    )
   },
 
   signOut(_, args, ctx) {

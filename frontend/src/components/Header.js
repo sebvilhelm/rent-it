@@ -1,10 +1,53 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { useState } from 'react'
+import { useState, useRef, useEffect, Suspense } from 'react'
 import { Link } from '@reach/router'
 import { useUser } from './User'
+import { Img } from 'the-platform'
+import useFocus from '../lib/useFocus'
+import SearchBar from './SearchBar'
 import SpacerGif from './SpacerGif'
-import Button from './elements/Button'
+import Button, { UnstyledButton } from './elements/Button'
+import logo from '../logo.svg'
+
+function Header(props) {
+  const { user } = useUser()
+  return (
+    <header css={[styles.header, styles.flexWrapper]} {...props}>
+      <Link
+        css={css`
+          line-height: 0;
+        `}
+        to="/"
+      >
+        <img css={styles.logo} src={logo} alt="Rent it logo" />
+      </Link>
+
+      <SpacerGif />
+      <SearchBar css={styles.searchBar} />
+      <SpacerGif />
+      <nav css={styles.navigation}>
+        {user && (
+          <MenuItem type="primary" to="/add-item">
+            Add Item
+          </MenuItem>
+        )}
+        <MenuItem to="/categories">Categories</MenuItem>
+        {user && <MenuItem to="/profile">Dashboard</MenuItem>}
+        {user && (
+          <ProfileButton>
+            <button>Sign Out</button>
+          </ProfileButton>
+        )}
+        {!user && (
+          <MenuItem type="primary" to="/profile">
+            Sign in
+          </MenuItem>
+        )}
+      </nav>
+    </header>
+  )
+}
 
 const styles = {
   header: css`
@@ -18,9 +61,16 @@ const styles = {
     align-items: center;
   `,
   logo: css`
-    opacity: 0;
+    max-width: 100px;
+    margin: 0 1rem;
   `,
-  navigation: css``,
+  searchBar: css`
+    flex: 1 1 20%;
+  `,
+  navigation: css`
+    display: flex;
+    align-items: center;
+  `,
   menuItem: {
     default: css`
       display: inline-flex;
@@ -45,63 +95,9 @@ function MenuItem({ type, ...props }) {
   )
 }
 
-function Header(props) {
-  const { user } = useUser()
-  return (
-    <header css={[styles.header, styles.flexWrapper]} {...props}>
-      <div css={styles.logo}>
-        <Link to="/">Logo</Link>
-      </div>
-      <SpacerGif />
-      <SearchBar />
-      <SpacerGif />
-      <nav css={styles.navigation}>
-        {user && (
-          <MenuItem type="primary" to="/add-item">
-            Add Item
-          </MenuItem>
-        )}
-        <MenuItem to="/categories">Categories</MenuItem>
-        <MenuItem to="/profile">Dashboard</MenuItem>
-        {user && (
-          <ProfileButton>
-            <button>Sign Out</button>
-          </ProfileButton>
-        )}
-        {!user && (
-          <MenuItem type="primary" to="/profile">
-            Sign in
-          </MenuItem>
-        )}
-      </nav>
-    </header>
-  )
-}
-const searchStyles = {
-  input: css`
-    border: 0;
-    background: #f5f5f5;
-    padding: 0.5rem 1rem;
-    width: 100%;
-    max-width: 512px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-      'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-size: 0.7rem;
-    &::placeholder {
-      color: #7d7f80;
-    }
-  `,
-}
-function SearchBar(props) {
-  return <input css={searchStyles.input} placeholder="Search..." type="text" />
-}
-
 const profileStyle = {
   wrapper: css`
-    display: inline-block;
+    display: inline-flex;
     position: relative;
   `,
   dropdown: css`
@@ -116,29 +112,81 @@ const profileStyle = {
       1px 1px 15px hsla(0, 0%, 0%, 0.025);
     z-index: 10;
   `,
+  image: css`
+    --image-dimension: 2.5rem;
+    width: var(--image-dimension);
+    height: var(--image-dimension);
+    object-fit: cover;
+    display: inline-flex;
+    border-radius: 50%;
+  `,
 }
 
 function ProfileButton(props) {
-  const { signOut } = useUser()
+  const { user, signOut } = useUser()
+
   const [open, setOpen] = useState(false)
+  const [hasFocus, onFocus, onBlur] = useFocus()
+  useEffect(
+    () => {
+      if (open && !hasFocus) {
+        setOpen(false)
+      }
+    },
+    [onFocus]
+  )
+
+  const nav = useRef()
+  useEffect(
+    () => {
+      if (open && nav.current) {
+        nav.current.firstChild.focus()
+      }
+    },
+    [open]
+  )
 
   return (
-    <div {...props} css={profileStyle.wrapper}>
-      <Button onClick={() => setOpen(!open)}>Profile</Button>
+    <div
+      {...props}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      css={profileStyle.wrapper}
+    >
+      <UnstyledButton
+        onClick={() => setOpen(!open)}
+        css={styles.menuItem.default}
+        aria-haspopup="true"
+        aria-expanded={open && hasFocus}
+        aria-label="open profile menu"
+      >
+        {user.image ? (
+          <Suspense
+            maxDuration={0}
+            fallback={
+              <img src={user.image.preview} alt="" css={profileStyle.image} />
+            }
+          >
+            <Img src={user.image.full} alt="" css={profileStyle.image} />
+          </Suspense>
+        ) : (
+          'Profile ▾'
+        )}
+      </UnstyledButton>
       {open && (
-        <nav css={profileStyle.dropdown}>
-          <div>
-            <Link to="/profile">My profile</Link>
-          </div>
-          <div>
-            <button
-              onClick={async () => {
-                await signOut()
-              }}
-            >
-              Sign out
-            </button>
-          </div>
+        <nav
+          ref={nav}
+          aria-label="profile-dropdown"
+          css={profileStyle.dropdown}
+        >
+          <MenuItem to="/profile">My profile</MenuItem>
+          <Button
+            onClick={async () => {
+              await signOut()
+            }}
+          >
+            Sign out
+          </Button>
         </nav>
       )}
     </div>

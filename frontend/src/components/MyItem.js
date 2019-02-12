@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useQuery, useMutation } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import {
@@ -13,56 +13,15 @@ import Button from './elements/Button'
 import confirm from '../lib/confirm'
 import formatPrice from '../lib/formatPrice'
 
-const QUERY_MY_ITEM = gql`
-  query myItem($id: ID!, $now: DateTime!) {
-    item(where: { id: $id }) {
-      id
-      title
-      pendingBookings: bookings(where: { status: PENDING }) {
-        ...myItemBooking
-      }
-      notPendingBookings: bookings(where: { NOT: { status: PENDING } }) {
-        ...myItemBooking
-      }
-      upcomingBookings: bookings(
-        where: { AND: [{ status: APPROVED }, { startDate_gt: $now }] }
-      ) {
-        ...myItemBooking
-      }
-    }
-  }
-
-  fragment myItemBooking on Booking {
-    id
-    status
-    item {
-      id
-      title
-    }
-    startDate
-    endDate
-    payment {
-      price
-    }
-    booker {
-      id
-      name
-    }
-  }
-`
-
-const styles = {
-  grid: css`
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  `,
-}
-
 function MyItem({ id }) {
   const {
     data: { item },
+    refetch,
   } = useQuery(QUERY_MY_ITEM, { variables: { id, now: startOfToday() } })
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   return (
     <section>
@@ -135,41 +94,56 @@ function MyItem({ id }) {
   )
 }
 
-const MUTATION_ACCEPT_BOOKING = gql`
-  mutation acceptBooking($id: ID!) {
-    acceptBooking(id: $id) {
+const FRAGMENT_MY_ITEM = gql`
+  fragment myItemBooking on Booking {
+    id
+    status
+    item {
       id
-      booker {
-        id
-        name
-      }
+      title
     }
-  }
-`
-const MUTATION_DENY_BOOKING = gql`
-  mutation denyBooking($id: ID!) {
-    denyBooking(id: $id) {
+    startDate
+    endDate
+    payment {
+      price
+    }
+    booker {
       id
-      booker {
-        id
-        name
-      }
+      name
     }
   }
 `
 
-const cardStyles = {
-  card: css`
-    background-color: white;
-    box-shadow: 2px 2px 35px hsla(0, 0%, 0%, 0.05),
-      2px 2px 20px hsla(0, 0%, 0%, 0.1);
-    z-index: 1;
-    transition: all 300ms;
-    padding: 1rem;
+const QUERY_MY_ITEM = gql`
+  query myItem($id: ID!, $now: DateTime!) {
+    item(where: { id: $id }) {
+      id
+      title
+      pendingBookings: bookings(where: { status: PENDING }) {
+        ...myItemBooking
+      }
+      notPendingBookings: bookings(where: { NOT: { status: PENDING } }) {
+        ...myItemBooking
+      }
+      upcomingBookings: bookings(
+        where: { AND: [{ status: APPROVED }, { startDate_gt: $now }] }
+      ) {
+        ...myItemBooking
+      }
+    }
+  }
+  ${FRAGMENT_MY_ITEM}
+`
+
+const styles = {
+  grid: css`
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   `,
 }
 
-function PendingBooking(props) {
+export function PendingBooking(props) {
   const { booking } = props
 
   const variables = { id: booking.item.id, now: startOfToday() }
@@ -261,6 +235,40 @@ function PendingBooking(props) {
       />
     </div>
   )
+}
+
+const MUTATION_ACCEPT_BOOKING = gql`
+  mutation acceptBooking($id: ID!) {
+    acceptBooking(id: $id) {
+      id
+      booker {
+        id
+        name
+      }
+    }
+  }
+`
+const MUTATION_DENY_BOOKING = gql`
+  mutation denyBooking($id: ID!) {
+    denyBooking(id: $id) {
+      id
+      booker {
+        id
+        name
+      }
+    }
+  }
+`
+
+const cardStyles = {
+  card: css`
+    background-color: white;
+    box-shadow: 2px 2px 35px hsla(0, 0%, 0%, 0.05),
+      2px 2px 20px hsla(0, 0%, 0%, 0.1);
+    z-index: 1;
+    transition: all 300ms;
+    padding: 1rem;
+  `,
 }
 
 const Pill = props => (
@@ -397,7 +405,6 @@ function UpcomingBooking(props) {
       <p>For {formatPrice(booking.payment.price)}</p>
       <Button
         color="red"
-        transparent
         onClick={async () => {
           setError(null)
           try {
@@ -415,3 +422,4 @@ function UpcomingBooking(props) {
 }
 
 export default MyItem
+export { FRAGMENT_MY_ITEM }
