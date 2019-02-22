@@ -18,7 +18,7 @@ const mocks = [
 ]
 
 describe('<Categories />', () => {
-  it('renders and matches snapshot', async () => {
+  fit('renders and matches snapshot', async () => {
     const client = createClient(mocks)
     const { getByText, container } = render(
       <ApolloProvider client={client}>

@@ -24,14 +24,15 @@ const unauthenticatedMock = [
 ]
 
 describe('<App />', () => {
-  xit('renders and matches snapshot', async () => {
+  it('renders and matches snapshot', async () => {
     const client = createClient(unauthenticatedMock)
-    const { getByText, debug } = render(
+    const { container, debug } = render(
       <ApolloProvider client={client}>
         <App />
       </ApolloProvider>
     )
     await wait()
-    debug()
+    expect(container).toMatchSnapshot()
+    // TODO: Test incomplete
   })
 })
