@@ -22,7 +22,7 @@ function Profile() {
   const [editing, setEditing] = useState(false)
   const {
     data: { me },
-  } = useQuery(QUERY_PROFILE)
+  } = useQuery(QUERY_PROFILE, { suspend: true })
 
   return (
     <Layout>

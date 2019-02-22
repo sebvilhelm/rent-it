@@ -12,7 +12,7 @@ function Categories() {
   const {
     data: { categories },
     refetch,
-  } = useQuery(QUERY_CATEGORIES)
+  } = useQuery(QUERY_CATEGORIES, { suspend: true })
 
   useEffect(() => {
     document.title = 'Categories'
@@ -27,9 +27,10 @@ function Categories() {
     <Layout>
       <section>
         <h1>Categories</h1>
-        {categories.map(category => (
-          <CategoryCard category={category} key={category.slug} />
-        ))}
+        {categories &&
+          categories.map(category => (
+            <CategoryCard category={category} key={category.slug} />
+          ))}
       </section>
     </Layout>
   )

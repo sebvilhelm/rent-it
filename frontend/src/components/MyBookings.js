@@ -46,7 +46,7 @@ function MyBookings() {
       me: { bookings },
     },
     refetch,
-  } = useQuery(QUERY_MY_BOOKINGS)
+  } = useQuery(QUERY_MY_BOOKINGS, { suspend: true })
 
   useEffect(() => {
     refetch()

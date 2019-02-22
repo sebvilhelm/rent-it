@@ -108,7 +108,7 @@ const styles = {
 function SearchResults({ searchTerm, ...rest }) {
   const {
     data: { searchItems },
-  } = useQuery(SEARCH_QUERY, { variables: { searchTerm } })
+  } = useQuery(SEARCH_QUERY, { suspend: true, variables: { searchTerm } })
 
   const [focusIndex, setFocusIndex] = useState(null)
 

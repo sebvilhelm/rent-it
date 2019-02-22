@@ -68,7 +68,7 @@ const User = {}
 function UserProvider(props) {
   const {
     data: { me },
-  } = useQuery(QUERY_CURRENT_USER, { errorPolicy: 'ignore' })
+  } = useQuery(QUERY_CURRENT_USER, { suspend: true, errorPolicy: 'ignore' })
   const signUpMutation = useMutation(MUTATION_SIGNUP)
   const signInMutation = useMutation(MUTATION_SIGNIN)
   const signOutMutation = useMutation(MUTATION_SIGNOUT)

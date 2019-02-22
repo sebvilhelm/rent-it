@@ -38,7 +38,7 @@ const styles = {
 function MyItems() {
   const {
     data: { me },
-  } = useQuery(QUERY_MY_ITEMS)
+  } = useQuery(QUERY_MY_ITEMS, { suspend: true })
   return (
     <section>
       <h1>My items</h1>

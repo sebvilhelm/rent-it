@@ -17,7 +17,10 @@ function MyItem({ id }) {
   const {
     data: { item },
     refetch,
-  } = useQuery(QUERY_MY_ITEM, { variables: { id, now: startOfToday() } })
+  } = useQuery(QUERY_MY_ITEM, {
+    suspend: true,
+    variables: { id, now: startOfToday() },
+  })
 
   useEffect(() => {
     refetch()

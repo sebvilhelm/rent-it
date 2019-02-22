@@ -212,7 +212,10 @@ const styles = {
 function CategoryList({ searchTerm, children }) {
   const {
     data: { categories },
-  } = useQuery(QUERY_SEARCH_CATEGORIES, { variables: { searchTerm } })
+  } = useQuery(QUERY_SEARCH_CATEGORIES, {
+    suspend: true,
+    variables: { searchTerm },
+  })
 
   return children({ categories })
 }

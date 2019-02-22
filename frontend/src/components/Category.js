@@ -29,6 +29,7 @@ function Category(props) {
     data: { items, category },
     refetch,
   } = useQuery(QUERY_ITEMS_BY_CATEGORY, {
+    suspend: true,
     variables,
   })
 

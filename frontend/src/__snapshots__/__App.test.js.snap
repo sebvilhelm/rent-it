@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> renders and matches snapshot 1`] = `
+<div>
+  <header
+    class="css-eqpux9-Header"
+  >
+    <a
+      aria-current="page"
+      class="css-prwv7z-Header"
+      href="/"
+    >
+      <img
+        alt="Rent it logo"
+        class="css-jjhtl6-Header"
+        src="logo.svg"
+      />
+    </a>
+    <div
+      class="css-1rr4qq7"
+    />
+    <div
+      class="css-nzjyny-Header"
+    >
+      <div
+        class="css-1i1524n-SearchBar"
+      >
+        <input
+          aria-label="search"
+          class="css-1dswoqk-SearchBar"
+          placeholder="Search..."
+          type="text"
+          value=""
+        />
+        
+      </div>
+      
+    </div>
+    <div
+      class="css-1rr4qq7"
+    />
+    <nav
+      class="css-atca4d-Header"
+    >
+      <a
+        class="css-1h76f4l-MenuItem"
+        href="/categories"
+      >
+        Categories
+      </a>
+      <a
+        class="css-1nosnxj-MenuItem"
+        href="/profile"
+      >
+        Sign in
+      </a>
+    </nav>
+  </header>
+  <main
+    style="display: none;"
+  >
+    <div
+      role="group"
+      style="outline: none;"
+      tabindex="-1"
+    />
+  </main>
+  <svg
+    height="28"
+    stroke="#22a3bb"
+    viewBox="0 0 38 38"
+    width="28"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g
+      fill="none"
+      fill-rule="evenodd"
+    >
+      <g
+        stroke-width="2"
+        transform="translate(1 1)"
+      >
+        <circle
+          cx="18"
+          cy="18"
+          r="18"
+          stroke-opacity=".5"
+        />
+        <path
+          d="M36 18c0-9.94-8.06-18-18-18"
+        >
+          <animatetransform
+            attributeName="transform"
+            dur="1s"
+            from="0 18 18"
+            repeatCount="indefinite"
+            to="360 18 18"
+            type="rotate"
+          />
+        </path>
+      </g>
+    </g>
+  </svg>
+</div>
+`;

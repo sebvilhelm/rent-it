@@ -14,7 +14,7 @@ function Item({ id, ...props }) {
 
   const {
     data: { item },
-  } = useQuery(ITEM_QUERY, { variables: { id: id } })
+  } = useQuery(ITEM_QUERY, { suspend: true, variables: { id: id } })
 
   useEffect(
     () => {

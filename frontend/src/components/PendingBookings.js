@@ -107,7 +107,7 @@ function PendingBookings() {
   const {
     data: { me },
     refetch,
-  } = useQuery(QUERY_MY_PENDING_BOOKINGS)
+  } = useQuery(QUERY_MY_PENDING_BOOKINGS, { suspend: true })
 
   useEffect(() => {
     refetch()
